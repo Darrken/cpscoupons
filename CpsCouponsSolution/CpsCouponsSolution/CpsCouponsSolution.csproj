@@ -44,6 +44,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -111,12 +113,50 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Mall.cs">
+      <DependentUpon>ToolkitEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Program.cs">
+      <DependentUpon>ToolkitEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Program_Fields.cs">
+      <DependentUpon>ToolkitEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Program_Field_Values.cs">
+      <DependentUpon>ToolkitEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Program_Retailers.cs">
+      <DependentUpon>ToolkitEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Program_Retailer_Selected_Malls.cs">
+      <DependentUpon>ToolkitEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\State.cs">
+      <DependentUpon>ToolkitEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ToolkitEntities.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ToolkitEntities.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ToolkitEntities.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ToolkitEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ToolkitEntities.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ToolkitEntities.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="default.html" />
     <Content Include="Global.asax" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -126,10 +166,31 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\" />
-    <Folder Include="Models\" />
+    <EntityDeploy Include="Models\ToolkitEntities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ToolkitEntities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Models\ToolkitEntities.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ToolkitEntities.edmx</DependentUpon>
+      <LastGenOutput>ToolkitEntities.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\ToolkitEntities.edmx.diagram">
+      <DependentUpon>ToolkitEntities.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\ToolkitEntities.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ToolkitEntities.edmx</DependentUpon>
+      <LastGenOutput>ToolkitEntities.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
