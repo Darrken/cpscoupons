@@ -109,7 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\CouponsController.cs" />
+    <Compile Include="Controllers\ProgramsController.cs" />
     <Compile Include="DTO\FieldDTO.cs" />
     <Compile Include="DTO\RetailerDTO.cs" />
     <Compile Include="DTO\ProgramDTO.cs" />
