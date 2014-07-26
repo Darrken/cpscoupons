@@ -1,4 +1,18 @@
-﻿<div>
-	<h2>Admin</h2>
+﻿<div class="container-fluid">
+	<div class="page-header">
+		<h1>Admin</h1>
+	</div>
 
+	<div class="panel panel-default">
+		<ul class="list-group">
+			<li class="list-group-item"><a href="/reportbyretailer">View Signups by Retailer</a></li>
+			<li class="list-group-item"><a href="/reportbycenter">View Signups by Center</a></li>
+			<li class="list-group-item"><a href="/adminprogram">Create a new Program</a></li>
+			<li class="list-group-item">Edit an existing Program
+				<ul>
+					<li ng-repeat="program in programs"><a href="/adminprogram/{{program.id}}">{{program.name}}</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
 </div>
