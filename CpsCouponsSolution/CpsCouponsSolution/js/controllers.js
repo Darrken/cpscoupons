@@ -1,11 +1,9 @@
-﻿var adminControllers = angular.module('adminControllers', []);
+﻿app.controller('adminMenuCtrl', ['$scope', '$http', function($scope, $http) {
+		$scope.programs = [{name: 'program1', id: 1 }, {name: 'program2', id: 2}];
+	}
+]);
 
-adminControllers.controller('menuCtrl', ['$scope', '$http',
-  function ($scope, $http) {
-  	
-  }]);
-
-adminControllers.controller('programCtrl', ['$scope', '$routeParams',
-  function ($scope, $routeParams) {
-  	$scope.programId = $routeParams.programId;
-  }]);
+app.controller('programCtrl', ['$scope', '$routeParams', function($scope, $routeParams) {
+		$scope.programId = $routeParams.programId;
+	}
+]);
