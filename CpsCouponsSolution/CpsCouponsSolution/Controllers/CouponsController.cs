@@ -8,7 +8,32 @@ namespace CpsCouponsSolution.Controllers
 {
 	public class CouponsController : ApiController
 	{
-		public HttpResponseMessage GetMalls()
+		public HttpResponseMessage CreateProgram()
+		{
+			return Request.CreateResponse(HttpStatusCode.OK);
+		}
+
+		public HttpResponseMessage GetProgramById(int programId)
+		{
+			return Request.CreateResponse(HttpStatusCode.OK);
+		}
+
+		public HttpResponseMessage GetProgramByRetailer(string urlGuid)
+		{
+			return Request.CreateResponse(HttpStatusCode.OK);
+		}
+
+		public HttpResponseMessage GetRetailersByProgram(int programId)
+		{
+			return Request.CreateResponse(HttpStatusCode.OK);
+		}
+
+		public HttpResponseMessage GetProgramList()
+		{
+			return Request.CreateResponse(HttpStatusCode.OK);
+		}
+
+		public HttpResponseMessage GetMallList()
 		{
 			return GetMalls(false);
 		}
@@ -30,5 +55,14 @@ namespace CpsCouponsSolution.Controllers
 			}
 		}
 
+		public HttpResponseMessage SignUp()
+		{
+			return Request.CreateResponse(HttpStatusCode.OK);
+		}
+
+		public HttpResponseMessage GetRetailersByMall(int mallId)
+		{
+			return Request.CreateResponse(HttpStatusCode.OK);
+		}
 	}
 }

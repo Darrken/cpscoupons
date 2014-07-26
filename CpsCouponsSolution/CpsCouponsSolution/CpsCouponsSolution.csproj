@@ -110,6 +110,9 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\CouponsController.cs" />
+    <Compile Include="DTO\FieldDTO.cs" />
+    <Compile Include="DTO\RetailerDTO.cs" />
+    <Compile Include="DTO\ProgramDTO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
