@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ToolkitModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="ToolkitModelStoreContainer">
+          <EntitySet Name="Mall" EntityType="ToolkitModel.Store.Mall" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="State" EntityType="ToolkitModel.Store.State" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Mall_State" Association="ToolkitModel.Store.FK_Mall_State">
+            <End Role="State" EntitySet="State" />
+            <End Role="Mall" EntitySet="Mall" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Mall">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="256" />
+          <Property Name="MallCode" Type="nvarchar" Nullable="false" MaxLength="25" />
+          <Property Name="Address" Type="nvarchar" MaxLength="256" />
+          <Property Name="City" Type="nvarchar" MaxLength="256" />
+          <Property Name="StateID" Type="int" />
+          <Property Name="Zip" Type="nvarchar" MaxLength="10" />
+          <Property Name="HeaderAssetID" Type="uniqueidentifier" />
+          <Property Name="HeaderBGColor" Type="nvarchar" MaxLength="20" />
+          <Property Name="FooterHTML" Type="nvarchar(max)" />
+          <Property Name="ZoneId" Type="int" Nullable="false" />
+          <Property Name="NavButtonColor" Type="nvarchar" MaxLength="20" />
+          <Property Name="NavButtonHighlightColor" Type="nvarchar" MaxLength="20" />
+          <Property Name="NavBGColor" Type="nvarchar" MaxLength="20" />
+          <Property Name="NavTextColor" Type="nvarchar" MaxLength="20" />
+          <Property Name="NavBorderColor" Type="nvarchar" MaxLength="20" />
+          <Property Name="UsersGetProofEmail" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="State">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="TaxRate" Type="decimal" Scale="2" />
+          <Property Name="Abbreviation" Type="nvarchar" MaxLength="3" />
+        </EntityType>
+        <Association Name="FK_Mall_State">
+          <End Role="State" Type="ToolkitModel.Store.State" Multiplicity="0..1" />
+          <End Role="Mall" Type="ToolkitModel.Store.Mall" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="State">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Mall">
+              <PropertyRef Name="StateID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ToolkitModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="ToolkitEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Malls" EntityType="ToolkitModel.Mall" />
+          <EntitySet Name="States" EntityType="ToolkitModel.State" />
+          <AssociationSet Name="FK_Mall_State" Association="ToolkitModel.FK_Mall_State">
+            <End Role="State" EntitySet="States" />
+            <End Role="Mall" EntitySet="Malls" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Mall">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" Unicode="true" FixedLength="false" />
+          <Property Name="MallCode" Type="String" Nullable="false" MaxLength="25" Unicode="true" FixedLength="false" />
+          <Property Name="Address" Type="String" MaxLength="256" Unicode="true" FixedLength="false" />
+          <Property Name="City" Type="String" MaxLength="256" Unicode="true" FixedLength="false" />
+          <Property Name="StateID" Type="Int32" />
+          <Property Name="Zip" Type="String" MaxLength="10" Unicode="true" FixedLength="false" />
+          <Property Name="HeaderAssetID" Type="Guid" />
+          <Property Name="HeaderBGColor" Type="String" MaxLength="20" Unicode="true" FixedLength="false" />
+          <Property Name="FooterHTML" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="ZoneId" Type="Int32" Nullable="false" />
+          <Property Name="NavButtonColor" Type="String" MaxLength="20" Unicode="true" FixedLength="false" />
+          <Property Name="NavButtonHighlightColor" Type="String" MaxLength="20" Unicode="true" FixedLength="false" />
+          <Property Name="NavBGColor" Type="String" MaxLength="20" Unicode="true" FixedLength="false" />
+          <Property Name="NavTextColor" Type="String" MaxLength="20" Unicode="true" FixedLength="false" />
+          <Property Name="NavBorderColor" Type="String" MaxLength="20" Unicode="true" FixedLength="false" />
+          <Property Name="UsersGetProofEmail" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="State" Relationship="ToolkitModel.FK_Mall_State" FromRole="Mall" ToRole="State" />
+        </EntityType>
+        <EntityType Name="State">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="TaxRate" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Abbreviation" Type="String" MaxLength="3" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Malls" Relationship="ToolkitModel.FK_Mall_State" FromRole="State" ToRole="Mall" />
+        </EntityType>
+        <Association Name="FK_Mall_State">
+          <End Role="State" Type="ToolkitModel.State" Multiplicity="0..1" />
+          <End Role="Mall" Type="ToolkitModel.Mall" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="State">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Mall">
+              <PropertyRef Name="StateID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ToolkitModelStoreContainer" CdmEntityContainer="ToolkitEntities">
+          <EntitySetMapping Name="Malls">
+            <EntityTypeMapping TypeName="ToolkitModel.Mall">
+              <MappingFragment StoreEntitySet="Mall">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="MallCode" ColumnName="MallCode" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="HeaderAssetID" ColumnName="HeaderAssetID" />
+                <ScalarProperty Name="HeaderBGColor" ColumnName="HeaderBGColor" />
+                <ScalarProperty Name="FooterHTML" ColumnName="FooterHTML" />
+                <ScalarProperty Name="ZoneId" ColumnName="ZoneId" />
+                <ScalarProperty Name="NavButtonColor" ColumnName="NavButtonColor" />
+                <ScalarProperty Name="NavButtonHighlightColor" ColumnName="NavButtonHighlightColor" />
+                <ScalarProperty Name="NavBGColor" ColumnName="NavBGColor" />
+                <ScalarProperty Name="NavTextColor" ColumnName="NavTextColor" />
+                <ScalarProperty Name="NavBorderColor" ColumnName="NavBorderColor" />
+                <ScalarProperty Name="UsersGetProofEmail" ColumnName="UsersGetProofEmail" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="States">
+            <EntityTypeMapping TypeName="ToolkitModel.State">
+              <MappingFragment StoreEntitySet="State">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="TaxRate" ColumnName="TaxRate" />
+                <ScalarProperty Name="Abbreviation" ColumnName="Abbreviation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
