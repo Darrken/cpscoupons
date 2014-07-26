@@ -14,6 +14,11 @@ namespace CpsCouponsSolution.Models
     
     public partial class Mall
     {
+        public Mall()
+        {
+            this.Program_Retailer_Selected_Malls = new HashSet<Program_Retailer_Selected_Malls>();
+        }
+    
         public int ID { get; set; }
         public string Name { get; set; }
         public string MallCode { get; set; }
@@ -33,5 +38,6 @@ namespace CpsCouponsSolution.Models
         public bool UsersGetProofEmail { get; set; }
     
         public virtual State State { get; set; }
+        public virtual ICollection<Program_Retailer_Selected_Malls> Program_Retailer_Selected_Malls { get; set; }
     }
 }

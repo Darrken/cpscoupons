@@ -4,13 +4,42 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="ToolkitModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="ToolkitModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="ToolkitModelStoreContainer">
           <EntitySet Name="Mall" EntityType="ToolkitModel.Store.Mall" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Program" EntityType="ToolkitModel.Store.Program" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Program_Field_Values" EntityType="ToolkitModel.Store.Program_Field_Values" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Program_Fields" EntityType="ToolkitModel.Store.Program_Fields" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Program_Retailer_Selected_Malls" EntityType="ToolkitModel.Store.Program_Retailer_Selected_Malls" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Program_Retailers" EntityType="ToolkitModel.Store.Program_Retailers" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="State" EntityType="ToolkitModel.Store.State" store:Type="Tables" Schema="dbo" />
           <AssociationSet Name="FK_Mall_State" Association="ToolkitModel.Store.FK_Mall_State">
             <End Role="State" EntitySet="State" />
             <End Role="Mall" EntitySet="Mall" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Program_Field_Values_Program_Fields" Association="ToolkitModel.Store.FK_Program_Field_Values_Program_Fields">
+            <End Role="Program_Fields" EntitySet="Program_Fields" />
+            <End Role="Program_Field_Values" EntitySet="Program_Field_Values" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Program_Field_Values_Program_Retailers" Association="ToolkitModel.Store.FK_Program_Field_Values_Program_Retailers">
+            <End Role="Program_Retailers" EntitySet="Program_Retailers" />
+            <End Role="Program_Field_Values" EntitySet="Program_Field_Values" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Program_Fields_Program" Association="ToolkitModel.Store.FK_Program_Fields_Program">
+            <End Role="Program" EntitySet="Program" />
+            <End Role="Program_Fields" EntitySet="Program_Fields" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Program_Retailer_Selected_Malls_Mall" Association="ToolkitModel.Store.FK_Program_Retailer_Selected_Malls_Mall">
+            <End Role="Mall" EntitySet="Mall" />
+            <End Role="Program_Retailer_Selected_Malls" EntitySet="Program_Retailer_Selected_Malls" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Program_Retailer_Selected_Malls_Program_Retailers" Association="ToolkitModel.Store.FK_Program_Retailer_Selected_Malls_Program_Retailers">
+            <End Role="Program_Retailers" EntitySet="Program_Retailers" />
+            <End Role="Program_Retailer_Selected_Malls" EntitySet="Program_Retailer_Selected_Malls" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Program_Retailers_Program" Association="ToolkitModel.Store.FK_Program_Retailers_Program">
+            <End Role="Program" EntitySet="Program" />
+            <End Role="Program_Retailers" EntitySet="Program_Retailers" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Mall">
@@ -35,6 +64,50 @@
           <Property Name="NavBorderColor" Type="nvarchar" MaxLength="20" />
           <Property Name="UsersGetProofEmail" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="Program">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Description" Type="varchar(max)" />
+          <Property Name="Disclaimer" Type="varchar(max)" />
+          <Property Name="CouponWordCount" Type="int" />
+        </EntityType>
+        <EntityType Name="Program_Field_Values">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ProgramFieldId" Type="int" Nullable="false" />
+          <Property Name="ProgramRetailerId" Type="int" Nullable="false" />
+          <Property Name="Value" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Program_Fields">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="ProgramId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Program_Retailer_Selected_Malls">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ProgramRetailerId" Type="int" Nullable="false" />
+          <Property Name="MallId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Program_Retailers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="UrlGuid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ProgramId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="State">
           <Key>
             <PropertyRef Name="ID" />
@@ -56,8 +129,87 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
-    </edmx:StorageModels>
+        <Association Name="FK_Program_Field_Values_Program_Fields">
+          <End Role="Program_Fields" Type="ToolkitModel.Store.Program_Fields" Multiplicity="1" />
+          <End Role="Program_Field_Values" Type="ToolkitModel.Store.Program_Field_Values" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program_Fields">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Program_Field_Values">
+              <PropertyRef Name="ProgramFieldId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Program_Field_Values_Program_Retailers">
+          <End Role="Program_Retailers" Type="ToolkitModel.Store.Program_Retailers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Program_Field_Values" Type="ToolkitModel.Store.Program_Field_Values" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program_Retailers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Program_Field_Values">
+              <PropertyRef Name="ProgramRetailerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Program_Fields_Program">
+          <End Role="Program" Type="ToolkitModel.Store.Program" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Program_Fields" Type="ToolkitModel.Store.Program_Fields" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Program_Fields">
+              <PropertyRef Name="ProgramId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Program_Retailer_Selected_Malls_Mall">
+          <End Role="Mall" Type="ToolkitModel.Store.Mall" Multiplicity="1" />
+          <End Role="Program_Retailer_Selected_Malls" Type="ToolkitModel.Store.Program_Retailer_Selected_Malls" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mall">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Program_Retailer_Selected_Malls">
+              <PropertyRef Name="MallId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Program_Retailer_Selected_Malls_Program_Retailers">
+          <End Role="Program_Retailers" Type="ToolkitModel.Store.Program_Retailers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Program_Retailer_Selected_Malls" Type="ToolkitModel.Store.Program_Retailer_Selected_Malls" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program_Retailers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Program_Retailer_Selected_Malls">
+              <PropertyRef Name="ProgramRetailerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Program_Retailers_Program">
+          <End Role="Program" Type="ToolkitModel.Store.Program" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Program_Retailers" Type="ToolkitModel.Store.Program_Retailers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Program_Retailers">
+              <PropertyRef Name="ProgramId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ToolkitModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -67,6 +219,35 @@
           <AssociationSet Name="FK_Mall_State" Association="ToolkitModel.FK_Mall_State">
             <End Role="State" EntitySet="States" />
             <End Role="Mall" EntitySet="Malls" />
+          </AssociationSet>
+          <EntitySet Name="Programs" EntityType="ToolkitModel.Program" />
+          <EntitySet Name="Program_Field_Values" EntityType="ToolkitModel.Program_Field_Values" />
+          <EntitySet Name="Program_Fields" EntityType="ToolkitModel.Program_Fields" />
+          <EntitySet Name="Program_Retailer_Selected_Malls" EntityType="ToolkitModel.Program_Retailer_Selected_Malls" />
+          <EntitySet Name="Program_Retailers" EntityType="ToolkitModel.Program_Retailers" />
+          <AssociationSet Name="FK_Program_Retailer_Selected_Malls_Mall" Association="ToolkitModel.FK_Program_Retailer_Selected_Malls_Mall">
+            <End Role="Mall" EntitySet="Malls" />
+            <End Role="Program_Retailer_Selected_Malls" EntitySet="Program_Retailer_Selected_Malls" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Program_Fields_Program" Association="ToolkitModel.FK_Program_Fields_Program">
+            <End Role="Program" EntitySet="Programs" />
+            <End Role="Program_Fields" EntitySet="Program_Fields" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Program_Retailers_Program" Association="ToolkitModel.FK_Program_Retailers_Program">
+            <End Role="Program" EntitySet="Programs" />
+            <End Role="Program_Retailers" EntitySet="Program_Retailers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Program_Field_Values_Program_Fields" Association="ToolkitModel.FK_Program_Field_Values_Program_Fields">
+            <End Role="Program_Fields" EntitySet="Program_Fields" />
+            <End Role="Program_Field_Values" EntitySet="Program_Field_Values" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Program_Field_Values_Program_Retailers" Association="ToolkitModel.FK_Program_Field_Values_Program_Retailers">
+            <End Role="Program_Retailers" EntitySet="Program_Retailers" />
+            <End Role="Program_Field_Values" EntitySet="Program_Field_Values" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Program_Retailer_Selected_Malls_Program_Retailers" Association="ToolkitModel.FK_Program_Retailer_Selected_Malls_Program_Retailers">
+            <End Role="Program_Retailers" EntitySet="Program_Retailers" />
+            <End Role="Program_Retailer_Selected_Malls" EntitySet="Program_Retailer_Selected_Malls" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Mall">
@@ -91,6 +272,7 @@
           <Property Name="NavBorderColor" Type="String" MaxLength="20" Unicode="true" FixedLength="false" />
           <Property Name="UsersGetProofEmail" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="State" Relationship="ToolkitModel.FK_Mall_State" FromRole="Mall" ToRole="State" />
+          <NavigationProperty Name="Program_Retailer_Selected_Malls" Relationship="ToolkitModel.FK_Program_Retailer_Selected_Malls_Mall" FromRole="Mall" ToRole="Program_Retailer_Selected_Malls" />
         </EntityType>
         <EntityType Name="State">
           <Key>
@@ -111,6 +293,141 @@
             </Principal>
             <Dependent Role="Mall">
               <PropertyRef Name="StateID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Program">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Description" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Disclaimer" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="CouponWordCount" />
+          <NavigationProperty Name="Program_Fields" Relationship="ToolkitModel.FK_Program_Fields_Program" FromRole="Program" ToRole="Program_Fields" />
+          <NavigationProperty Name="Program_Retailers" Relationship="ToolkitModel.FK_Program_Retailers_Program" FromRole="Program" ToRole="Program_Retailers" />
+        </EntityType>
+        <EntityType Name="Program_Field_Values">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="ProgramFieldId" Nullable="false" />
+          <Property Type="Int32" Name="ProgramRetailerId" Nullable="false" />
+          <Property Type="String" Name="Value" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Program_Fields" Relationship="ToolkitModel.FK_Program_Field_Values_Program_Fields" FromRole="Program_Field_Values" ToRole="Program_Fields" />
+          <NavigationProperty Name="Program_Retailers" Relationship="ToolkitModel.FK_Program_Field_Values_Program_Retailers" FromRole="Program_Field_Values" ToRole="Program_Retailers" />
+        </EntityType>
+        <EntityType Name="Program_Fields">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="ProgramId" Nullable="false" />
+          <NavigationProperty Name="Program" Relationship="ToolkitModel.FK_Program_Fields_Program" FromRole="Program_Fields" ToRole="Program" />
+          <NavigationProperty Name="Program_Field_Values" Relationship="ToolkitModel.FK_Program_Field_Values_Program_Fields" FromRole="Program_Fields" ToRole="Program_Field_Values" />
+        </EntityType>
+        <EntityType Name="Program_Retailer_Selected_Malls">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="ProgramRetailerId" Nullable="false" />
+          <Property Type="Int32" Name="MallId" Nullable="false" />
+          <NavigationProperty Name="Mall" Relationship="ToolkitModel.FK_Program_Retailer_Selected_Malls_Mall" FromRole="Program_Retailer_Selected_Malls" ToRole="Mall" />
+          <NavigationProperty Name="Program_Retailers" Relationship="ToolkitModel.FK_Program_Retailer_Selected_Malls_Program_Retailers" FromRole="Program_Retailer_Selected_Malls" ToRole="Program_Retailers" />
+        </EntityType>
+        <EntityType Name="Program_Retailers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Guid" Name="UrlGuid" Nullable="false" />
+          <Property Type="Int32" Name="ProgramId" Nullable="false" />
+          <NavigationProperty Name="Program" Relationship="ToolkitModel.FK_Program_Retailers_Program" FromRole="Program_Retailers" ToRole="Program" />
+          <NavigationProperty Name="Program_Field_Values" Relationship="ToolkitModel.FK_Program_Field_Values_Program_Retailers" FromRole="Program_Retailers" ToRole="Program_Field_Values" />
+          <NavigationProperty Name="Program_Retailer_Selected_Malls" Relationship="ToolkitModel.FK_Program_Retailer_Selected_Malls_Program_Retailers" FromRole="Program_Retailers" ToRole="Program_Retailer_Selected_Malls" />
+        </EntityType>
+        <Association Name="FK_Program_Retailer_Selected_Malls_Mall">
+          <End Type="ToolkitModel.Mall" Role="Mall" Multiplicity="1" />
+          <End Type="ToolkitModel.Program_Retailer_Selected_Malls" Role="Program_Retailer_Selected_Malls" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mall">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Program_Retailer_Selected_Malls">
+              <PropertyRef Name="MallId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Program_Fields_Program">
+          <End Type="ToolkitModel.Program" Role="Program" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ToolkitModel.Program_Fields" Role="Program_Fields" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Program_Fields">
+              <PropertyRef Name="ProgramId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Program_Retailers_Program">
+          <End Type="ToolkitModel.Program" Role="Program" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ToolkitModel.Program_Retailers" Role="Program_Retailers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Program_Retailers">
+              <PropertyRef Name="ProgramId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Program_Field_Values_Program_Fields">
+          <End Type="ToolkitModel.Program_Fields" Role="Program_Fields" Multiplicity="1" />
+          <End Type="ToolkitModel.Program_Field_Values" Role="Program_Field_Values" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program_Fields">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Program_Field_Values">
+              <PropertyRef Name="ProgramFieldId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Program_Field_Values_Program_Retailers">
+          <End Type="ToolkitModel.Program_Retailers" Role="Program_Retailers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ToolkitModel.Program_Field_Values" Role="Program_Field_Values" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program_Retailers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Program_Field_Values">
+              <PropertyRef Name="ProgramRetailerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Program_Retailer_Selected_Malls_Program_Retailers">
+          <End Type="ToolkitModel.Program_Retailers" Role="Program_Retailers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ToolkitModel.Program_Retailer_Selected_Malls" Role="Program_Retailer_Selected_Malls" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program_Retailers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Program_Retailer_Selected_Malls">
+              <PropertyRef Name="ProgramRetailerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -150,6 +467,55 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="TaxRate" ColumnName="TaxRate" />
                 <ScalarProperty Name="Abbreviation" ColumnName="Abbreviation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Programs">
+            <EntityTypeMapping TypeName="ToolkitModel.Program">
+              <MappingFragment StoreEntitySet="Program">
+                <ScalarProperty Name="CouponWordCount" ColumnName="CouponWordCount" />
+                <ScalarProperty Name="Disclaimer" ColumnName="Disclaimer" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Program_Field_Values">
+            <EntityTypeMapping TypeName="ToolkitModel.Program_Field_Values">
+              <MappingFragment StoreEntitySet="Program_Field_Values">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="ProgramRetailerId" ColumnName="ProgramRetailerId" />
+                <ScalarProperty Name="ProgramFieldId" ColumnName="ProgramFieldId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Program_Fields">
+            <EntityTypeMapping TypeName="ToolkitModel.Program_Fields">
+              <MappingFragment StoreEntitySet="Program_Fields">
+                <ScalarProperty Name="ProgramId" ColumnName="ProgramId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Program_Retailer_Selected_Malls">
+            <EntityTypeMapping TypeName="ToolkitModel.Program_Retailer_Selected_Malls">
+              <MappingFragment StoreEntitySet="Program_Retailer_Selected_Malls">
+                <ScalarProperty Name="MallId" ColumnName="MallId" />
+                <ScalarProperty Name="ProgramRetailerId" ColumnName="ProgramRetailerId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Program_Retailers">
+            <EntityTypeMapping TypeName="ToolkitModel.Program_Retailers">
+              <MappingFragment StoreEntitySet="Program_Retailers">
+                <ScalarProperty Name="ProgramId" ColumnName="ProgramId" />
+                <ScalarProperty Name="UrlGuid" ColumnName="UrlGuid" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

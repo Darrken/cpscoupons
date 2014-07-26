@@ -27,5 +27,10 @@ namespace CpsCouponsSolution.Models
     
         public DbSet<Mall> Malls { get; set; }
         public DbSet<State> States { get; set; }
+        public DbSet<Program> Programs { get; set; }
+        public DbSet<Program_Field_Values> Program_Field_Values { get; set; }
+        public DbSet<Program_Fields> Program_Fields { get; set; }
+        public DbSet<Program_Retailer_Selected_Malls> Program_Retailer_Selected_Malls { get; set; }
+        public DbSet<Program_Retailers> Program_Retailers { get; set; }
     }
 }

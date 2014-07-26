@@ -8,6 +8,17 @@
         <EntityTypeShape EntityType="ToolkitModel.Mall" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="ToolkitModel.State" Width="1.5" PointX="0.75" PointY="2.25" IsExpanded="true" />
         <AssociationConnector Association="ToolkitModel.FK_Mall_State" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ToolkitModel.Program" Width="1.5" PointX="6.125" PointY="1" />
+        <EntityTypeShape EntityType="ToolkitModel.Program_Field_Values" Width="2.125" PointX="9.25" PointY="4.125" />
+        <EntityTypeShape EntityType="ToolkitModel.Program_Fields" Width="1.5" PointX="9.5" PointY="1.125" />
+        <EntityTypeShape EntityType="ToolkitModel.Program_Retailer_Selected_Malls" Width="2.75" PointX="5.5" PointY="7.5" />
+        <EntityTypeShape EntityType="ToolkitModel.Program_Retailers" Width="2.125" PointX="5.875" PointY="4" />
+        <AssociationConnector Association="ToolkitModel.FK_Program_Retailer_Selected_Malls_Mall" />
+        <AssociationConnector Association="ToolkitModel.FK_Program_Fields_Program" />
+        <AssociationConnector Association="ToolkitModel.FK_Program_Retailers_Program" />
+        <AssociationConnector Association="ToolkitModel.FK_Program_Field_Values_Program_Fields" />
+        <AssociationConnector Association="ToolkitModel.FK_Program_Field_Values_Program_Retailers" />
+        <AssociationConnector Association="ToolkitModel.FK_Program_Retailer_Selected_Malls_Program_Retailers" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
