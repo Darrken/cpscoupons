@@ -126,5 +126,20 @@ namespace CpsCouponsSolution.Services
 
 			return retailers;
 		}
+
+		public List<ProgramDTO> GetProgramList()
+		{
+			List<ProgramDTO> programs;
+
+			using (var dbContext = new ToolkitEntities())
+			{
+				var programList = dbContext.Programs
+					.ToList();
+
+				programs = programList.Select(program => new ProgramDTO(program)).ToList();
+			}
+
+			return programs;
+		}
 	}
 }

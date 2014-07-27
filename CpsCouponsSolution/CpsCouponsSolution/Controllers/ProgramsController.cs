@@ -96,7 +96,18 @@ namespace CpsCouponsSolution.Controllers
 
 		public HttpResponseMessage GetProgramList()
 		{
-			return Request.CreateResponse(HttpStatusCode.OK);
+			List<ProgramDTO> programs;
+			try
+			{
+				var programsService = new ProgramsService();
+				programs = programsService.GetProgramList();
+			}
+			catch (Exception ex)
+			{
+				return Request.CreateResponse(HttpStatusCode.InternalServerError, new { wasSuccessful = false, message = "There was an error retrieving the program list.  " + ex.Message });
+			}
+
+			return Request.CreateResponse(HttpStatusCode.OK, programs);
 		}
 
 		public HttpResponseMessage GetMallList()

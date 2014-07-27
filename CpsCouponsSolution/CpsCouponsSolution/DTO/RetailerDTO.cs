@@ -7,6 +7,9 @@ namespace CpsCouponsSolution.DTO
 {
 	public class RetailerDTO
 	{
+		public RetailerDTO()
+		{}
+
 		public RetailerDTO(Program_Retailers retailer)
 		{
 			Id = retailer.Id;

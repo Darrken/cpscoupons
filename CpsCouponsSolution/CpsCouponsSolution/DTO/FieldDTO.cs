@@ -4,6 +4,9 @@ namespace CpsCouponsSolution.DTO
 {
 	public class FieldDTO
 	{
+		public FieldDTO()
+		{}
+
 		public FieldDTO(Program_Fields field)
 		{
 			Id = field.Id;
@@ -16,6 +19,9 @@ namespace CpsCouponsSolution.DTO
 
 	public class FieldValueDTO
 	{
+		public FieldValueDTO()
+		{}
+
 		public FieldValueDTO(Program_Field_Values field)
 		{
 			Id = field.Id;
