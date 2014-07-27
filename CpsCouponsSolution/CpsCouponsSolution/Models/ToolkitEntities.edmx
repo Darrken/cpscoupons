@@ -124,6 +124,9 @@
           <Property Name="Email" Type="varchar" Nullable="false" MaxLength="50" />
           <Property Name="UrlGuid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="ProgramId" Type="int" Nullable="false" />
+          <Property Name="StoreName" Type="varchar" MaxLength="50" />
+          <Property Name="Offer" Type="varchar(max)" />
+          <Property Name="Restrictions" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="State">
           <Key>
@@ -351,6 +354,9 @@
           <NavigationProperty Name="Program_Field_Values" Relationship="ToolkitModel.FK_Program_Field_Values_Program_Retailers" FromRole="Program_Retailers" ToRole="Program_Field_Values" />
           <NavigationProperty Name="Program_Retailer_Selected_Malls" Relationship="ToolkitModel.FK_Program_Retailer_Selected_Malls_Program_Retailers" FromRole="Program_Retailers" ToRole="Program_Retailer_Selected_Malls" />
           <NavigationProperty Name="Program" Relationship="ToolkitModel.FK_Program_Retailers_Program" FromRole="Program_Retailers" ToRole="Program" />
+          <Property Type="String" Name="StoreName" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Offer" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Restrictions" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_Program_Field_Values_Program_Fields">
           <End Type="ToolkitModel.Program_Fields" Role="Program_Fields" Multiplicity="1" />
@@ -533,6 +539,9 @@
           <EntitySetMapping Name="Program_Retailers">
             <EntityTypeMapping TypeName="ToolkitModel.Program_Retailers">
               <MappingFragment StoreEntitySet="Program_Retailers">
+                <ScalarProperty Name="Restrictions" ColumnName="Restrictions" />
+                <ScalarProperty Name="Offer" ColumnName="Offer" />
+                <ScalarProperty Name="StoreName" ColumnName="StoreName" />
                 <ScalarProperty Name="ProgramId" ColumnName="ProgramId" />
                 <ScalarProperty Name="UrlGuid" ColumnName="UrlGuid" />
                 <ScalarProperty Name="Email" ColumnName="Email" />

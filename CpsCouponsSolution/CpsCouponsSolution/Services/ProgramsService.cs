@@ -166,9 +166,21 @@ namespace CpsCouponsSolution.Services
 
 		public SignUpResult RetailerSignUp(ProgramDTO programData)
 		{
+			var retailerData = programData.Retailers.FirstOrDefault();
+			if(retailerData == null)
+				return new SignUpResult() { WasSuccessful = false, FailureReason = "No Retailer submitted to update." };
+
+			if(string.IsNullOrEmpty(retailerData.Offer))
+				return new SignUpResult() { WasSuccessful = false, FailureReason = "No Offer details submitted." };
+
+			if(string.IsNullOrEmpty(retailerData.StoreName))
+				return new SignUpResult() { WasSuccessful = false, FailureReason = "No StoreName submitted." };
+
+			if(retailerData.SelectedMalls == null || !retailerData.SelectedMalls.Any())
+				return new SignUpResult() { WasSuccessful = false, FailureReason = "No Malls were selected." };
+			
 			using (var dbContext = new ToolkitEntities())
 			{
-				var retailerData = programData.Retailers.First();
 				var retailer = dbContext.Program_Retailers.SingleOrDefault(pr => pr.Id == retailerData.Id && pr.ProgramId == programData.Id);
 
 				if(retailer == null)
@@ -185,14 +197,17 @@ namespace CpsCouponsSolution.Services
 
 		private void UpdateRetailerData(Program_Retailers retailer, RetailerDTO retailerData)
 		{
-			foreach (var fieldValueDto in retailerData.FieldValues)
+			if (retailerData.FieldValues != null && retailerData.FieldValues.Any())
 			{
-				retailer.Program_Field_Values.Add(new Program_Field_Values()
-															 {
-																 ProgramFieldId = fieldValueDto.Id,
-																 ProgramRetailerId = retailer.Id,
-																 Value = fieldValueDto.Value
-															 });
+				foreach (var fieldValueDto in retailerData.FieldValues)
+				{
+					retailer.Program_Field_Values.Add(new Program_Field_Values()
+					                                  {
+						                                  ProgramFieldId = fieldValueDto.Id,
+						                                  ProgramRetailerId = retailer.Id,
+						                                  Value = fieldValueDto.Value
+					                                  });
+				}
 			}
 
 			foreach (var mallId in retailerData.SelectedMalls)

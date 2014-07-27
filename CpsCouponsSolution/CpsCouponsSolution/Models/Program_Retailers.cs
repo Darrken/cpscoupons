@@ -24,6 +24,9 @@ namespace CpsCouponsSolution.Models
         public string Email { get; set; }
         public System.Guid UrlGuid { get; set; }
         public int ProgramId { get; set; }
+        public string StoreName { get; set; }
+        public string Offer { get; set; }
+        public string Restrictions { get; set; }
     
         public virtual ICollection<Program_Field_Values> Program_Field_Values { get; set; }
         public virtual ICollection<Program_Retailer_Selected_Malls> Program_Retailer_Selected_Malls { get; set; }
