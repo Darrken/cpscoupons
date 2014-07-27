@@ -80,7 +80,18 @@ namespace CpsCouponsSolution.Controllers
 
 		public HttpResponseMessage GetRetailersByProgram(int programId)
 		{
-			return Request.CreateResponse(HttpStatusCode.OK);
+			List<RetailerDTO> retailers;
+			try
+			{
+				var programsService = new ProgramsService();
+				retailers = programsService.GetRetailersByProgramId(programId);
+			}
+			catch (Exception ex)
+			{
+				return Request.CreateResponse(HttpStatusCode.InternalServerError, new { wasSuccessful = false, message = "There was an error retrieving retailers for the specified program.  " + ex.Message });
+			}
+
+			return Request.CreateResponse(HttpStatusCode.OK, retailers);
 		}
 
 		public HttpResponseMessage GetProgramList()
