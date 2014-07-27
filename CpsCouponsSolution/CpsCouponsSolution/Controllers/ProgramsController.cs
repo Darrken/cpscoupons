@@ -1,18 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using CpsCouponsSolution.Models;
+using CpsCouponsSolution.DTO;
+using CpsCouponsSolution.Services;
 
 namespace CpsCouponsSolution.Controllers
 {
 	public class ProgramsController : ApiController
 	{
-		public HttpResponseMessage CreateProgram()
+
+		// TODO: Add DI and construct controller with ProgramsService
+
+		public HttpResponseMessage CreateProgram(ProgramDTO programData)
 		{
-			return Request.CreateResponse(HttpStatusCode.OK);
+			int programId;
+			try
+			{
+				var programsService = new ProgramsService();
+				programId = programsService.CreateProgram(programData);
+			}
+			catch (Exception ex)
+			{
+				return Request.CreateResponse(HttpStatusCode.InternalServerError, new { message = "There was an error creating the program.  " + ex.Message });
+			}
+			
+			return Request.CreateResponse(HttpStatusCode.OK, new {Id = programId});
 		}
 
 		public HttpResponseMessage GetProgramById(int programId)
@@ -37,14 +51,15 @@ namespace CpsCouponsSolution.Controllers
 
 		public HttpResponseMessage GetMallList()
 		{
-			List<string> mallList;
+			List<MallDTO> mallList;
 			try
 			{
-				mallList = GetMallNames(false);
+				var programsService = new ProgramsService();
+				mallList = programsService.GetMallNames(false);
 			}
 			catch (Exception ex)
 			{
-				return Request.CreateResponse(HttpStatusCode.InternalServerError, new { message = "There was an error retrieving the mall list."});
+				return Request.CreateResponse(HttpStatusCode.InternalServerError, new { message = "There was an error retrieving the mall list.  " + ex.Message});
 			}
 			
 			return Request.CreateResponse(HttpStatusCode.OK, mallList);
@@ -52,34 +67,18 @@ namespace CpsCouponsSolution.Controllers
 
 		public HttpResponseMessage GetMallList(bool isAll)
 		{
-			List<string> mallNames;
+			List<MallDTO> mallNames;
 			try
 			{
-				mallNames = GetMallNames(isAll);
+				var programsService = new ProgramsService();
+				mallNames = programsService.GetMallNames(isAll);
 			}
 			catch (Exception ex)
 			{
-				return Request.CreateResponse(HttpStatusCode.InternalServerError, new { message = "There was an error retrieving the mall list." });
+				return Request.CreateResponse(HttpStatusCode.InternalServerError, new { message = "There was an error retrieving the mall list.  " + ex.Message });
 			}
 
 			return Request.CreateResponse(HttpStatusCode.OK, mallNames);
-		}
-
-		private static List<string> GetMallNames(bool isAll)
-		{
-			List<string> mallNames;
-			using (var dbContext = new ToolkitEntities())
-			{
-				var malls = dbContext.Malls.Select(m => new {Name = m.Name + " - " + m.State.Abbreviation});
-
-				if (!isAll)
-					malls = malls.Where(m => !m.Name.Contains("?")
-					                         && !m.Name.ToLower().StartsWith("test")
-					                         && !m.Name.ToLower().StartsWith("zz"));
-
-				mallNames = malls.OrderBy(m => m.Name).Select(m => m.Name).ToList();
-			}
-			return mallNames;
 		}
 
 		public HttpResponseMessage SignUp()

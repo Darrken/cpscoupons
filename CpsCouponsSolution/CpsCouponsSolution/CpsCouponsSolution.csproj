@@ -110,6 +110,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ProgramsController.cs" />
+    <Compile Include="DTO\MallDTO.cs" />
     <Compile Include="DTO\FieldDTO.cs" />
     <Compile Include="DTO\RetailerDTO.cs" />
     <Compile Include="DTO\ProgramDTO.cs" />
@@ -153,6 +154,7 @@
       <DependentUpon>ToolkitEntities.edmx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ProgramsService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\angular-route.min.js" />
