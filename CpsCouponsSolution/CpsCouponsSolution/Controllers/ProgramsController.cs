@@ -22,6 +22,10 @@ namespace CpsCouponsSolution.Controllers
 				var programsService = new ProgramsService();
 				programId = programsService.CreateProgram(programData);
 			}
+			catch (ArgumentNullException ex)
+			{
+				return Request.CreateResponse(HttpStatusCode.BadRequest, new { message = "Argument errors when trying to create the program.  " + ex.Message });
+			}
 			catch (Exception ex)
 			{
 				return Request.CreateResponse(HttpStatusCode.InternalServerError, new { message = "There was an error creating the program.  " + ex.Message });
@@ -33,6 +37,9 @@ namespace CpsCouponsSolution.Controllers
 		[HttpPost]
 		public HttpResponseMessage DeleteProgram(int programId)
 		{
+			if(programId <= 0)
+				return Request.CreateResponse(HttpStatusCode.BadRequest, new { wasSuccessful = false, message = "ProgramId invalid." });
+
 			try
 			{
 				var programsService = new ProgramsService();
@@ -48,6 +55,9 @@ namespace CpsCouponsSolution.Controllers
 
 		public HttpResponseMessage GetProgramById(int programId)
 		{
+			if (programId <= 0)
+				return Request.CreateResponse(HttpStatusCode.BadRequest, new { message = "ProgramId invalid." });
+			
 			ProgramDTO program;
 			try
 			{
@@ -64,11 +74,20 @@ namespace CpsCouponsSolution.Controllers
 
 		public HttpResponseMessage GetProgramByRetailer(string guid)
 		{
+			if (string.IsNullOrEmpty(guid))
+				return Request.CreateResponse(HttpStatusCode.BadRequest, new {  message = "Retailer Guid invalid." });
+
 			ProgramDTO program;
 			try
 			{
 				var programsService = new ProgramsService();
 				program = programsService.GetProgramByRetailerGuId(guid);
+				if(program == null)
+					return Request.CreateResponse(HttpStatusCode.OK, new { message = "Retailer not found." });
+			}
+			catch (ArgumentException ex)
+			{
+				return Request.CreateResponse(HttpStatusCode.BadRequest, new { message = "There was an error retrieving program data.  " + ex.Message });
 			}
 			catch (Exception ex)
 			{
@@ -80,6 +99,9 @@ namespace CpsCouponsSolution.Controllers
 
 		public HttpResponseMessage GetRetailersByProgram(int programId)
 		{
+			if (programId <= 0)
+				return Request.CreateResponse(HttpStatusCode.BadRequest, new { message = "ProgramId invalid." });
+
 			List<RetailerDTO> retailers;
 			try
 			{
@@ -144,22 +166,29 @@ namespace CpsCouponsSolution.Controllers
 
 		public HttpResponseMessage SignUp(ProgramDTO programData)
 		{
-			SignUpResult signUpResult;
+			ResponseResult responseResult;
 			try
 			{
 				var programsService = new ProgramsService();
-				signUpResult = programsService.RetailerSignUp(programData);
+				responseResult = programsService.RetailerSignUp(programData);
+			}
+			catch (ArgumentNullException ex)
+			{
+				return Request.CreateResponse(HttpStatusCode.BadRequest, new { message = "Argument errors when trying to update retailer program data.  " + ex.Message });
 			}
 			catch (Exception ex)
 			{
 				return Request.CreateResponse(HttpStatusCode.InternalServerError, new { message = "There was an error saving the retailer data.  " + ex.Message });
 			}
 
-			return Request.CreateResponse(HttpStatusCode.OK, signUpResult);
+			return Request.CreateResponse(HttpStatusCode.OK, responseResult);
 		}
 
 		public HttpResponseMessage GetRetailersByMall(int mallId)
 		{
+			if (mallId <= 0)
+				return Request.CreateResponse(HttpStatusCode.BadRequest, new { message = "Mall Id invalid." });
+
 			List<RetailerDTO> retailers;
 			try
 			{
