@@ -56,15 +56,26 @@ namespace CpsCouponsSolution.Controllers
 			}
 			catch (Exception ex)
 			{
-				return Request.CreateResponse(HttpStatusCode.InternalServerError, new { wasSuccessful = false, message = "There was an error deleting the program.  " + ex.Message });
+				return Request.CreateResponse(HttpStatusCode.InternalServerError, new { wasSuccessful = false, message = "There was an error retrieving the program.  " + ex.Message });
 			}
 
 			return Request.CreateResponse(HttpStatusCode.OK, program);
 		}
 
-		public HttpResponseMessage GetProgramByRetailer(string urlGuid)
+		public HttpResponseMessage GetProgramByRetailer(string guid)
 		{
-			return Request.CreateResponse(HttpStatusCode.OK);
+			ProgramDTO program;
+			try
+			{
+				var programsService = new ProgramsService();
+				program = programsService.GetProgramByRetailerGuId(guid);
+			}
+			catch (Exception ex)
+			{
+				return Request.CreateResponse(HttpStatusCode.InternalServerError, new { wasSuccessful = false, message = "There was an error retrieving the program for the retailer.  " + ex.Message });
+			}
+
+			return Request.CreateResponse(HttpStatusCode.OK, program);
 		}
 
 		public HttpResponseMessage GetRetailersByProgram(int programId)

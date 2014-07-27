@@ -95,5 +95,20 @@ namespace CpsCouponsSolution.Services
 
 			return programDto;
 		}
+
+		public ProgramDTO GetProgramByRetailerGuId(string urlGuid)
+		{
+			ProgramDTO programDto;
+			var retailerGuid = Guid.Parse(urlGuid);
+
+			using (var dbContext = new ToolkitEntities())
+			{
+				var selectedProgram = dbContext.Programs.SingleOrDefault(p => p.Program_Retailers.Any(r => r.UrlGuid == retailerGuid));
+
+				programDto = new ProgramDTO(selectedProgram);
+			}
+
+			return programDto;
+		}
 	}
 }
