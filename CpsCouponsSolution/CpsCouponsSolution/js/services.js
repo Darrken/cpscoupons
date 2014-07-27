@@ -3,10 +3,10 @@
 	return {
 		baseQueriesApiUrl: '/api/programs/',
 
-		getMallList: function () {
+		getByCommand: function (command) {
 			var deferred = $q.defer();
 
-			var apiUrl = this.baseQueriesApiUrl + 'getMallList';
+			var apiUrl = this.baseQueriesApiUrl + command;
 
 			$http({ method: 'GET', url: apiUrl }).
 				success(function (data) {
@@ -23,9 +23,9 @@
 			return deferred.promise;
 		},
 
-		createProgram: function (model) {
+		saveByCommand: function (command, model) {
 			var deferred = $q.defer();
-			var apiUrl = this.baseQueriesApiUrl + 'createProgram';
+			var apiUrl = this.baseQueriesApiUrl + command;
 			
 			$http({
 				url: apiUrl,
