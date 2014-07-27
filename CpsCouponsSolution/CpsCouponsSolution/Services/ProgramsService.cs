@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using CpsCouponsSolution.DTO;
 using CpsCouponsSolution.Models;
@@ -31,18 +32,54 @@ namespace CpsCouponsSolution.Services
 			return mallList;
 		}
 
+		public void DeleteProgram(int programId)
+		{
+			using (var dbContext = new ToolkitEntities())
+			{
+				var programToRemove = dbContext.Programs.SingleOrDefault(p => p.Id == programId);
+				
+				dbContext.Entry(programToRemove).State = EntityState.Deleted;
+				dbContext.SaveChanges();
+			};
+		}
+
 		public int CreateProgram(ProgramDTO programData)
 		{
-			//using (var dbContext = new ToolkitEntities())
-			//{
-			//	var newProgram = new Program()
-			//						  {
-			//							  CouponWordCount = programData.CouponWordCount,
-					                 
-			//						  }
-			//}
+			Program newProgram;
+			using (var dbContext = new ToolkitEntities())
+			{
+				newProgram = new Program()
+				             {
+					             CouponWordCount = programData.CouponWordCount,
+					             Description = programData.Description,
+					             Disclaimer = programData.Disclaimer,
+					             Name = programData.Name
+				             };
 
-			throw new NotImplementedException();
+				foreach (var fieldDto in programData.Fields)
+				{
+					newProgram.Program_Fields.Add(new Program_Fields()
+					{
+						Name = fieldDto.Name,
+						ProgramId = newProgram.Id
+					});
+				}
+
+				foreach (var retailerDto in programData.Retailers)
+				{
+					newProgram.Program_Retailers.Add(new Program_Retailers()
+					{
+						Email = retailerDto.Email,
+						ProgramId = newProgram.Id,
+						UrlGuid = Guid.NewGuid()
+					}); 
+				}
+
+				dbContext.Programs.Add(newProgram);
+				dbContext.SaveChanges();
+			}
+
+			return newProgram.Id;
 		}
 	}
 }

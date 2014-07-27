@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using CpsCouponsSolution.DTO;
+using CpsCouponsSolution.Models;
 using CpsCouponsSolution.Services;
 
 namespace CpsCouponsSolution.Controllers
@@ -24,6 +25,22 @@ namespace CpsCouponsSolution.Controllers
 			catch (Exception ex)
 			{
 				return Request.CreateResponse(HttpStatusCode.InternalServerError, new { message = "There was an error creating the program.  " + ex.Message });
+			}
+			
+			return Request.CreateResponse(HttpStatusCode.OK, new {Id = programId});
+		}
+
+		[HttpPost]
+		public HttpResponseMessage DeleteProgram(int programId)
+		{
+			try
+			{
+				var programsService = new ProgramsService();
+				programsService.DeleteProgram(programId);
+			}
+			catch (Exception ex)
+			{
+				return Request.CreateResponse(HttpStatusCode.InternalServerError, new { message = "There was an error deleting the program.  " + ex.Message });
 			}
 			
 			return Request.CreateResponse(HttpStatusCode.OK, new {Id = programId});
