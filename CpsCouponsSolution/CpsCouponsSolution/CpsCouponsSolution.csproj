@@ -162,6 +162,7 @@
     <Content Include="index.html" />
     <Content Include="Global.asax" />
     <Content Include="js\controllers.js" />
+    <Content Include="js\directives.js" />
     <Content Include="js\services.js" />
     <Content Include="views\admin.html" />
     <Content Include="views\program.html" />

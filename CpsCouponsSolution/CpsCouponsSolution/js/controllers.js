@@ -23,7 +23,7 @@
 });
 
 
-app.controller('programCtrl', function ($scope, $routeParams, $location, $anchorScroll, programsApiService) {
+app.controller('programCtrl', function($scope, $routeParams, $location, $anchorScroll, programsApiService) {
 	$scope.alerts = [];
 	//$scope.program.ProgramId = $routeParams.programId;
 	$scope.program = {
@@ -35,13 +35,13 @@ app.controller('programCtrl', function ($scope, $routeParams, $location, $anchor
 		Fields: [],
 		Name: null,
 	};
-	
-	$scope.getMallList = function () {
+
+	$scope.getMallList = function() {
 		programsApiService.getByCommand('getMallList')
-			.then(function (data) {
+			.then(function(data) {
 				$scope.malls = data;
 			})
-			.catch(function () {
+			.catch(function() {
 				addAlert('danger', 'Unable to get Center data.');
 			});
 	};
@@ -52,26 +52,25 @@ app.controller('programCtrl', function ($scope, $routeParams, $location, $anchor
 		$scope.alerts.push({ type: errorType, msg: message });
 	};
 
-	$scope.closeAlert = function (index) {
+	$scope.closeAlert = function(index) {
 		$scope.alerts.splice(index, 1);
 	};
 
-	$scope.toggleCenter = function (id) {
+	$scope.toggleCenter = function(id) {
 		var idx = $scope.program.ParticipatingMalls.indexOf(id);
 
 		// is currently selected
 		if (idx > -1) {
 			$scope.program.ParticipatingMalls.splice(idx, 1);
 		}
-
-		// is newly selected
+// is newly selected
 		else {
 			$scope.program.ParticipatingMalls.push(id);
 		}
 	};
 
 	$scope.addField = function() {
-		$scope.program.Fields.push({Name: null});
+		$scope.program.Fields.push({ Name: null });
 	};
 
 	$scope.removeEmptyField = function(fieldName, index) {
@@ -80,11 +79,11 @@ app.controller('programCtrl', function ($scope, $routeParams, $location, $anchor
 		}
 	}
 
-	$scope.saveProgram = function () {
+	$scope.saveProgram = function() {
 		var emails = $scope.program.Emails.split('\n');
 		$scope.program.Retailers = [];
 
-		_.forEach(emails, function (email) {
+		_.forEach(emails, function(email) {
 			$scope.program.Retailers.push({ Email: email });
 		});
 
@@ -97,24 +96,9 @@ app.controller('programCtrl', function ($scope, $routeParams, $location, $anchor
 			.catch(function(data) {
 				addAlert('danger', 'Unable to save Program data.');
 			})
-			.finally(function () {
+			.finally(function() {
 				$location.hash('top');
 				$anchorScroll();
-		});
-	};
-})
-.directive('autoFocus', function() {
-	return{
-		restrict: 'A',
-
-		link: function(scope, element, attrs){
-			scope.$watch(function(){
-				return scope.$eval(attrs.autoFocus);
-			},function (newValue){
-				if (newValue == true){
-					element[0].focus();
-				}
 			});
-		}
 	};
 });
