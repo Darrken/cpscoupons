@@ -95,5 +95,51 @@ namespace CpsCouponsSolution.Services
 
 			return programDto;
 		}
+
+		public ProgramDTO GetProgramByRetailerGuId(string urlGuid)
+		{
+			ProgramDTO programDto;
+			var retailerGuid = Guid.Parse(urlGuid);
+
+			using (var dbContext = new ToolkitEntities())
+			{
+				var selectedProgram = dbContext.Programs.SingleOrDefault(p => p.Program_Retailers.Any(r => r.UrlGuid == retailerGuid));
+
+				programDto = new ProgramDTO(selectedProgram);
+			}
+
+			return programDto;
+		}
+
+		public List<RetailerDTO> GetRetailersByProgramId(int programId)
+		{
+			List<RetailerDTO> retailers;
+			
+			using (var dbContext = new ToolkitEntities())
+			{
+				var retailerList = dbContext.Program_Retailers
+					.Where(r => r.ProgramId == programId)
+					.ToList();
+
+				retailers = retailerList.Select(r => new RetailerDTO(r)).ToList();
+			}
+
+			return retailers;
+		}
+
+		public List<ProgramDTO> GetProgramList()
+		{
+			List<ProgramDTO> programs;
+
+			using (var dbContext = new ToolkitEntities())
+			{
+				var programList = dbContext.Programs
+					.ToList();
+
+				programs = programList.Select(program => new ProgramDTO(program)).ToList();
+			}
+
+			return programs;
+		}
 	}
 }

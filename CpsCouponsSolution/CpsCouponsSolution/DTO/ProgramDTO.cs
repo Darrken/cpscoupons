@@ -6,6 +6,9 @@ namespace CpsCouponsSolution.DTO
 {
 	public class ProgramDTO
 	{
+		public ProgramDTO()
+		{}
+
 		public ProgramDTO(Program program)
 		{
 			Id = program.Id;
