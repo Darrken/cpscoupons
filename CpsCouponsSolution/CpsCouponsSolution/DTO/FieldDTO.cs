@@ -24,7 +24,7 @@ namespace CpsCouponsSolution.DTO
 
 		public FieldValueDTO(Program_Field_Values field)
 		{
-			Id = field.Id;
+			Id = field.ProgramFieldId;
 			RetailerId = field.ProgramRetailerId;
 			Value = field.Value;
 		}

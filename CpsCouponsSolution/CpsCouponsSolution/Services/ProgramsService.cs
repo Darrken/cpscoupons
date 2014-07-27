@@ -169,12 +169,12 @@ namespace CpsCouponsSolution.Services
 			using (var dbContext = new ToolkitEntities())
 			{
 				var retailerData = programData.Retailers.First();
-				var retailer = dbContext.Program_Retailers.SingleOrDefault(pr => pr.Id == retailerData.Id);
+				var retailer = dbContext.Program_Retailers.SingleOrDefault(pr => pr.Id == retailerData.Id && pr.ProgramId == programData.Id);
 
 				if(retailer == null)
 					return new SignUpResult(){WasSuccessful = false, FailureReason = "Retailer not found."};
 
-				UpdateRetailerData(retailer, programData.Retailers.First());
+				UpdateRetailerData(retailer, retailerData);
 
 				dbContext.Entry(retailer).State = EntityState.Modified;
 				dbContext.SaveChanges();
@@ -190,7 +190,7 @@ namespace CpsCouponsSolution.Services
 				retailer.Program_Field_Values.Add(new Program_Field_Values()
 															 {
 																 ProgramFieldId = fieldValueDto.Id,
-																 ProgramRetailerId = (int)fieldValueDto.RetailerId,
+																 ProgramRetailerId = retailer.Id,
 																 Value = fieldValueDto.Value
 															 });
 			}

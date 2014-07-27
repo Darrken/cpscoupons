@@ -187,7 +187,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Program_Malls_Mall">
-          <End Role="Mall" Type="ToolkitModel.Store.Mall" Multiplicity="1" />
+          <End Role="Mall" Type="ToolkitModel.Store.Mall" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Program_Malls" Type="ToolkitModel.Store.Program_Malls" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Mall">
@@ -199,7 +201,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Program_Malls_Program">
-          <End Role="Program" Type="ToolkitModel.Store.Program" Multiplicity="1" />
+          <End Role="Program" Type="ToolkitModel.Store.Program" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Program_Malls" Type="ToolkitModel.Store.Program_Malls" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Program">

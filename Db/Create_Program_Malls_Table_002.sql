@@ -1,7 +1,7 @@
 USE [Toolkit]
 GO
 
-/****** Object:  Table [dbo].[Program_Malls]    Script Date: 07/26/2014 22:16:31 ******/
+/****** Object:  Table [dbo].[Program_Malls]    Script Date: 07/26/2014 23:08:15 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -22,6 +22,7 @@ GO
 
 ALTER TABLE [dbo].[Program_Malls]  WITH CHECK ADD  CONSTRAINT [FK_Program_Malls_Mall] FOREIGN KEY([MallId])
 REFERENCES [dbo].[Mall] ([ID])
+ON DELETE CASCADE
 GO
 
 ALTER TABLE [dbo].[Program_Malls] CHECK CONSTRAINT [FK_Program_Malls_Mall]
@@ -29,6 +30,7 @@ GO
 
 ALTER TABLE [dbo].[Program_Malls]  WITH CHECK ADD  CONSTRAINT [FK_Program_Malls_Program] FOREIGN KEY([ProgramId])
 REFERENCES [dbo].[Program] ([Id])
+ON DELETE CASCADE
 GO
 
 ALTER TABLE [dbo].[Program_Malls] CHECK CONSTRAINT [FK_Program_Malls_Program]
