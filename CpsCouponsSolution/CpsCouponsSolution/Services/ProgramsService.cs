@@ -81,5 +81,19 @@ namespace CpsCouponsSolution.Services
 
 			return newProgram.Id;
 		}
+
+		public ProgramDTO GetProgramById(int programId)
+		{
+			ProgramDTO programDto;
+
+			using (var dbContext = new ToolkitEntities())
+			{
+				var selectedProgram =dbContext.Programs.SingleOrDefault(p => p.Id == programId);
+
+				programDto = new ProgramDTO(selectedProgram);
+			}
+
+			return programDto;
+		}
 	}
 }

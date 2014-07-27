@@ -40,15 +40,26 @@ namespace CpsCouponsSolution.Controllers
 			}
 			catch (Exception ex)
 			{
-				return Request.CreateResponse(HttpStatusCode.InternalServerError, new { message = "There was an error deleting the program.  " + ex.Message });
+				return Request.CreateResponse(HttpStatusCode.InternalServerError, new { wasSuccessful = false, message = "There was an error deleting the program.  " + ex.Message });
 			}
-			
-			return Request.CreateResponse(HttpStatusCode.OK, new {Id = programId});
+
+			return Request.CreateResponse(HttpStatusCode.OK, new { wasSuccessful = true });
 		}
 
 		public HttpResponseMessage GetProgramById(int programId)
 		{
-			return Request.CreateResponse(HttpStatusCode.OK);
+			ProgramDTO program;
+			try
+			{
+				var programsService = new ProgramsService();
+				program = programsService.GetProgramById(programId);
+			}
+			catch (Exception ex)
+			{
+				return Request.CreateResponse(HttpStatusCode.InternalServerError, new { wasSuccessful = false, message = "There was an error deleting the program.  " + ex.Message });
+			}
+
+			return Request.CreateResponse(HttpStatusCode.OK, program);
 		}
 
 		public HttpResponseMessage GetProgramByRetailer(string urlGuid)
