@@ -1,11 +1,11 @@
 ﻿<div class="container-fluid">
 	<div class="page-header">
-		<h1>Create Program</h1>
+		<h1 id="top">Create Program</h1>
 	</div>
 	
 	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 
-	<form name="programform" role="form">
+	<form name="programform" role="form" ng-submit="saveProgram()">
 		<div class="form-group">
 			<label for="name">Program Name</label>
 			<input type="text" class="form-control" id="name" placeholder="Enter program name" ng-model="program.Name" required="true">
@@ -24,13 +24,13 @@
 		</div>		
 		<div class="form-group">
 			<label for="emails">Retailer Emails</label>
-			<textarea class="form-control" id="emails" required="true" rows="8" placeholder="Type or Paste Email list (line-break separated)"></textarea>
+			<textarea class="form-control" id="emails" required="true" rows="8" ng-model="program.Emails" placeholder="Type or Paste Email list (line-break separated)"></textarea>
 		</div>
 		<div class="form-group">
 			<label for="centers">Select Participating Centers</label>
 			<div style="height: 20em; overflow-y: scroll; padding: 1em;" class="panel panel-default">
 				<label class="checkbox-inline" ng-repeat="mall in malls" style="width: 20%; margin-left: 0">
-					<input type="checkbox" name="centers" id="centers" value="{{mall.Id}}" style="position: static;"> {{mall.Name + ' - ' + mall.StateName}}
+					<input type="checkbox" name="centers" id="centers" ng-click="toggleCenter(mall.Id)" value="{{mall.Id}}" style="position: static;"> {{mall.Name + ' - ' + mall.StateName}}
 				</label>
 			</div>
 		</div>
