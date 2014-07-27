@@ -16,10 +16,10 @@
 		</div>
 		<div class="form-group">
 			<label for="centers">Select Participating Centers</label>
-			<div>
-				<select id="centers" multiple="true">
-					<option ng-repeat="mall in malls" id="{{mall.Id}}">{{mall.Name}}</option>
-				</select>
+			<div style="height:20em; overflow:scroll; padding: 1em;" class="panel panel-default">
+				<label class="checkbox-inline" ng-repeat="mall in malls" style="width:20%; margin-left:0">
+					<input type="checkbox" name="centers" id="centers" value="{{mall.Id}}" style="position: static;"> {{mall.Name + ' - ' + mall.StateName}}
+				</label>
 			</div>
 		</div>
 		<button type="submit" class="btn btn-default">Submit</button>
