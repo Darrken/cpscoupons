@@ -34,6 +34,13 @@
 				</label>
 			</div>
 		</div>
+		<div class="form-group">
+			<label>Additional Form Fields</label>
+			<div class="panel panel-default" data-ng-repeat="field in program.Fields">
+				<input class="form-control" type="text" ng-model="field.Name" placeholder="Enter Field Name" ng-blur="removeEmptyField(field.Name, $index)" auto-focus="$index == program.Fields.length-1">
+			</div>
+			<div><button type="button" class="btn btn-primary" ng-click="addField()">Add New Input Field</button></div>
+		</div>
 		<button type="submit" class="btn btn-primary" ng-disabled="!programform.$valid">Submit</button>
 	</form>
 </div>

@@ -27,7 +27,7 @@ app.controller('programCtrl', function ($scope, $routeParams, $location, $anchor
 	$scope.alerts = [];
 	//$scope.program.ProgramId = $routeParams.programId;
 	$scope.program = {
-		Centers: [],
+		ParticipatingMalls: [],
 		CouponWordCount: null,
 		Description: null,
 		Disclaimer: null,
@@ -57,18 +57,28 @@ app.controller('programCtrl', function ($scope, $routeParams, $location, $anchor
 	};
 
 	$scope.toggleCenter = function (id) {
-		var idx = $scope.program.Centers.indexOf(id);
+		var idx = $scope.program.ParticipatingMalls.indexOf(id);
 
 		// is currently selected
 		if (idx > -1) {
-			$scope.program.Centers.splice(idx, 1);
+			$scope.program.ParticipatingMalls.splice(idx, 1);
 		}
 
 		// is newly selected
 		else {
-			$scope.program.Centers.push(id);
+			$scope.program.ParticipatingMalls.push(id);
 		}
 	};
+
+	$scope.addField = function() {
+		$scope.program.Fields.push({Name: null});
+	};
+
+	$scope.removeEmptyField = function(fieldName, index) {
+		if (!fieldName || fieldName.length === 0) {
+			$scope.program.Fields.splice(index, 1);
+		}
+	}
 
 	$scope.saveProgram = function () {
 		var emails = $scope.program.Emails.split('\n');
@@ -91,5 +101,20 @@ app.controller('programCtrl', function ($scope, $routeParams, $location, $anchor
 				$location.hash('top');
 				$anchorScroll();
 		});
+	};
+})
+.directive('autoFocus', function() {
+	return{
+		restrict: 'A',
+
+		link: function(scope, element, attrs){
+			scope.$watch(function(){
+				return scope.$eval(attrs.autoFocus);
+			},function (newValue){
+				if (newValue == true){
+					element[0].focus();
+				}
+			});
+		}
 	};
 });
