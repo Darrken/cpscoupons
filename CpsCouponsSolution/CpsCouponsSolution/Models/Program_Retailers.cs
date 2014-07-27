@@ -25,8 +25,8 @@ namespace CpsCouponsSolution.Models
         public System.Guid UrlGuid { get; set; }
         public int ProgramId { get; set; }
     
-        public virtual Program Program { get; set; }
         public virtual ICollection<Program_Field_Values> Program_Field_Values { get; set; }
         public virtual ICollection<Program_Retailer_Selected_Malls> Program_Retailer_Selected_Malls { get; set; }
+        public virtual Program Program { get; set; }
     }
 }

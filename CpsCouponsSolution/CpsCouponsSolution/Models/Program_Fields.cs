@@ -23,7 +23,7 @@ namespace CpsCouponsSolution.Models
         public string Name { get; set; }
         public int ProgramId { get; set; }
     
-        public virtual Program Program { get; set; }
         public virtual ICollection<Program_Field_Values> Program_Field_Values { get; set; }
+        public virtual Program Program { get; set; }
     }
 }

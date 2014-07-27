@@ -142,14 +142,36 @@ namespace CpsCouponsSolution.Controllers
 			return Request.CreateResponse(HttpStatusCode.OK, mallNames);
 		}
 
-		public HttpResponseMessage SignUp()
+		public HttpResponseMessage SignUp(ProgramDTO programData)
 		{
-			return Request.CreateResponse(HttpStatusCode.OK);
+			SignUpResult signUpResult;
+			try
+			{
+				var programsService = new ProgramsService();
+				signUpResult = programsService.RetailerSignUp(programData);
+			}
+			catch (Exception ex)
+			{
+				return Request.CreateResponse(HttpStatusCode.InternalServerError, new { message = "There was an error saving the retailer data.  " + ex.Message });
+			}
+
+			return Request.CreateResponse(HttpStatusCode.OK, signUpResult);
 		}
 
 		public HttpResponseMessage GetRetailersByMall(int mallId)
 		{
-			return Request.CreateResponse(HttpStatusCode.OK);
+			List<RetailerDTO> retailers;
+			try
+			{
+				var programsService = new ProgramsService();
+				retailers = programsService.GetRetailersByMallId(mallId);
+			}
+			catch (Exception ex)
+			{
+				return Request.CreateResponse(HttpStatusCode.InternalServerError, new { wasSuccessful = false, message = "There was an error retrieving retailers for the specified mall.  " + ex.Message });
+			}
+
+			return Request.CreateResponse(HttpStatusCode.OK, retailers);
 		}
 	}
 }

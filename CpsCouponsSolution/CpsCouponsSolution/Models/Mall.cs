@@ -17,6 +17,7 @@ namespace CpsCouponsSolution.Models
         public Mall()
         {
             this.Program_Retailer_Selected_Malls = new HashSet<Program_Retailer_Selected_Malls>();
+            this.Programs = new HashSet<Program>();
         }
     
         public int ID { get; set; }
@@ -39,5 +40,6 @@ namespace CpsCouponsSolution.Models
     
         public virtual State State { get; set; }
         public virtual ICollection<Program_Retailer_Selected_Malls> Program_Retailer_Selected_Malls { get; set; }
+        public virtual ICollection<Program> Programs { get; set; }
     }
 }

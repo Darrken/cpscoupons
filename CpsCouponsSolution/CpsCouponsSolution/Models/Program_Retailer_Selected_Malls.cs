@@ -18,7 +18,7 @@ namespace CpsCouponsSolution.Models
         public int ProgramRetailerId { get; set; }
         public int MallId { get; set; }
     
-        public virtual Mall Mall { get; set; }
         public virtual Program_Retailers Program_Retailers { get; set; }
+        public virtual Mall Mall { get; set; }
     }
 }

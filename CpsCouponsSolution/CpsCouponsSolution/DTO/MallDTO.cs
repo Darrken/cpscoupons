@@ -1,4 +1,6 @@
-﻿namespace CpsCouponsSolution.DTO
+﻿using CpsCouponsSolution.Models;
+
+namespace CpsCouponsSolution.DTO
 {
 	public class MallDTO
 	{

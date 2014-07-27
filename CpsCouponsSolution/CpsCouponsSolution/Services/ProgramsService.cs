@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Web.Management;
 using CpsCouponsSolution.DTO;
 using CpsCouponsSolution.Models;
 
@@ -75,6 +76,11 @@ namespace CpsCouponsSolution.Services
 					}); 
 				}
 
+				foreach (var mallId in programData.ParticipatingMalls)
+				{
+					newProgram.Malls.Add(dbContext.Malls.First(m => m.ID == mallId)); 
+				}
+
 				dbContext.Programs.Add(newProgram);
 				dbContext.SaveChanges();
 			}
@@ -141,5 +147,68 @@ namespace CpsCouponsSolution.Services
 
 			return programs;
 		}
+
+		public List<RetailerDTO> GetRetailersByMallId(int mallId)
+		{
+			List<RetailerDTO> retailers;
+
+			using (var dbContext = new ToolkitEntities())
+			{
+				var retailerList = dbContext.Program_Retailers
+					.Where(r => r.Program_Retailer_Selected_Malls.Any(rm => rm.MallId == mallId))
+					.ToList();
+
+				retailers = retailerList.Select(r => new RetailerDTO(r)).ToList();
+			}
+
+			return retailers;
+		}
+
+		public SignUpResult RetailerSignUp(ProgramDTO programData)
+		{
+			using (var dbContext = new ToolkitEntities())
+			{
+				var retailerData = programData.Retailers.First();
+				var retailer = dbContext.Program_Retailers.SingleOrDefault(pr => pr.Id == retailerData.Id);
+
+				if(retailer == null)
+					return new SignUpResult(){WasSuccessful = false, FailureReason = "Retailer not found."};
+
+				UpdateRetailerData(retailer, programData.Retailers.First());
+
+				dbContext.Entry(retailer).State = EntityState.Modified;
+				dbContext.SaveChanges();
+			}
+
+			return new SignUpResult() { WasSuccessful = true }; 
+		}
+
+		private void UpdateRetailerData(Program_Retailers retailer, RetailerDTO retailerData)
+		{
+			foreach (var fieldValueDto in retailerData.FieldValues)
+			{
+				retailer.Program_Field_Values.Add(new Program_Field_Values()
+															 {
+																 ProgramFieldId = fieldValueDto.Id,
+																 ProgramRetailerId = (int)fieldValueDto.RetailerId,
+																 Value = fieldValueDto.Value
+															 });
+			}
+
+			foreach (var mallId in retailerData.SelectedMalls)
+			{
+				retailer.Program_Retailer_Selected_Malls.Add(new Program_Retailer_Selected_Malls()
+				{
+					ProgramRetailerId = retailerData.Id,
+					MallId = mallId
+				});
+			}
+		}
+	}
+
+	public class SignUpResult
+	{
+		public bool WasSuccessful { get; set; }
+		public string FailureReason { get; set; }
 	}
 }
