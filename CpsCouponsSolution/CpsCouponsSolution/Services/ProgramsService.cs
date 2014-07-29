@@ -220,12 +220,11 @@ namespace CpsCouponsSolution.Services
 			return retailers;
 		}
 
-		public ResponseResult RetailerSignUp(ProgramDTO programData)
+		public ResponseResult RetailerSignUp(RetailerDTO retailerData)
 		{
-			if(programData == null)
-				throw new ArgumentNullException("programData");
+			if (retailerData == null)
+				throw new ArgumentNullException("retailerData1");
 			
-			var retailerData = programData.Retailers.FirstOrDefault();
 			if(retailerData == null)
 				return new ResponseResult() { WasSuccessful = false, FailureReason = "No Retailer submitted to update." };
 
@@ -240,7 +239,7 @@ namespace CpsCouponsSolution.Services
 			
 			using (var dbContext = new ToolkitEntities())
 			{
-				var retailer = dbContext.Program_Retailers.SingleOrDefault(pr => pr.Id == retailerData.Id && pr.ProgramId == programData.Id);
+				var retailer = dbContext.Program_Retailers.SingleOrDefault(pr => pr.Id == retailerData.Id && pr.ProgramId == retailerData.ProgramId);
 
 				if(retailer == null)
 					return new ResponseResult(){WasSuccessful = false, FailureReason = "Retailer not found."};
