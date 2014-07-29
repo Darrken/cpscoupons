@@ -25,13 +25,17 @@
 
 app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, programsApiService) {
 	$scope.alerts = [];
+	$scope.Emails = [];
+	$scope.ParticipatingMalls = [];
 
 	$scope.program = {
 		ParticipatingMalls: [],
 		CouponWordCount: null,
 		Description: null,
 		Disclaimer: null,
-		Emails: [],
+		DeadlineCoupon: null,
+		DeadlineInMall: null,
+		Retailers: [],
 		Fields: [],
 		Name: null,
 	};
@@ -57,13 +61,13 @@ app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, p
 	};
 
 	$scope.toggleCenter = function(id) {
-		var idx = $scope.program.ParticipatingMalls.indexOf(id);
+		var idx = $scope.ParticipatingMalls.indexOf(id);
 
 		if (idx > -1) {
-			$scope.program.ParticipatingMalls.splice(idx, 1);
+			$scope.ParticipatingMalls.splice(idx, 1);
 		}
 		else {
-			$scope.program.ParticipatingMalls.push(id);
+			$scope.ParticipatingMalls.push(id);
 		}
 	};
 
@@ -79,10 +83,13 @@ app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, p
 
 	$scope.saveProgram = function() {
 		var emails = $scope.program.Emails.split('\n');
-		$scope.program.Retailers = [];
 
 		_.forEach(emails, function(email) {
 			$scope.program.Retailers.push({ Email: email });
+		});
+
+		_.forEach($scope.ParticipatingMalls, function (id) {
+			$scope.program.ParticipatingMalls.push({ Id: id });
 		});
 
 		programsApiService.saveByCommand('createProgram', $scope.program)
@@ -105,9 +112,10 @@ app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, p
 
 app.controller('programUserCtrl', function ($scope, $routeParams, $location, $anchorScroll, programsApiService) {
 	$scope.alerts = [];
+	var mallList = [];
 
 	$scope.getProgramByGuid = function () {
-		programsApiService.getByCommand('getProgramByRetailerGuId', $routeParams.urlguid)
+		programsApiService.getProgramByRetailer($routeParams.urlguid)
 			.then(function (data) {
 				$scope.program = data;
 			})
@@ -117,6 +125,10 @@ app.controller('programUserCtrl', function ($scope, $routeParams, $location, $an
 	};
 
 	$scope.getProgramByGuid();
+	
+	$scope.mallsByState = _.groupBy(mallList, 'StateId');
+
+	console.log($scope);
 
 	function addAlert(errorType, message) {
 		$scope.alerts.push({ type: errorType, msg: message });
@@ -147,26 +159,4 @@ app.controller('programUserCtrl', function ($scope, $routeParams, $location, $an
 		}
 	}
 
-	$scope.saveProgram = function () {
-		var emails = $scope.program.Emails.split('\n');
-		$scope.program.Retailers = [];
-
-		_.forEach(emails, function (email) {
-			$scope.program.Retailers.push({ Email: email });
-		});
-
-		programsApiService.saveByCommand('createProgram', $scope.program)
-			.then(function (data) {
-				if (data.status === 200) {
-					addAlert('success', 'Program was successfully saved.');
-				}
-			})
-			.catch(function (data) {
-				addAlert('danger', 'Unable to save Program data.');
-			})
-			.finally(function () {
-				$location.hash('top');
-				$anchorScroll();
-			});
-	};
 });

@@ -34,25 +34,6 @@ namespace CpsCouponsSolution.Services
 			return mallList;
 		}		
 		
-		public List<MallDTO> GetMallsByProgramId(int programId)
-		{
-			List<MallDTO> mallList;
-			using (var dbContext = new ToolkitEntities())
-			{
-				var malls = dbContext.Programs.Where(p => p.Id == programId).SelectMany(p => p.Malls.Select(m => new MallDTO
-				{
-					Id = m.ID,
-					Name = m.Name,
-					StateId = m.State.ID,
-					StateName = m.State.Abbreviation
-				}));
-
-				mallList = malls.OrderBy(m => m.Name).ToList();
-			}
-
-			return mallList;
-		}
-
 		public void DeleteProgram(int programId)
 		{
 			using (var dbContext = new ToolkitEntities())
@@ -90,7 +71,9 @@ namespace CpsCouponsSolution.Services
 					             CouponWordCount = programData.CouponWordCount,
 					             Description = programData.Description,
 					             Disclaimer = programData.Disclaimer,
-					             Name = programData.Name
+					             Name = programData.Name,
+									 DeadlineCoupon = programData.DeadlineCoupon,
+									 DeadlineInMall = programData.DeadlineInMall
 				             };
 
 				if (programData.Fields != null && programData.Fields.Any())
@@ -115,9 +98,9 @@ namespace CpsCouponsSolution.Services
 					}); 
 				}
 
-				foreach (var mallId in programData.ParticipatingMalls)
+				foreach (var mall in programData.ParticipatingMalls)
 				{
-					newProgram.Malls.Add(dbContext.Malls.First(m => m.ID == mallId)); 
+					newProgram.Malls.Add(dbContext.Malls.First(m => m.ID == mall.Id)); 
 				}
 
 				dbContext.Programs.Add(newProgram);

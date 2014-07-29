@@ -23,6 +23,27 @@
 			return deferred.promise;
 		},
 
+
+		getProgramByRetailer: function (id) {
+			var deferred = $q.defer();
+
+			var apiUrl = this.baseQueriesApiUrl + 'getProgramByRetailer?guid=' + encodeURIComponent(id);
+
+			$http({ method: 'GET', url: apiUrl }).
+				success(function (data) {
+					deferred.resolve(data);
+				}).
+				error(function (data, status) {
+					data = data || {};
+
+					data.status = status;
+
+					deferred.reject(data);
+				});
+
+			return deferred.promise;
+		},
+
 		saveByCommand: function (command, model) {
 			var deferred = $q.defer();
 			var apiUrl = this.baseQueriesApiUrl + command;
