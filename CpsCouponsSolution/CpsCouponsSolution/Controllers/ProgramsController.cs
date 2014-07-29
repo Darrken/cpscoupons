@@ -164,13 +164,13 @@ namespace CpsCouponsSolution.Controllers
 			return Request.CreateResponse(HttpStatusCode.OK, mallNames);
 		}
 
-		public HttpResponseMessage SignUp(ProgramDTO programData)
+		public HttpResponseMessage SignUp(RetailerDTO retailerDto)
 		{
 			ResponseResult responseResult;
 			try
 			{
 				var programsService = new ProgramsService();
-				responseResult = programsService.RetailerSignUp(programData);
+				responseResult = programsService.RetailerSignUp(retailerDto);
 			}
 			catch (ArgumentNullException ex)
 			{

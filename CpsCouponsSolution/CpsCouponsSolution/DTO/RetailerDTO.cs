@@ -13,6 +13,7 @@ namespace CpsCouponsSolution.DTO
 		public RetailerDTO(Program_Retailers retailer)
 		{
 			Id = retailer.Id;
+			ProgramId = retailer.ProgramId;
 			Email = retailer.Email;
 			UrlGuid = retailer.UrlGuid;
 			HasSignedUp = retailer.Program_Field_Values.Any() || retailer.Program_Retailer_Selected_Malls.Any();
@@ -23,6 +24,7 @@ namespace CpsCouponsSolution.DTO
 		public List<FieldValueDTO> FieldValues { get; set; }
 		public List<int> SelectedMalls { get; set; }
 		public int Id { get; set; }
+		public int ProgramId { get; set; }
 		public string Email { get; set; }
 		public Guid UrlGuid { get; set; }
 		public bool HasSignedUp { get; set; }
