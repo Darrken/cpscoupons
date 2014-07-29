@@ -31,6 +31,25 @@ namespace CpsCouponsSolution.Services
 			}
 
 			return mallList;
+		}		
+		
+		public List<MallDTO> GetProgramMalls(int programId)
+		{
+			List<MallDTO> mallList;
+			using (var dbContext = new ToolkitEntities())
+			{
+				var malls = dbContext.Programs.Where(p => p.Id == programId).SelectMany(p => p.Malls.Select(m => new MallDTO
+				{
+					Id = m.ID,
+					Name = m.Name,
+					StateId = m.State.ID,
+					StateName = m.State.Abbreviation
+				}));
+
+				mallList = malls.OrderBy(m => m.Name).ToList();
+			}
+
+			return mallList;
 		}
 
 		public void DeleteProgram(int programId)

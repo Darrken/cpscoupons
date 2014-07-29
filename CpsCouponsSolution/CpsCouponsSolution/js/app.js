@@ -1,7 +1,7 @@
 ﻿var app = angular.module('app', ['ngRoute', 'ui.bootstrap'])
 	.config(function($routeProvider, $locationProvider) {
 		$routeProvider.
-			when('/admin', {
+			when('/adminmenu', {
 				templateUrl: '/views/admin.html',
 				controller: 'adminMenuCtrl'
 			}).
@@ -11,11 +11,11 @@
 			}).
 			when('/adminprogram', {
 				templateUrl: '/views/programcreate.html',
-				controller: 'programCtrl'
+				controller: 'programAdminCtrl'
 			}).
-			when('/signup/:guid', {
+			when('/signup/:urlguid', {
 				templateUrl: '/views/program.html',
-				controller: 'programCtrl'
+				controller: 'programUserCtrl'
 			}).
 			otherwise({
 				redirectTo: '/'

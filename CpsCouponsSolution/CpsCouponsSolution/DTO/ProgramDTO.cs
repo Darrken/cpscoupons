@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CpsCouponsSolution.Models;
 
@@ -15,6 +16,8 @@ namespace CpsCouponsSolution.DTO
 			Name = program.Name;
 			Description = program.Description;
 			Disclaimer = program.Disclaimer;
+			DeadlineCoupon = program.DeadlineCoupon;
+			DeadlineInMall = program.DeadlineInMall;
 			CouponWordCount = program.CouponWordCount;
 			Retailers = program.Program_Retailers.Select(r => new RetailerDTO(r)).ToList();
 			Fields = program.Program_Fields.Select(f => new FieldDTO(f)).ToList();
@@ -25,6 +28,8 @@ namespace CpsCouponsSolution.DTO
 		public string Name { get; set; }
 		public string Description { get; set; }
 		public string Disclaimer { get; set; }
+		public DateTime? DeadlineCoupon { get; set; }
+		public DateTime? DeadlineInMall { get; set; }
 		public int? CouponWordCount { get; set; }
 		public List<RetailerDTO> Retailers { get; set; }
 		public List<FieldDTO> Fields { get; set; }

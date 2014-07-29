@@ -1,0 +1,38 @@
+﻿<div class="container-fluid">
+	<h2>{{program.Name}}</h2>
+
+	<div class="row">
+		<div class="col-md-6">{{program.Description}}</div>
+		<div class="col-md-6">{{program.Disclaimer}}</div>
+	</div>
+
+	<p class="bg-info">Act quickly, as space is very limited and offered on a first-come, first-served basis. Send in your reservation TODAY to ensure your participation.</p>
+	
+	<div class="row">
+		<div class="col-md-6">
+			<h3>deadlines</h3>
+			<ul class="list-group">
+				<li class="list-group-item">
+					<span class="badge">{{program.DeadlineCoupon}}</span>
+					Space Reservations and Coupon Offer
+				</li>
+				<li class="list-group-item">
+					<span class="badge">{{program.DeadlineInMall}}</span>
+					In-Mall Date
+				</li>
+			</ul>
+		</div>
+		<div class="col-md-6">
+			<h3>coupon offer ({{program.CouponWordCount}} words or less):</h3>
+			<textarea class="form-control" id="offer" rows="4" placeholder="Enter offer text" required="true" ng-model="retailer.Offer"></textarea>
+			<p><small>MMM will provide a proof of your offer and will send via fax or email for approval. We must either have email or fax information to send proof.</small></p>
+		</div>
+	</div>
+	
+	<h3>please check your participating GGP Shopping Center locations:</h3>
+	<div style="padding: 1em;" class="panel panel-default">
+		<label class="checkbox-inline" ng-repeat="mall in malls" style="width: 20%; margin-left: 0">
+			<input type="checkbox" name="centers" id="centers" ng-click="toggleCenter(mall.Id)" value="{{mall.Id}}" style="position: static;"> {{mall.Name + ' - ' + mall.StateName}}
+		</label>
+	</div>
+</div>

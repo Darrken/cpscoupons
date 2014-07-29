@@ -9,7 +9,7 @@
         <EntityTypeShape EntityType="ToolkitModel.Program_Field_Values" Width="2.125" PointX="9.25" PointY="3.875" />
         <EntityTypeShape EntityType="ToolkitModel.Program_Fields" Width="1.5" PointX="9.5" PointY="1.125" />
         <EntityTypeShape EntityType="ToolkitModel.Program_Retailer_Selected_Malls" Width="2.75" PointX="12.125" PointY="2.375" />
-        <EntityTypeShape EntityType="ToolkitModel.Program_Retailers" Width="2.125" PointX="6" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ToolkitModel.Program_Retailers" Width="2.125" PointX="6" PointY="5.625" IsExpanded="true" />
         <AssociationConnector Association="ToolkitModel.FK_Program_Field_Values_Program_Fields" />
         <AssociationConnector Association="ToolkitModel.FK_Program_Field_Values_Program_Retailers" />
         <AssociationConnector Association="ToolkitModel.FK_Program_Retailer_Selected_Malls_Program_Retailers" />

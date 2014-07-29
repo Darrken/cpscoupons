@@ -82,6 +82,8 @@
           <Property Name="Description" Type="varchar(max)" />
           <Property Name="Disclaimer" Type="varchar(max)" />
           <Property Name="CouponWordCount" Type="int" />
+          <Property Name="DeadlineCoupon" Type="date" />
+          <Property Name="DeadlineInMall" Type="date" />
         </EntityType>
         <EntityType Name="Program_Field_Values">
           <Key>
@@ -435,6 +437,8 @@
           <NavigationProperty Name="Program_Fields" Relationship="ToolkitModel.FK_Program_Fields_Program" FromRole="Program" ToRole="Program_Fields" />
           <NavigationProperty Name="Program_Retailers" Relationship="ToolkitModel.FK_Program_Retailers_Program" FromRole="Program" ToRole="Program_Retailers" />
           <NavigationProperty Name="Malls" Relationship="ToolkitModel.Program_Malls" FromRole="Program" ToRole="Mall" />
+          <Property Type="DateTime" Name="DeadlineCoupon" Precision="0" />
+          <Property Type="DateTime" Name="DeadlineInMall" Precision="0" />
         </EntityType>
         <Association Name="FK_Mall_State">
           <End Type="ToolkitModel.State" Role="State" Multiplicity="0..1" />
@@ -575,6 +579,8 @@
           <EntitySetMapping Name="Programs">
             <EntityTypeMapping TypeName="ToolkitModel.Program">
               <MappingFragment StoreEntitySet="Program">
+                <ScalarProperty Name="DeadlineInMall" ColumnName="DeadlineInMall" />
+                <ScalarProperty Name="DeadlineCoupon" ColumnName="DeadlineCoupon" />
                 <ScalarProperty Name="CouponWordCount" ColumnName="CouponWordCount" />
                 <ScalarProperty Name="Disclaimer" ColumnName="Disclaimer" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
