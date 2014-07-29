@@ -33,7 +33,7 @@ namespace CpsCouponsSolution.Services
 			return mallList;
 		}		
 		
-		public List<MallDTO> GetProgramMalls(int programId)
+		public List<MallDTO> GetMallsByProgramId(int programId)
 		{
 			List<MallDTO> mallList;
 			using (var dbContext = new ToolkitEntities())
