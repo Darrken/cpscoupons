@@ -21,7 +21,7 @@ namespace CpsCouponsSolution.DTO
 			CouponWordCount = program.CouponWordCount;
 			Retailers = program.Program_Retailers.Select(r => new RetailerDTO(r)).ToList();
 			Fields = program.Program_Fields.Select(f => new FieldDTO(f)).ToList();
-			ParticipatingMalls = program.Malls.Select(m => m.ID).ToList();
+			ParticipatingMalls = program.Malls.Select(m =>new MallDTO(m)).ToList();
 		}
 
 		public int Id { get; set; }
@@ -33,6 +33,6 @@ namespace CpsCouponsSolution.DTO
 		public int? CouponWordCount { get; set; }
 		public List<RetailerDTO> Retailers { get; set; }
 		public List<FieldDTO> Fields { get; set; }
-		public List<int> ParticipatingMalls { get; set; }
+		public List<MallDTO> ParticipatingMalls { get; set; }
 	}
 }

@@ -14,7 +14,7 @@
 				controller: 'programAdminCtrl'
 			}).
 			when('/signup/:urlguid', {
-				templateUrl: '/views/program.html',
+				templateUrl: '/views/programsignup.html',
 				controller: 'programUserCtrl'
 			}).
 			otherwise({
