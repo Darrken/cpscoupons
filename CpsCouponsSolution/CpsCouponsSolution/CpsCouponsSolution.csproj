@@ -157,6 +157,7 @@
     <Compile Include="Services\ProgramsService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\logonmast.png" />
     <Content Include="js\app.js" />
     <Content Include="Assets\ui-bootstrap-tpls-0.11.0.min.js" />
     <Content Include="index.html" />
