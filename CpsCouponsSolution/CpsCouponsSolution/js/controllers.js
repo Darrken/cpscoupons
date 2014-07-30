@@ -113,6 +113,7 @@ app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, p
 app.controller('programUserCtrl', function ($scope, $routeParams, $location, $anchorScroll, programsApiService) {
 	$scope.alerts = [];
 	var mallList = [];
+	$scope.agreed = false;
 
 	$scope.getProgramByGuid = function () {
 		programsApiService.getProgramByRetailer($routeParams.urlguid)
@@ -123,10 +124,9 @@ app.controller('programUserCtrl', function ($scope, $routeParams, $location, $an
 				addAlert('danger', 'Unable to get Program data. Please contact your CPS rep.');
 			});
 	};
-
 	$scope.getProgramByGuid();
 	
-	$scope.mallsByState = _.groupBy(mallList, 'StateId');
+	//$scope.mallsByState = _.groupBy($scope.program.ParticipatingMalls, 'StateId');
 
 	console.log($scope);
 
@@ -139,13 +139,13 @@ app.controller('programUserCtrl', function ($scope, $routeParams, $location, $an
 	};
 
 	$scope.toggleCenter = function (id) {
-		var idx = $scope.program.ParticipatingMalls.indexOf(id);
+		var idx = $scope.program.SelectedMalls.indexOf(id);
 
 		if (idx > -1) {
-			$scope.program.ParticipatingMalls.splice(idx, 1);
+			$scope.program.SelectedMalls.splice(idx, 1);
 		}
 		else {
-			$scope.program.ParticipatingMalls.push(id);
+			$scope.program.SelectedMalls.push(id);
 		}
 	};
 
