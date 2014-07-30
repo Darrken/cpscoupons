@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Management;
 using CpsCouponsSolution.DTO;
@@ -205,9 +206,6 @@ namespace CpsCouponsSolution.Services
 
 		public ResponseResult RetailerSignUp(RetailerDTO retailerData)
 		{
-			if (retailerData == null)
-				throw new ArgumentNullException("retailerData1");
-			
 			if(retailerData == null)
 				return new ResponseResult() { WasSuccessful = false, FailureReason = "No Retailer submitted to update." };
 
@@ -227,7 +225,7 @@ namespace CpsCouponsSolution.Services
 				if(retailer == null)
 					return new ResponseResult(){WasSuccessful = false, FailureReason = "Retailer not found."};
 
-				UpdateRetailerData(retailer, retailerData);
+				UpdateRetailerData(retailer, retailerData, dbContext);
 
 				dbContext.Entry(retailer).State = EntityState.Modified;
 				dbContext.SaveChanges();
@@ -236,28 +234,52 @@ namespace CpsCouponsSolution.Services
 			return new ResponseResult() { WasSuccessful = true }; 
 		}
 
-		private void UpdateRetailerData(Program_Retailers retailer, RetailerDTO retailerData)
+		private void UpdateRetailerData(Program_Retailers retailer, RetailerDTO retailerData, ToolkitEntities dbContext)
 		{
+			retailer.Offer = retailerData.Offer;
+			retailer.StoreName = retailerData.StoreName;
+			retailer.Restrictions = retailerData.Restrictions;
+			
 			if (retailerData.FieldValues != null && retailerData.FieldValues.Any())
 			{
 				foreach (var fieldValueDto in retailerData.FieldValues)
 				{
-					retailer.Program_Field_Values.Add(new Program_Field_Values()
-					                                  {
-						                                  ProgramFieldId = fieldValueDto.Id,
-						                                  ProgramRetailerId = retailer.Id,
-						                                  Value = fieldValueDto.Value
-					                                  });
+					var existingFieldValue = dbContext.Program_Field_Values.SingleOrDefault(
+																									fv => fv.ProgramFieldId == fieldValueDto.Id
+																									&& fv.ProgramRetailerId == retailerData.Id);
+					if (existingFieldValue != null)
+					{
+						existingFieldValue.Value = fieldValueDto.Value;
+					}
+					else
+					{
+						retailer.Program_Field_Values.Add(new Program_Field_Values()
+						{
+							ProgramFieldId = fieldValueDto.Id,
+							ProgramRetailerId = retailer.Id,
+							Value = fieldValueDto.Value
+						});	
+					}
+				}
+			}
+			
+			var alreadySelectedMalls = dbContext.Program_Retailer_Selected_Malls.Where(rsm => rsm.ProgramRetailerId == retailerData.Id).ToList();
+			foreach (var mallId in retailerData.SelectedMalls)
+			{
+				if (alreadySelectedMalls.All(m => m.MallId != mallId))
+				{
+					retailer.Program_Retailer_Selected_Malls.Add(new Program_Retailer_Selected_Malls()
+					{
+						ProgramRetailerId = retailerData.Id,
+						MallId = mallId
+					});	
 				}
 			}
 
-			foreach (var mallId in retailerData.SelectedMalls)
+			var mallsToDelete = alreadySelectedMalls.Where(m => !retailerData.SelectedMalls.Contains(m.MallId)).ToList();
+			foreach (var mallToDelete in mallsToDelete)
 			{
-				retailer.Program_Retailer_Selected_Malls.Add(new Program_Retailer_Selected_Malls()
-				{
-					ProgramRetailerId = retailerData.Id,
-					MallId = mallId
-				});
+				dbContext.Entry(mallToDelete).State = EntityState.Deleted;
 			}
 		}
 	}
