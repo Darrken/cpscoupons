@@ -124,12 +124,6 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 				_.forEach($scope.program.Fields, function (field) {
 					var fieldValue = { Id: field.Id, Name: field.Name, Value: null, RetailerId: $scope.retailer.Id };
 					$scope.retailer.FieldValues.push(fieldValue);
-
-					// This can be used to prevent overwriting existing retailer data, but for now I'm clearing the retailer collection first (line 122)
-					//var existingField = _.find($scope.retailer.FieldValues, { 'Id': field.Id });
-					//if (!existingField) {
-					//	$scope.retailer.FieldValues.push(fieldValue);
-					//}
 				});
 			})
 			.catch(function () {
@@ -164,14 +158,14 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 		}
 
 		programsApiService.saveByCommand('signUp', $scope.retailer)
-			.then(function (data) {
+			.then(function(data) {
 				if (data.status === 200) {
 					//TODO: figure out why this doesn't always work
 					addAlert('success', 'Program was successfully saved.');
 				}
 			})
-			.catch(function (data) {
+			.catch(function(data) {
 				addAlert('danger', 'Unable to save Program data.');
-			})
+			});
 	};
 });
