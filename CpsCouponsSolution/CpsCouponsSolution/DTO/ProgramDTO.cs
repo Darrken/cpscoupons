@@ -37,6 +37,5 @@ namespace CpsCouponsSolution.DTO
 		public List<FieldDTO> Fields { get; set; }
 		public List<MallDTO> ParticipatingMalls { get; set; }
 		public string Header { get; set; }
-		public string RetailerEmail { get; set; }
 	}
 }

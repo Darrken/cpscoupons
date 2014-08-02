@@ -13,7 +13,7 @@
 		<div class="form-group">
 			<label for="name">Coupon Deadline</label>
 			<input type="date" class="form-control" id="coupondeadline" ng-model="program.DeadlineCoupon" required="true">
-		</div>		
+		</div>
 		<div class="form-group">
 			<label for="name">In-Mall Deadline</label>
 			<input type="date" class="form-control" id="inmalldeadline" ng-model="program.DeadlineInMall" required="true">
@@ -23,13 +23,17 @@
 			<input type="number" min="1" max="1000" class="form-control" name="wordcount" id="wordcount" placeholder="10" ng-model="program.CouponWordCount">
 		</div>
 		<div class="form-group">
+			<label for="header">Header</label>
+			<textarea class="form-control" id="header" rows="8" placeholder="Enter header information (html supported)" required="true" ng-model="program.Header"></textarea>
+		</div>
+		<div class="form-group">
 			<label for="description">Description</label>
-			<textarea class="form-control" id="description" rows="8" placeholder="Enter a description" required="true" ng-model="program.Description"></textarea>
+			<textarea class="form-control" id="description" rows="8" placeholder="Enter description (html supported)" required="true" ng-model="program.Description"></textarea>
 		</div>
 		<div class="form-group">
 			<label for="disclaimer">Disclaimer</label>
-			<textarea class="form-control" id="disclaimer" rows="8" placeholder="Enter a disclaimer" ng-model="program.Disclaimer"></textarea>
-		</div>		
+			<textarea class="form-control" id="disclaimer" rows="8" placeholder="Enter disclaimer information (html supported)" ng-model="program.Disclaimer"></textarea>
+		</div>
 		<div class="form-group">
 			<label for="emails">Retailer Emails</label>
 			<textarea class="form-control" id="emails" required="true" rows="8" ng-model="program.Emails" placeholder="Type or Paste Email list (line-break separated)"></textarea>

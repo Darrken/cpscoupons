@@ -143,10 +143,6 @@ namespace CpsCouponsSolution.Services
 					return null;
 
 				programDto = new ProgramDTO(selectedProgram);
-
-				var programRetailers = dbContext.Program_Retailers.SingleOrDefault(r => r.UrlGuid == retailerGuid);
-				if (programRetailers != null)
-					programDto.RetailerEmail = programRetailers.Email;
 			}
 
 			return programDto;
@@ -243,6 +239,13 @@ namespace CpsCouponsSolution.Services
 			retailer.Offer = retailerData.Offer;
 			retailer.StoreName = retailerData.StoreName;
 			retailer.Restrictions = retailerData.Restrictions;
+			retailer.Address = retailerData.Address;
+			retailer.City = retailerData.City;
+			retailer.ContactName = retailerData.ContactName;
+			retailer.Phone = retailerData.Phone;
+			retailer.RepName = retailerData.RepName;
+			retailer.State = retailerData.State;
+			retailer.Zip = retailerData.Zip;
 			
 			if (retailerData.FieldValues != null && retailerData.FieldValues.Any())
 			{

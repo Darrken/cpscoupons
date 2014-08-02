@@ -15,7 +15,7 @@
 			}).
 			when('/signup/:urlguid', {
 				templateUrl: '/views/programsignup.html',
-				controller: 'programUserCtrl'
+				controller: 'programSignupCtrl'
 			}).
 			otherwise({
 				redirectTo: '/'
