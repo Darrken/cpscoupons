@@ -1,4 +1,4 @@
-﻿var app = angular.module('app', ['ngRoute', 'ui.bootstrap'])
+﻿var app = angular.module('app', ['ngRoute', 'ui.bootstrap', 'ngSanitize'])
 	.config(function($routeProvider, $locationProvider) {
 		$routeProvider.
 			when('/adminmenu', {
