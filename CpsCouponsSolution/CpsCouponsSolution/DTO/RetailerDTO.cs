@@ -31,5 +31,12 @@ namespace CpsCouponsSolution.DTO
 		public string StoreName { get; set; }
 		public string Offer { get; set; }
 		public string Restrictions { get; set; }
+		public string ContactName { get; set; }
+		public string Address { get; set; }
+		public string City { get; set; }
+		public string State { get; set; }
+		public string Zip { get; set; }
+		public string RepName { get; set; }
+		public string Phone { get; set; }
 	}
 }

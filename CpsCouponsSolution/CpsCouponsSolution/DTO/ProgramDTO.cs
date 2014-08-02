@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using CpsCouponsSolution.Models;
 
 namespace CpsCouponsSolution.DTO
@@ -22,6 +23,7 @@ namespace CpsCouponsSolution.DTO
 			Retailers = program.Program_Retailers.Select(r => new RetailerDTO(r)).ToList();
 			Fields = program.Program_Fields.Select(f => new FieldDTO(f)).ToList();
 			ParticipatingMalls = program.Malls.Select(m =>new MallDTO(m)).ToList();
+			Header = program.Header;
 		}
 
 		public int Id { get; set; }
@@ -34,5 +36,7 @@ namespace CpsCouponsSolution.DTO
 		public List<RetailerDTO> Retailers { get; set; }
 		public List<FieldDTO> Fields { get; set; }
 		public List<MallDTO> ParticipatingMalls { get; set; }
+		public string Header { get; set; }
+		public string RetailerEmail { get; set; }
 	}
 }

@@ -84,6 +84,7 @@
           <Property Name="CouponWordCount" Type="int" />
           <Property Name="DeadlineCoupon" Type="date" />
           <Property Name="DeadlineInMall" Type="date" />
+          <Property Name="Header" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="Program_Field_Values">
           <Key>
@@ -129,6 +130,14 @@
           <Property Name="StoreName" Type="varchar" MaxLength="50" />
           <Property Name="Offer" Type="varchar(max)" />
           <Property Name="Restrictions" Type="varchar(max)" />
+          <Property Name="SubmittedTs" Type="datetime" Nullable="false" />
+          <Property Name="RepName" Type="varchar" MaxLength="50" />
+          <Property Name="Address" Type="varchar" MaxLength="200" />
+          <Property Name="City" Type="varchar" MaxLength="50" />
+          <Property Name="State" Type="varchar" MaxLength="50" />
+          <Property Name="Zip" Type="varchar" MaxLength="50" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" />
+          <Property Name="ContactName" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="State">
           <Key>
@@ -359,6 +368,14 @@
           <Property Type="String" Name="StoreName" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Offer" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Restrictions" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="SubmittedTs" Nullable="false" Precision="3" />
+          <Property Type="String" Name="RepName" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Address" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="City" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="State" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Zip" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Phone" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ContactName" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_Program_Field_Values_Program_Fields">
           <End Type="ToolkitModel.Program_Fields" Role="Program_Fields" Multiplicity="1" />
@@ -439,6 +456,7 @@
           <NavigationProperty Name="Malls" Relationship="ToolkitModel.Program_Malls" FromRole="Program" ToRole="Mall" />
           <Property Type="DateTime" Name="DeadlineCoupon" Precision="0" />
           <Property Type="DateTime" Name="DeadlineInMall" Precision="0" />
+          <Property Type="String" Name="Header" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_Mall_State">
           <End Type="ToolkitModel.State" Role="State" Multiplicity="0..1" />
@@ -543,6 +561,14 @@
           <EntitySetMapping Name="Program_Retailers">
             <EntityTypeMapping TypeName="ToolkitModel.Program_Retailers">
               <MappingFragment StoreEntitySet="Program_Retailers">
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="RepName" ColumnName="RepName" />
+                <ScalarProperty Name="SubmittedTs" ColumnName="SubmittedTs" />
                 <ScalarProperty Name="Restrictions" ColumnName="Restrictions" />
                 <ScalarProperty Name="Offer" ColumnName="Offer" />
                 <ScalarProperty Name="StoreName" ColumnName="StoreName" />
@@ -579,6 +605,7 @@
           <EntitySetMapping Name="Programs">
             <EntityTypeMapping TypeName="ToolkitModel.Program">
               <MappingFragment StoreEntitySet="Program">
+                <ScalarProperty Name="Header" ColumnName="Header" />
                 <ScalarProperty Name="DeadlineInMall" ColumnName="DeadlineInMall" />
                 <ScalarProperty Name="DeadlineCoupon" ColumnName="DeadlineCoupon" />
                 <ScalarProperty Name="CouponWordCount" ColumnName="CouponWordCount" />

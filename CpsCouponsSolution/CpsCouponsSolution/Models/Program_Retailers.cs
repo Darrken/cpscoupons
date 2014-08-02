@@ -27,6 +27,14 @@ namespace CpsCouponsSolution.Models
         public string StoreName { get; set; }
         public string Offer { get; set; }
         public string Restrictions { get; set; }
+        public System.DateTime SubmittedTs { get; set; }
+        public string RepName { get; set; }
+        public string Address { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Zip { get; set; }
+        public string Phone { get; set; }
+        public string ContactName { get; set; }
     
         public virtual ICollection<Program_Field_Values> Program_Field_Values { get; set; }
         public virtual ICollection<Program_Retailer_Selected_Malls> Program_Retailer_Selected_Malls { get; set; }

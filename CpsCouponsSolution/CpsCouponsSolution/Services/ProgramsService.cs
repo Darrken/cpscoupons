@@ -143,6 +143,10 @@ namespace CpsCouponsSolution.Services
 					return null;
 
 				programDto = new ProgramDTO(selectedProgram);
+
+				var programRetailers = dbContext.Program_Retailers.SingleOrDefault(r => r.UrlGuid == retailerGuid);
+				if (programRetailers != null)
+					programDto.RetailerEmail = programRetailers.Email;
 			}
 
 			return programDto;

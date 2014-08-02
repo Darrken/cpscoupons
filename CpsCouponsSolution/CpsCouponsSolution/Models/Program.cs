@@ -28,6 +28,7 @@ namespace CpsCouponsSolution.Models
         public Nullable<int> CouponWordCount { get; set; }
         public Nullable<System.DateTime> DeadlineCoupon { get; set; }
         public Nullable<System.DateTime> DeadlineInMall { get; set; }
+        public string Header { get; set; }
     
         public virtual ICollection<Program_Fields> Program_Fields { get; set; }
         public virtual ICollection<Program_Retailers> Program_Retailers { get; set; }
