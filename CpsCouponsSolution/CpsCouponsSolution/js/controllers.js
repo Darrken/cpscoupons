@@ -110,7 +110,7 @@ app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, p
 });
 
 
-app.controller('programSignupCtrl', function ($scope, $routeParams, $location, $anchorScroll, programsApiService) {
+app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiService) {
 	$scope.alerts = [];
 	$scope.agreed = false;
 
@@ -158,6 +158,11 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, $location, $
 	};
 
 	$scope.submitForm = function () {
+		if ($scope.retailer.SelectedMalls.length < 1) {
+			addAlert('danger', 'Please select at least one shopping center.');
+			return;
+		}
+
 		programsApiService.saveByCommand('signUp', $scope.retailer)
 			.then(function (data) {
 				if (data.status === 200) {
@@ -168,9 +173,5 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, $location, $
 			.catch(function (data) {
 				addAlert('danger', 'Unable to save Program data.');
 			})
-			.finally(function () {
-				$location.hash('top');
-				$anchorScroll();
-			});
 	};
 });
