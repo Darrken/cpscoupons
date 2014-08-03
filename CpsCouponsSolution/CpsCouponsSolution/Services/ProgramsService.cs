@@ -111,8 +111,8 @@ namespace CpsCouponsSolution.Services
 					var subject = ConfigurationManager.AppSettings["InviteSubject"];
 					var inviteBaseUrl = ConfigurationManager.AppSettings["InviteBaseUrl"];
 
-					var inviteLink = inviteBaseUrl + urlGuid;
-					body = body + "\n " + inviteLink;
+					var inviteUrl = inviteBaseUrl + urlGuid;
+					body = body + "\n " + GetButtonHtml(inviteUrl);
 
 					retailerInviteEmailsToSend.Add(emailService.CreateMessage(retailerDto.Email, subject, body));
 				}
@@ -128,6 +128,32 @@ namespace CpsCouponsSolution.Services
 			}
 
 			return newProgram.Id;
+		}
+
+		private string GetButtonHtml(string inviteUrl)
+		{
+			return @"<div>
+										<!--[if mso]>
+											<v:roundrect xmlns:v=""urn:schemas-microsoft-com:vml"" xmlns:w=""urn:schemas-microsoft-com:office:word"" href='" + inviteUrl + @"' style=""height:40px;v-text-anchor:middle;width:300px;"" arcsize=""10%"" stroke=""f"" fillcolor=""#d62828"">
+												<w:anchorlock/>
+												<center style=""color:#ffffff;font-family:sans-serif;font-size:16px;font-weight:bold;"">
+												Button Text Here!
+												</center>
+											</v:roundrect>
+											<![endif]-->
+											<![if !mso]>
+											<table cellspacing=""0"" cellpadding=""0""> <tr> 
+											<td align=""center"" width=""300"" height=""40"" bgcolor=""#d62828"" style=""-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; color: #ffffff; display: block;"">
+												<a href='" + inviteUrl +@"' style=""font-size:16px; font-weight: bold; font-family:sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block"">
+												<span style=""color: #ffffff;"">
+												Click to start Reservation
+												</span>
+												</a>
+											</td> 
+											</tr> </table> 
+											<![endif]>
+										</div>
+										";
 		}
 
 		public ProgramDTO GetProgramById(int programId)
