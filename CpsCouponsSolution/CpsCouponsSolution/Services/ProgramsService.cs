@@ -123,7 +123,8 @@ namespace CpsCouponsSolution.Services
 					{
 						Email = retailerDto.Email,
 						ProgramId = newProgram.Id,
-						UrlGuid = urlGuid
+						UrlGuid = urlGuid,
+						SubmittedTs = DateTime.UtcNow
 					});
 
 					var body = ConfigurationManager.AppSettings["InviteBody"];
