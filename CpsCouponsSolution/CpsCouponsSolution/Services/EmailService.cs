@@ -27,12 +27,14 @@ namespace CpsCouponsSolution.Services
 			var smtpHost = ConfigurationManager.AppSettings["EmailHost"];
 			var username = ConfigurationManager.AppSettings["SmtpUsername"];
 			var password = ConfigurationManager.AppSettings["SmtpPassword"];
+			var isSmtpServerAvailable = Convert.ToBoolean(ConfigurationManager.AppSettings["IsSmtpServerAvailable"]);
 
 			var client = new SmtpClient { Host = smtpHost };
 			if (areSmtpCredentialsRequired)
 				client.Credentials = new NetworkCredential(username, password);
-
-			client.Send(mailMessage);
+			
+			if(isSmtpServerAvailable)
+				client.Send(mailMessage);
 		}
 
 		public bool ValidateEmailAddress(string emailAddress)
