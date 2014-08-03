@@ -3,7 +3,7 @@
 		<h1>Admin</h1>
 	</div>
 	
-	<alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+	<alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="alerter.closeAlert($index)">{{alert.msg}}</alert>
 
 	<div class="panel panel-default">
 		<ul class="list-group">
