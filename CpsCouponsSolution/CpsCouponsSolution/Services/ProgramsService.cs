@@ -134,7 +134,7 @@ namespace CpsCouponsSolution.Services
 		{
 			return @"<div>
 										<!--[if mso]>
-											<v:roundrect xmlns:v=""urn:schemas-microsoft-com:vml"" xmlns:w=""urn:schemas-microsoft-com:office:word"" href='" + inviteUrl + @"' style=""height:40px;v-text-anchor:middle;width:300px;"" arcsize=""10%"" stroke=""f"" fillcolor=""#d62828"">
+											<v:roundrect xmlns:v=""urn:schemas-microsoft-com:vml"" xmlns:w=""urn:schemas-microsoft-com:office:word"" href='" + inviteUrl + @"' style=""height:40px;v-text-anchor:middle;width:300px;"" arcsize=""10%"" stroke=""f"" fillcolor=""#3071a9"">
 												<w:anchorlock/>
 												<center style=""color:#ffffff;font-family:sans-serif;font-size:16px;font-weight:bold;"">
 												Button Text Here!
@@ -143,7 +143,7 @@ namespace CpsCouponsSolution.Services
 											<![endif]-->
 											<![if !mso]>
 											<table cellspacing=""0"" cellpadding=""0""> <tr> 
-											<td align=""center"" width=""300"" height=""40"" bgcolor=""#d62828"" style=""-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; color: #ffffff; display: block;"">
+											<td align=""center"" width=""300"" height=""40"" bgcolor=""#3071a9"" style=""-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; color: #ffffff; display: block;"">
 												<a href='" + inviteUrl +@"' style=""font-size:16px; font-weight: bold; font-family:sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block"">
 												<span style=""color: #ffffff;"">
 												Click to start Reservation
