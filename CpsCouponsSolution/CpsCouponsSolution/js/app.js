@@ -11,7 +11,7 @@
 			}).
 			when('/adminprogram/:programId', {
 				templateUrl: '/views/programedit.html',
-				controller: 'programCtrl'
+				controller: 'programAdminCtrl'
 			}).
 			when('/adminprogram', {
 				templateUrl: '/views/programcreate.html',
