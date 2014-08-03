@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
+using System.Net.Mail;
 using System.Web.Management;
 using CpsCouponsSolution.DTO;
 using CpsCouponsSolution.Models;
@@ -88,23 +90,41 @@ namespace CpsCouponsSolution.Services
 					}
 				}
 
+				foreach (var mall in programData.ParticipatingMalls)
+				{
+					newProgram.Malls.Add(dbContext.Malls.First(m => m.ID == mall.Id));
+				}
+
+				var emailService = new EmailService();
+				var retailerInviteEmailsToSend = new List<MailMessage>();
 				foreach (var retailerDto in programData.Retailers)
 				{
+					var urlGuid = Guid.NewGuid();
 					newProgram.Program_Retailers.Add(new Program_Retailers()
 					{
 						Email = retailerDto.Email,
 						ProgramId = newProgram.Id,
-						UrlGuid = Guid.NewGuid()
-					}); 
-				}
+						UrlGuid = urlGuid
+					});
 
-				foreach (var mall in programData.ParticipatingMalls)
-				{
-					newProgram.Malls.Add(dbContext.Malls.First(m => m.ID == mall.Id)); 
+					var body = ConfigurationManager.AppSettings["InviteBody"];
+					var subject = ConfigurationManager.AppSettings["InviteSubject"];
+					var inviteBaseUrl = ConfigurationManager.AppSettings["InviteBaseUrl"];
+
+					var inviteLink = inviteBaseUrl + urlGuid;
+					body = body + "\n " + inviteLink;
+
+					retailerInviteEmailsToSend.Add(emailService.CreateMessage(retailerDto.Email, subject, body));
 				}
 
 				dbContext.Programs.Add(newProgram);
 				dbContext.SaveChanges();
+
+				// send emails if program creation was successful
+				foreach (var email in retailerInviteEmailsToSend)
+				{
+					emailService.Send(email);
+				}
 			}
 
 			return newProgram.Id;

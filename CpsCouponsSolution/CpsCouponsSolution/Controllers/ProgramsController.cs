@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -19,6 +20,15 @@ namespace CpsCouponsSolution.Controllers
 			int programId;
 			try
 			{
+				var emailService = new EmailService();
+				var invalidEmailAddresses = (from retailerDto in programData.Retailers 
+														where !emailService.ValidateEmailAddress(retailerDto.Email) 
+														select retailerDto.Email).ToList();
+
+				if(invalidEmailAddresses.Any())
+					return Request.CreateResponse(HttpStatusCode.BadRequest, 
+																new { message = "Invalid retailer email addresses: " + string.Concat(invalidEmailAddresses.Select(e => e + " ")) });
+
 				var programsService = new ProgramsService();
 				programId = programsService.CreateProgram(programData);
 			}
