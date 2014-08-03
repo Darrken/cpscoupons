@@ -169,6 +169,7 @@
     <Content Include="views\programsignup.html" />
     <Content Include="views\programcreate.html" />
     <Content Include="views\programedit.html" />
+    <Content Include="views\retailersbycenter.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

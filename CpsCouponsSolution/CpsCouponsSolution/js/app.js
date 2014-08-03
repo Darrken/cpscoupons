@@ -17,6 +17,10 @@
 				templateUrl: '/views/programsignup.html',
 				controller: 'programSignupCtrl'
 			}).
+			when('/retailersbycenter', {
+				templateUrl: '/views/retailersbycenter.html',
+				controller: 'retailersByCenterCtrl'
+			}).
 			otherwise({
 				redirectTo: '/'
 			});

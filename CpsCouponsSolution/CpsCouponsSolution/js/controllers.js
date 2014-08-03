@@ -164,3 +164,40 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 			});
 	};
 });
+
+
+app.controller('retailersByCenterCtrl', function ($scope, $routeParams, programsApiService, alertService, fileService) {
+	$scope.alerter = alertService;
+	$scope.malls = [];
+	$scope.selectedMall = {};
+	$scope.retailers = [];
+		//[{ email: 'test@test.com', hasSignedUp: false, storeName: 'test store', contactName: 'john smith', repName: 'john rep', phone: '123-456-7890' },
+		//{ email: 'anothertest@test.com', hasSignedUp: true, storeName: 'kiosk?', contactName: 'jane smith', repName: 'jane rep', phone: '789-456-1230' }];
+
+	$scope.getMallList = function () {
+		programsApiService.getByCommand('getMallList')
+			.then(function (data) {
+				$scope.malls = data;
+			})
+			.catch(function () {
+				$scope.alerter.addAlert('danger', 'Unable to get Center data.');
+			});
+	};
+
+	$scope.getRetailersByMall = function () {
+		programsApiService.getRetailersByMall($scope.selectedMall.Id)
+			.then(function (data) {
+				$scope.retailers = data;
+			})
+			.catch(function () {
+				$scope.alerter.addAlert('danger', 'Unable to get report data.');
+			});
+	};
+
+	$scope.exportReport = function () {
+		var exportColumns = ['email', 'hasSignedUp', 'storeName', 'contactName', 'repName', 'phone'];
+		fileService.createCsvFile(exportColumns, $scope.retailers, 'retailers_by_center');
+	};
+
+	$scope.malls = $scope.getMallList();
+});
