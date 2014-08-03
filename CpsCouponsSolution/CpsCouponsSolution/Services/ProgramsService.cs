@@ -130,32 +130,6 @@ namespace CpsCouponsSolution.Services
 			return newProgram.Id;
 		}
 
-		private string GetButtonHtml(string inviteUrl)
-		{
-			return @"<div>
-										<!--[if mso]>
-											<v:roundrect xmlns:v=""urn:schemas-microsoft-com:vml"" xmlns:w=""urn:schemas-microsoft-com:office:word"" href='" + inviteUrl + @"' style=""height:40px;v-text-anchor:middle;width:300px;"" arcsize=""10%"" stroke=""f"" fillcolor=""#3071a9"">
-												<w:anchorlock/>
-												<center style=""color:#ffffff;font-family:sans-serif;font-size:16px;font-weight:bold;"">
-												Button Text Here!
-												</center>
-											</v:roundrect>
-											<![endif]-->
-											<![if !mso]>
-											<table cellspacing=""0"" cellpadding=""0""> <tr> 
-											<td align=""center"" width=""300"" height=""40"" bgcolor=""#3071a9"" style=""-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; color: #ffffff; display: block;"">
-												<a href='" + inviteUrl +@"' style=""font-size:16px; font-weight: bold; font-family:sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block"">
-												<span style=""color: #ffffff;"">
-												Click to start Reservation
-												</span>
-												</a>
-											</td> 
-											</tr> </table> 
-											<![endif]>
-										</div>
-										";
-		}
-
 		public ProgramDTO GetProgramById(int programId)
 		{
 			ProgramDTO programDto;
@@ -263,9 +237,12 @@ namespace CpsCouponsSolution.Services
 
 			if(retailerData.SelectedMalls == null || !retailerData.SelectedMalls.Any())
 				return new ResponseResult() { WasSuccessful = false, FailureReason = "No Malls were selected." };
-			
+
+			Program selectedProgram;
 			using (var dbContext = new ToolkitEntities())
 			{
+				selectedProgram = dbContext.Programs.SingleOrDefault(p => p.Id == retailerData.ProgramId);
+				
 				var retailer = dbContext.Program_Retailers.SingleOrDefault(pr => pr.Id == retailerData.Id && pr.ProgramId == retailerData.ProgramId);
 
 				if(retailer == null)
@@ -277,7 +254,56 @@ namespace CpsCouponsSolution.Services
 				dbContext.SaveChanges();
 			}
 
+			// after successful signup, send email of transaction
+			SendReservationConfirmedEmail(retailerData, selectedProgram);
+
 			return new ResponseResult() { WasSuccessful = true }; 
+		}
+
+		private void SendReservationConfirmedEmail(RetailerDTO retailerData, Program selectedProgram)
+		{
+			var emailService = new EmailService();
+			var subject = ConfigurationManager.AppSettings["SignedUpEmailSubject"];
+			var body = ConfigurationManager.AppSettings["SignedUpEmailBody"];
+
+			body = body + "\n" + "Reservation for Program name: \n\t" + selectedProgram.Name;
+			body = body + "\n" + "Program description: \n\t" + selectedProgram.Description;
+			body = body + "\n" + "Store name: \n\t" + retailerData.StoreName;
+			body = body + "\n" + "Offer: \n\t" + retailerData.Offer;
+			body = body + "\n" + "Restrictions: \n\t" +retailerData.Restrictions;
+
+			body = body + "\n" + "Selected Malls: \n\t" + GetMallNames(false)
+																		.Where(m => retailerData.SelectedMalls.Contains(m.Id))
+																		.Select(m => m.Name + "\n\t");
+
+			var emailMsg = emailService.CreateMessage(retailerData.Email, subject, body);
+			emailService.Send(emailMsg);
+		}
+
+		private string GetButtonHtml(string inviteUrl)
+		{
+			return @"<div>
+										<!--[if mso]>
+											<v:roundrect xmlns:v=""urn:schemas-microsoft-com:vml"" xmlns:w=""urn:schemas-microsoft-com:office:word"" href='" + inviteUrl + @"' style=""height:40px;v-text-anchor:middle;width:300px;"" arcsize=""10%"" stroke=""f"" fillcolor=""#3071a9"">
+												<w:anchorlock/>
+												<center style=""color:#ffffff;font-family:sans-serif;font-size:16px;font-weight:bold;"">
+												Button Text Here!
+												</center>
+											</v:roundrect>
+											<![endif]-->
+											<![if !mso]>
+											<table cellspacing=""0"" cellpadding=""0""> <tr> 
+											<td align=""center"" width=""300"" height=""40"" bgcolor=""#3071a9"" style=""-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; color: #ffffff; display: block;"">
+												<a href='" + inviteUrl +@"' style=""font-size:16px; font-weight: bold; font-family:sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block"">
+												<span style=""color: #ffffff;"">
+												Click to start Reservation
+												</span>
+												</a>
+											</td> 
+											</tr> </table> 
+											<![endif]>
+										</div>
+										";
 		}
 
 		private void UpdateRetailerData(Program_Retailers retailer, RetailerDTO retailerData, ToolkitEntities dbContext)
