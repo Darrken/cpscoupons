@@ -266,15 +266,19 @@ namespace CpsCouponsSolution.Services
 			var subject = ConfigurationManager.AppSettings["SignedUpEmailSubject"];
 			var body = ConfigurationManager.AppSettings["SignedUpEmailBody"];
 
-			body = body + "\n" + "Reservation for Program name: \n\t" + selectedProgram.Name;
+			body = body + "\n\n" + "Program name: \n\t" + selectedProgram.Name;
 			body = body + "\n" + "Program description: \n\t" + selectedProgram.Description;
 			body = body + "\n" + "Store name: \n\t" + retailerData.StoreName;
 			body = body + "\n" + "Offer: \n\t" + retailerData.Offer;
 			body = body + "\n" + "Restrictions: \n\t" +retailerData.Restrictions;
-
-			body = body + "\n" + "Selected Malls: \n\t" + GetMallNames(false)
+			body = body + "\n" + "Selected Malls: \n\t" + string.Concat(GetMallNames(false)
 																		.Where(m => retailerData.SelectedMalls.Contains(m.Id))
-																		.Select(m => m.Name + "\n\t");
+																		.Select(m => m.Name + "\n\t").ToList());
+			body = body + "\n Thank you for your participation.";
+			body = body + "\n\n Mall Marketing Media.";
+			body = body + "\n a division of.";
+			body = body + "\n creative publishing solutions.";
+
 
 			var emailMsg = emailService.CreateMessage(retailerData.Email, subject, body);
 			emailService.Send(emailMsg);
