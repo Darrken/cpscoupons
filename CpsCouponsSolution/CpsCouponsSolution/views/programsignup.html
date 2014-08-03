@@ -11,7 +11,7 @@
 	<div class="row">
 		<div class="col-md-6">
 			<h3>coupon offer ({{program.CouponWordCount}} words or less):</h3>
-			<textarea class="form-control" id="offer" rows="3" placeholder="Enter offer text" required="true" ng-model="retailer.Offer"></textarea>
+			<textarea class="form-control" id="offer" rows="3" placeholder="Enter offer text" required ng-model="retailer.Offer"></textarea>
 			<p><small>MMM will provide a proof of your offer and will send via email for approval.</small></p>
 		</div>
 		<div class="col-md-6">
@@ -31,7 +31,7 @@
 
 	<h3>please check your participating GGP Shopping Center locations:</h3>
 	<div style="padding: 1em;" class="panel panel-default">
-		<label class="checkbox-inline" ng-repeat="mall in program.ParticipatingMalls" style="width: 20%; margin-left: 0">
+		<label class="checkbox-inline" ng-repeat="mall in program.ParticipatingMalls" style="width: 20%; margin-left: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" tooltip="{{mall.Name + ' - ' + mall.StateName}}">
 			<input type="checkbox" name="centers" id="centers" ng-click="toggleCenter(mall.Id)" value="{{mall.Id}}" style="position: static;"> {{mall.Name + ' - ' + mall.StateName}}
 		</label>
 	</div>
@@ -42,11 +42,11 @@
 			<form name="programform" role="form" ng-submit="submitForm()">
 				<div class="form-group">
 					<label for="name">Name <span class="text-danger">*</span></label>
-					<input type="text" class="form-control" id="name" placeholder="Name" required="true" ng-model="retailer.ContactName">
+					<input type="text" class="form-control" id="name" placeholder="Name" required ng-model="retailer.ContactName">
 				</div>
 				<div class="form-group">
 					<label for="retailer">Retailer <span class="text-danger">*</span></label>
-					<input type="txt" class="form-control" id="retailer" placeholder="Retailer name" required="true" ng-model="retailer.StoreName">
+					<input type="txt" class="form-control" id="retailer" placeholder="Retailer name" required ng-model="retailer.StoreName">
 				</div>
 				<div class="form-group">
 					<label for="restrictions">Coupon Restrictions</label>
@@ -54,7 +54,7 @@
 				</div>	
 				<div class="form-group">
 					<label for="phone">Phone <span class="text-danger">*</span></label>
-					<input type="tel" class="form-control" id="phone" placeholder="Phone number" required="true" ng-model="retailer.Phone">
+					<input type="tel" class="form-control" id="phone" placeholder="Phone number" required ng-model="retailer.Phone">
 				</div>
 				<div class="form-group">
 					<label for="address">Address</label>
@@ -99,7 +99,7 @@
 				<button type="submit" class="btn btn-default btn-primary" ng-disabled="!agreed">Submit</button>
 			</form>
 			<br/>
-			<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+			<alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 		</div>
 		<div class="col-md-6">
 			<h3>material guidelines</h3>

@@ -72,3 +72,18 @@
 
 	};
 });
+
+app.factory('alertService', function() {
+	var root = {};
+	root.alerts = [];
+
+	root.addAlert = function (errorType, message) {
+		root.alerts.push({ type: errorType, msg: message });
+	};
+
+	root.closeAlert = function (index) {
+		root.alerts.splice(index, 1);
+	};
+
+	return root;
+});

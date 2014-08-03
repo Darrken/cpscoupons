@@ -17,7 +17,7 @@ namespace CpsCouponsSolution.DTO
 			Id = mall.ID;
 			Name = mall.Name;
 			StateId = mall.State.ID;
-			StateName = mall.State.Name;
+			StateName = mall.State.Abbreviation;
 		}
 	}
 }

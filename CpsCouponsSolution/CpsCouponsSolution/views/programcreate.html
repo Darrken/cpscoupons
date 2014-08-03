@@ -1,47 +1,47 @@
 ﻿<div class="container-fluid">
-	<div class="page-header">
+	<div class="page-header" ng-show="!previewMode">
 		<h1 id="top">Create Program</h1>
 	</div>
 	
-	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+	<alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 
-	<form name="programform" role="form" ng-submit="saveProgram()">
+	<form name="programform" role="form" ng-submit="saveProgram()" ng-show="!previewMode">
 		<div class="form-group">
 			<label for="name">Program Name</label>
-			<input type="text" class="form-control" id="name" placeholder="Enter program name" ng-model="program.Name" required="true">
+			<input type="text" class="form-control" id="name" placeholder="Enter program name" ng-model="program.Name" required>
 		</div>
 		<div class="form-group">
 			<label for="name">Coupon Deadline</label>
-			<input type="date" class="form-control" id="coupondeadline" ng-model="program.DeadlineCoupon" required="true">
+			<input type="date" class="form-control" id="coupondeadline" ng-model="program.DeadlineCoupon" required>
 		</div>
 		<div class="form-group">
 			<label for="name">In-Mall Deadline</label>
-			<input type="date" class="form-control" id="inmalldeadline" ng-model="program.DeadlineInMall" required="true">
+			<input type="date" class="form-control" id="inmalldeadline" ng-model="program.DeadlineInMall" required>
 		</div>
-		<div class="form-group" ng-class="{'has-error': !programform.wordcount.$valid}">
+		<div class="form-group">
 			<label for="wordcount">Coupon Word Count</label>
-			<input type="number" min="1" max="1000" class="form-control" name="wordcount" id="wordcount" placeholder="10" ng-model="program.CouponWordCount">
+			<input type="number" min="1" max="1000" class="form-control" name="wordcount" id="wordcount" placeholder="10" ng-model="program.CouponWordCount" required>
 		</div>
 		<div class="form-group">
 			<label for="header">Header</label>
-			<textarea class="form-control" id="header" rows="8" placeholder="Enter header information (html supported)" required="true" ng-model="program.Header"></textarea>
+			<textarea class="form-control" id="header" rows="8" placeholder="Enter header information (html supported)" required ng-model="program.Header"></textarea>
 		</div>
 		<div class="form-group">
 			<label for="description">Description</label>
-			<textarea class="form-control" id="description" rows="8" placeholder="Enter description (html supported)" required="true" ng-model="program.Description"></textarea>
+			<textarea class="form-control" id="description" rows="8" placeholder="Enter description (html supported)" required ng-model="program.Description"></textarea>
 		</div>
 		<div class="form-group">
 			<label for="disclaimer">Disclaimer</label>
-			<textarea class="form-control" id="disclaimer" rows="8" placeholder="Enter disclaimer information (html supported)" ng-model="program.Disclaimer"></textarea>
+			<textarea class="form-control" id="disclaimer" rows="8" placeholder="Enter disclaimer information (html supported)" required ng-model="program.Disclaimer"></textarea>
 		</div>
 		<div class="form-group">
 			<label for="emails">Retailer Emails</label>
-			<textarea class="form-control" id="emails" required="true" rows="8" ng-model="program.Emails" placeholder="Type or Paste Email list (line-break separated)"></textarea>
+			<textarea class="form-control" id="emails" required rows="8" ng-model="program.Emails" placeholder="Type or Paste Email list (line-break separated)"></textarea>
 		</div>
 		<div class="form-group">
 			<label for="centers">Select Participating Centers</label>
 			<div style="height: 20em; overflow-y: scroll; padding: 1em;" class="panel panel-default">
-				<label class="checkbox-inline" ng-repeat="mall in malls" style="width: 20%; margin-left: 0">
+				<label class="checkbox-inline" ng-repeat="mall in malls" style="width: 20%; margin-left: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" tooltip="{{mall.Name + ' - ' + mall.StateName}}">
 					<input type="checkbox" name="centers" id="centers" ng-click="toggleCenter(mall.Id)" value="{{mall.Id}}" style="position: static;"> {{mall.Name + ' - ' + mall.StateName}}
 				</label>
 			</div>
@@ -51,8 +51,142 @@
 			<div class="panel panel-default" data-ng-repeat="field in program.Fields">
 				<input class="form-control" type="text" ng-model="field.Name" placeholder="Enter Field Name" ng-blur="removeEmptyField(field.Name, $index)" auto-focus="$index == program.Fields.length-1">
 			</div>
-			<div><button type="button" class="btn btn-primary" ng-click="addField()">Add New Input Field</button></div>
+			<div><button type="button" class="btn btn-info" ng-click="addField()">Add New Input Field</button></div>
 		</div>
-		<button type="submit" class="btn btn-primary" ng-disabled="!programform.$valid">Submit</button>
+		<button type="button" class="btn btn-warning" ng-click="previewMode = !previewMode">Preview Form</button> <button type="submit" class="btn btn-primary" ng-disabled="!programform.$valid">Submit</button>
 	</form>
+	
+
+	<div ng-show="previewMode">
+		<h2 ng-bind-html="program.Header"></h2>
+
+		<div class="row">
+			<div class="col-md-6" ng-bind-html="program.Description"></div>
+			<div class="col-md-6" ng-bind-html="program.Disclaimer"></div>
+		</div>
+
+		<h4 class="text-primary text-center">Act quickly, as space is very limited and offered on a first-come, first-served basis. Send in your reservation TODAY to ensure your participation.</h4>
+	
+		<div class="row">
+			<div class="col-md-6">
+				<h3>coupon offer ({{program.CouponWordCount}} words or less):</h3>
+				<textarea class="form-control" id="offer" rows="3" placeholder="Enter offer text" required></textarea>
+				<p><small>MMM will provide a proof of your offer and will send via email for approval.</small></p>
+			</div>
+			<div class="col-md-6">
+				<h3>deadlines</h3>
+				<ul class="list-group">
+					<li class="list-group-item">
+						Space Reservations and Coupon Offer
+						<span class="label label-primary pull-right" style="font-size: inherit">{{program.DeadlineCoupon | date:'MM-dd-yyyy'}}</span>
+					</li>
+					<li class="list-group-item">
+						In-Mall Date
+						<span class="label label-success pull-right" style="font-size: inherit">{{program.DeadlineInMall | date:'MM-dd-yyyy'}}</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<h3>please check your participating GGP Shopping Center locations:</h3>
+		<div style="padding: 1em;" class="panel panel-default">
+			<label class="checkbox-inline" ng-repeat="mall in program.ParticipatingMalls" style="width: 20%; margin-left: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" tooltip="{{mall.Name + ' - ' + mall.StateName}}">
+				<input type="checkbox" name="centers" id="Checkbox1" ng-click="toggleCenter(mall.Id)" value="{{mall.Id}}" style="position: static;"> {{mall.Name + ' - ' + mall.StateName}}
+			</label>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<h3>participation agreement</h3>
+				<form name="programform" role="form">
+					<div class="form-group">
+						<label for="name">Name <span class="text-danger">*</span></label>
+						<input type="text" class="form-control" id="Text1" placeholder="Name">
+					</div>
+					<div class="form-group">
+						<label for="retailer">Retailer <span class="text-danger">*</span></label>
+						<input type="txt" class="form-control" id="retailer" placeholder="Retailer name">
+					</div>
+					<div class="form-group">
+						<label for="restrictions">Coupon Restrictions</label>
+						<input type="txt" class="form-control" id="restrictions" placeholder="Enter any coupon restrictions">
+					</div>	
+					<div class="form-group">
+						<label for="phone">Phone <span class="text-danger">*</span></label>
+						<input type="tel" class="form-control" id="phone" placeholder="Phone number">
+					</div>
+					<div class="form-group">
+						<label for="address">Address</label>
+						<input type="text" class="form-control" id="address" placeholder="Address">
+					</div>
+					<div class="row form-group">
+						<div class="col-xs-4">
+							<label for="city">City</label>
+							<input type="text" id="city" class="form-control" placeholder="City">
+						</div>
+						<div class="col-xs-2">
+							<label for="state">State</label>
+							<input type="text" id="state" class="form-control" placeholder="State">
+						</div>
+						<div class="col-xs-3">
+							<label for="zip">Zip</label>
+							<input type="text" id="zip" class="form-control" placeholder="Zip">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="rep">MMM Representative</label>
+						<input type="text" class="form-control" id="rep" placeholder="MMM Representative">
+					</div>
+					<div class="form-group" ng-repeat="field in program.Fields">
+						<label for="{{field.Name}}">{{field.Name}}</label>
+						<input type="text" class="form-control" id="{{field.Name}}" placeholder="{{field.Name}}">
+					</div>
+					<div class="form-group">
+						<label for="email">Email</label>
+						<input type="email" class="form-control" id="email" placeholder="Email" disabled="disabled" value="retailer@test.com">
+					</div>
+					<div class="form-group">
+						<strong>Terms and Conditions</strong><br/>
+						<small>Space is not confirmed until we receive your signed participation agreement.</small><br/>
+						<small>Cancellations must be received by publisher in writing before the space reservation deadline date.</small>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" ng-model="agreed"> I agree to the terms for participation
+						</label>
+					</div>
+					<button type="button" class="btn btn-warning" ng-click="previewMode = !previewMode">Back to Editing</button>
+				</form>
+				<br/>
+				<alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+			</div>
+			<div class="col-md-6">
+				<h3>material guidelines</h3>
+				<div class="list-group">
+					<a class="list-group-item">
+						<h4 class="list-group-item-heading">Material</h4>
+						<p class="list-group-item-text">The retailer must provide publisher with coupon copy by the material deadline. If material is not received by the material deadline, it will not be included.</p>
+					</a>
+					<a class="list-group-item">
+						<h4 class="list-group-item-heading">Copy</h4>
+						<p class="list-group-item-text">Mall Marketing Media reserves the right to edit supplied copy if the retailer supplies more words than can possibly fit the coupon size. Copywriting assistance is available upon request.</p>
+					</a>
+					<a class="list-group-item">
+						<h4 class="list-group-item-heading">Proofs</h4>
+						<p class="list-group-item-text">Proofs will be provided when all materials have been received by publisher by the material deadline date. It is the responsibility of the retailer to make sure all copy is correct. Proofs will be in English. Proofing is to make necessary corrections, not for rewrites. The retailer must be available to approve the proof by date specified or make sure someone is authorized to sign off on the proof in their absence. Proofs must be returned to the publisher by date indicated on proof.<br/><br/>
+							All proofs will be sent via fax or email. You must provide either of these options for proofing.</p>
+					</a>
+					<a class="list-group-item">
+						<h4 class="list-group-item-heading">Special Position</h4>
+						<p class="list-group-item-text">Unless otherwise agreed in writing, MMM will select the placement of each offer by alphabetical order.</p>
+					</a>
+					<a class="list-group-item">
+						<h4 class="list-group-item-heading">Cancellations</h4>
+						<p class="list-group-item-text">Cancellations must be received in writing by publisher before the space reservations deadline date.</p>
+					</a>
+				</div>
+			</div>
+		</div>
+		<h3><img src="/Assets/logonmast.png" class="img-responsive center-block" alt="Responsive image"></h3>
+	</div>
 </div>
