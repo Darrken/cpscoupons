@@ -1,12 +1,14 @@
-﻿app.controller('adminMenuCtrl', function($scope, programsApiService, alertService) {
+﻿app.controller('adminMenuCtrl', function ($scope, programsApiService, alertService, adminService) {
+	adminService.adminCheck('/adminmenu');
+	
 	$scope.alerter = alertService;
 
-	$scope.getProgramList = function() {
+	$scope.getProgramList = function () {
 		programsApiService.getByCommand('getProgramList')
-			.then(function(data) {
+			.then(function (data) {
 				$scope.programs = data;
 			})
-			.catch(function() {
+			.catch(function () {
 				$scope.alerter.addAlert('danger', 'Unable to get Program data.');
 			});
 	};
@@ -14,7 +16,9 @@
 	$scope.getProgramList();
 });
 
-app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, $timeout, programsApiService, alertService) {
+app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, $timeout, programsApiService, alertService, adminService) {
+	adminService.adminCheck('/adminprogram');
+	
 	$scope.alerter = alertService;
 	$scope.Emails = [];
 	$scope.ParticipatingMalls = [];
@@ -33,19 +37,19 @@ app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, $
 		Name: null,
 	};
 
-	$scope.getMallList = function() {
+	$scope.getMallList = function () {
 		programsApiService.getByCommand('getMallList')
-			.then(function(data) {
+			.then(function (data) {
 				$scope.malls = data;
 			})
-			.catch(function() {
+			.catch(function () {
 				$scope.alerter.addAlert('danger', 'Unable to get Center data.');
 			});
 	};
 
 	$scope.getMallList();
 
-	$scope.toggleCenter = function(id) {
+	$scope.toggleCenter = function (id) {
 		var idx = $scope.ParticipatingMalls.indexOf(id);
 
 		if (idx > -1) {
@@ -56,17 +60,17 @@ app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, $
 		}
 
 		$scope.previewMalls = [];
-		_.forEach($scope.ParticipatingMalls, function(participatingMall) {
+		_.forEach($scope.ParticipatingMalls, function (participatingMall) {
 			var mall = _.find($scope.malls, { 'Id': participatingMall });
 			$scope.previewMalls.push(mall);
 		});
 	};
 
-	$scope.addField = function() {
+	$scope.addField = function () {
 		$scope.program.Fields.push({ Name: null });
 	};
 
-	$scope.removeEmptyField = function(fieldName, index) {
+	$scope.removeEmptyField = function (fieldName, index) {
 		if (!fieldName || fieldName.length === 0) {
 			$scope.program.Fields.splice(index, 1);
 		}
@@ -82,10 +86,10 @@ app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, $
 		ev.preventDefault();
 	});
 
-	$scope.saveProgram = function() {
+	$scope.saveProgram = function () {
 		var emails = $scope.program.Emails.split('\n');
 		$scope.program.Retailers = [];
-		_.forEach(emails, function(email) {
+		_.forEach(emails, function (email) {
 			$scope.program.Retailers.push({ Email: email });
 		});
 
@@ -95,23 +99,25 @@ app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, $
 		});
 
 		programsApiService.saveByCommand('createProgram', $scope.program)
-			.then(function(data) {
+			.then(function (data) {
 				if (data.status === 200) {
 					//TODO: figure out why this doesn't always work
 					$scope.alerter.addAlert('success', 'Program was successfully saved.');
 				}
 			})
-			.catch(function(data) {
+			.catch(function (data) {
 				$scope.alerter.addAlert('danger', 'Unable to save Program data.');
 			})
-			.finally(function() {
+			.finally(function () {
 				$location.hash('top');
 				$anchorScroll();
 			});
 	};
 });
 
-app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiService, alertService) {
+app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiService, alertService, adminService) {
+	adminService.adminCheck('/signup/' + $routeParams.urlguid);
+
 	$scope.alerter = alertService;
 	$scope.agreed = false;
 
@@ -151,25 +157,27 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 		}
 
 		programsApiService.saveByCommand('signUp', $scope.retailer)
-			.then(function(data) {
+			.then(function (data) {
 				if (data.status === 200) {
 					//TODO: figure out why this doesn't always work
 					$scope.alerter.addAlert('success', 'Program was successfully saved.');
 				}
 			})
-			.catch(function(data) {
+			.catch(function (data) {
 				$scope.alerter.addAlert('danger', 'Unable to save Program data.');
 			});
 	};
 });
 
-app.controller('retailersByCenterCtrl', function ($scope, $routeParams, programsApiService, alertService, fileService) {
+app.controller('retailersByCenterCtrl', function ($scope, $routeParams, programsApiService, alertService, fileService, adminService) {
+	adminService.adminCheck('/retailersbycenter');
+	
 	$scope.alerter = alertService;
 	$scope.malls = [];
 	$scope.selectedMall = {};
 	$scope.retailers = [];
-		//[{ email: 'test@test.com', hasSignedUp: false, storeName: 'test store', contactName: 'john smith', repName: 'john rep', phone: '123-456-7890' },
-		//{ email: 'anothertest@test.com', hasSignedUp: true, storeName: 'kiosk?', contactName: 'jane smith', repName: 'jane rep', phone: '789-456-1230' }];
+	//[{ email: 'test@test.com', hasSignedUp: false, storeName: 'test store', contactName: 'john smith', repName: 'john rep', phone: '123-456-7890' },
+	//{ email: 'anothertest@test.com', hasSignedUp: true, storeName: 'kiosk?', contactName: 'jane smith', repName: 'jane rep', phone: '789-456-1230' }];
 
 	$scope.getMallList = function () {
 		programsApiService.getByCommand('getMallList')
@@ -199,13 +207,15 @@ app.controller('retailersByCenterCtrl', function ($scope, $routeParams, programs
 	$scope.malls = $scope.getMallList();
 });
 
-app.controller('retailersByProgramCtrl', function ($scope, $routeParams, programsApiService, alertService, fileService) {
+app.controller('retailersByProgramCtrl', function ($scope, $routeParams, programsApiService, alertService, fileService, adminService) {
+	adminService.adminCheck('/retailersbyprogram');
+
 	$scope.alerter = alertService;
 	$scope.programs = [];
 	$scope.selectedProgram = {};
 	$scope.retailers = [];
-		//[{ email: 'test@test.com', hasSignedUp: false, storeName: 'test store', contactName: 'john smith', repName: 'john rep', phone: '123-456-7890' },
-		//{ email: 'anothertest@test.com', hasSignedUp: true, storeName: 'kiosk?', contactName: 'jane smith', repName: 'jane rep', phone: '789-456-1230' }];
+	//[{ email: 'test@test.com', hasSignedUp: false, storeName: 'test store', contactName: 'john smith', repName: 'john rep', phone: '123-456-7890' },
+	//{ email: 'anothertest@test.com', hasSignedUp: true, storeName: 'kiosk?', contactName: 'jane smith', repName: 'jane rep', phone: '789-456-1230' }];
 
 	$scope.getProgramList = function () {
 		programsApiService.getByCommand('getProgramList')
@@ -233,4 +243,19 @@ app.controller('retailersByProgramCtrl', function ($scope, $routeParams, program
 	};
 
 	$scope.getProgramList();
+});
+
+app.controller('adminLoginCtrl', function ($scope, $location, alertService, adminService) {
+	$scope.alerter = alertService;
+	$scope.pwd = '';
+
+	$scope.login = function () {
+		var wasSuccessful = adminService.loginAdmin($scope.pwd);
+
+		if (wasSuccessful) {
+			$scope.alerter.clearAlerts();
+		} else {
+			$scope.alerter.addAlert('danger', 'Invalid password.');
+		}
+	};
 });

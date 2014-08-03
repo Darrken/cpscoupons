@@ -5,6 +5,10 @@
 				templateUrl: '/views/admin.html',
 				controller: 'adminMenuCtrl'
 			}).
+			when('/adminlogin', {
+				templateUrl: '/views/adminlogin.html',
+				controller: 'adminLoginCtrl'
+			}).
 			when('/adminprogram/:programId', {
 				templateUrl: '/views/programedit.html',
 				controller: 'programCtrl'

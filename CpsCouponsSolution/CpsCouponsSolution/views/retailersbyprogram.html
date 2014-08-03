@@ -1,0 +1,42 @@
+﻿<div id="top" class="container-fluid">
+	<div class="page-header">
+		<h1>Retailers by Program</h1>
+	</div>
+
+	<alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="alerter.closeAlert($index)">{{alert.msg}}</alert>
+
+	<div class="panel panel-default">
+
+		<div class="panel-heading">
+			<div class="form-group">
+				<label class="col-sm-1 control-label" for="centers">Programs</label>
+				<select id="centers" ng-model="selectedProgram" ng-change="getRetailersByProgram()" ng-options="program.Name for program in programs">
+					<option value="">-- choose program --</option>
+				</select>
+				<span ng-click="exportReport()" class="glyphicon glyphicon-download-alt"></span>
+			</div>
+		</div>
+
+		<table class="table table-condensed">
+			<thead>
+				<tr>
+					<th>Email</th>
+					<th>Has Signed Up</th>
+					<th>Contact Name</th>
+					<th>Rep Name</th>
+					<th>Phone</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="retailer in retailers">
+					<td>{{retailer.email}}</td>
+					<td><span class="label" ng-class="{'label-success': retailer.hasSignedUp, 'label-danger': !retailer.hasSignedUp}">{{retailer.hasSignedUp}}</span></td>
+					<td>{{retailer.contactName}}</td>
+					<td>{{retailer.repName}}</td>
+					<td>{{retailer.phone}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<a href="/adminmenu">Back to menu</a>
+</div>

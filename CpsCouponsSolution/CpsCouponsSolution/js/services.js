@@ -116,6 +116,10 @@ app.factory('alertService', function() {
 	var root = {};
 	root.alerts = [];
 
+	root.clearAlerts = function () {
+		root.alerts = [];
+	};
+	
 	root.addAlert = function (errorType, message) {
 		root.alerts.push({ type: errorType, msg: message });
 	};
@@ -214,6 +218,31 @@ app.factory('fileService', function ($filter) {
 			downloadAnchor.setAttribute('download', fileName + '.csv');
 
 			downloadAnchor.click();
+		}
+	};
+});
+
+app.factory('adminService', function ($location) {
+	var adminPwd = 'CpsAdmin1';
+	var isAdmin = false;
+	var returnPath = '/adminmenu';
+	
+	return {
+		loginAdmin: function (pwd) {
+			if (isAdmin = pwd === adminPwd) {
+				$location.path(returnPath);
+				return true;
+			}
+
+			return false;
+		},
+		
+		adminCheck: function (path) {
+			returnPath = path;
+			
+			if (!isAdmin) {
+				$location.path('adminlogin');
+			}
 		}
 	};
 });
