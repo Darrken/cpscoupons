@@ -21,6 +21,10 @@
 				templateUrl: '/views/retailersbycenter.html',
 				controller: 'retailersByCenterCtrl'
 			}).
+			when('/retailersbyprogram', {
+				templateUrl: '/views/retailersbyprogram.html',
+				controller: 'retailersByProgramCtrl'
+			}).
 			otherwise({
 				redirectTo: '/'
 			});

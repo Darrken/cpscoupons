@@ -1,19 +1,18 @@
-﻿app.controller('adminMenuCtrl', function ($scope, programsApiService, alertService) {
+﻿app.controller('adminMenuCtrl', function($scope, programsApiService, alertService) {
 	$scope.alerter = alertService;
 
-	$scope.getProgramList = function () {
+	$scope.getProgramList = function() {
 		programsApiService.getByCommand('getProgramList')
-			.then(function (data) {
+			.then(function(data) {
 				$scope.programs = data;
 			})
-			.catch(function () {
+			.catch(function() {
 				$scope.alerter.addAlert('danger', 'Unable to get Program data.');
 			});
 	};
 
 	$scope.getProgramList();
 });
-
 
 app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, $timeout, programsApiService, alertService) {
 	$scope.alerter = alertService;
@@ -112,7 +111,6 @@ app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, $
 	};
 });
 
-
 app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiService, alertService) {
 	$scope.alerter = alertService;
 	$scope.agreed = false;
@@ -165,7 +163,6 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 	};
 });
 
-
 app.controller('retailersByCenterCtrl', function ($scope, $routeParams, programsApiService, alertService, fileService) {
 	$scope.alerter = alertService;
 	$scope.malls = [];
@@ -200,4 +197,40 @@ app.controller('retailersByCenterCtrl', function ($scope, $routeParams, programs
 	};
 
 	$scope.malls = $scope.getMallList();
+});
+
+app.controller('retailersByProgramCtrl', function ($scope, $routeParams, programsApiService, alertService, fileService) {
+	$scope.alerter = alertService;
+	$scope.programs = [];
+	$scope.selectedProgram = {};
+	$scope.retailers = [];
+		//[{ email: 'test@test.com', hasSignedUp: false, storeName: 'test store', contactName: 'john smith', repName: 'john rep', phone: '123-456-7890' },
+		//{ email: 'anothertest@test.com', hasSignedUp: true, storeName: 'kiosk?', contactName: 'jane smith', repName: 'jane rep', phone: '789-456-1230' }];
+
+	$scope.getProgramList = function () {
+		programsApiService.getByCommand('getProgramList')
+			.then(function (data) {
+				$scope.programs = data;
+			})
+			.catch(function () {
+				$scope.alerter.addAlert('danger', 'Unable to get Program data.');
+			});
+	};
+
+	$scope.getRetailersByProgram = function () {
+		programsApiService.getRetailersByProgram($scope.selectedProgram.Id)
+			.then(function (data) {
+				$scope.retailers = data;
+			})
+			.catch(function () {
+				$scope.alerter.addAlert('danger', 'Unable to get report data.');
+			});
+	};
+
+	$scope.exportReport = function () {
+		var exportColumns = ['email', 'hasSignedUp', 'storeName', 'contactName', 'repName', 'phone'];
+		fileService.createCsvFile(exportColumns, $scope.retailers, 'retailers_by_center');
+	};
+
+	$scope.getProgramList();
 });
