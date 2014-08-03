@@ -3,7 +3,7 @@
 		<h1 id="top">Create Program</h1>
 	</div>
 	
-	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+	<alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 
 	<form name="programform" role="form" ng-submit="saveProgram()">
 		<div class="form-group">

@@ -1,5 +1,5 @@
-﻿app.controller('adminMenuCtrl', function ($scope, programsApiService) {
-	$scope.alerts = [];
+﻿app.controller('adminMenuCtrl', function ($scope, programsApiService, alertService) {
+	$scope.alerter = alertService;
 
 	$scope.getProgramList = function () {
 		programsApiService.getByCommand('getProgramList')
@@ -7,24 +7,16 @@
 				$scope.programs = data;
 			})
 			.catch(function () {
-				addAlert('danger', 'Unable to get Program data.');
+				$scope.alerter.addAlert('danger', 'Unable to get Program data.');
 			});
-	};
-
-	function addAlert(errorType, message) {
-		$scope.alerts.push({ type: errorType, msg: message });
-	};
-
-	$scope.closeAlert = function (index) {
-		$scope.alerts.splice(index, 1);
 	};
 
 	$scope.getProgramList();
 });
 
 
-app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, programsApiService) {
-	$scope.alerts = [];
+app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, programsApiService, alertService) {
+	$scope.alerter = alertService;
 	$scope.Emails = [];
 	$scope.ParticipatingMalls = [];
 
@@ -46,19 +38,11 @@ app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, p
 				$scope.malls = data;
 			})
 			.catch(function() {
-				addAlert('danger', 'Unable to get Center data.');
+				$scope.alerter.addAlert('danger', 'Unable to get Center data.');
 			});
 	};
 
 	$scope.getMallList();
-
-	function addAlert(errorType, message) {
-		$scope.alerts.push({ type: errorType, msg: message });
-	};
-
-	$scope.closeAlert = function(index) {
-		$scope.alerts.splice(index, 1);
-	};
 
 	$scope.toggleCenter = function(id) {
 		var idx = $scope.ParticipatingMalls.indexOf(id);
@@ -96,11 +80,11 @@ app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, p
 			.then(function(data) {
 				if (data.status === 200) {
 					//TODO: figure out why this doesn't always work
-					addAlert('success', 'Program was successfully saved.');
+					$scope.alerter.addAlert('success', 'Program was successfully saved.');
 				}
 			})
 			.catch(function(data) {
-				addAlert('danger', 'Unable to save Program data.');
+				$scope.alerter.addAlert('danger', 'Unable to save Program data.');
 			})
 			.finally(function() {
 				$location.hash('top');
@@ -110,8 +94,8 @@ app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, p
 });
 
 
-app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiService) {
-	$scope.alerts = [];
+app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiService, alertService) {
+	$scope.alerter = alertService;
 	$scope.agreed = false;
 
 	$scope.getProgramByGuid = function () {
@@ -127,18 +111,10 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 				});
 			})
 			.catch(function () {
-				addAlert('danger', 'Unable to get Program data. Please contact your MMM rep.');
+				$scope.alerter.addAlert('danger', 'Unable to get Program data. Please contact your MMM rep.');
 			});
 	};
 	$scope.getProgramByGuid();
-	
-	function addAlert(errorType, message) {
-		$scope.alerts.push({ type: errorType, msg: message });
-	};
-
-	$scope.closeAlert = function (index) {
-		$scope.alerts.splice(index, 1);
-	};
 
 	$scope.toggleCenter = function (id) {
 		var idx = $scope.retailer.SelectedMalls.indexOf(id);
@@ -153,7 +129,7 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 
 	$scope.submitForm = function () {
 		if ($scope.retailer.SelectedMalls.length < 1) {
-			addAlert('danger', 'Please select at least one shopping center.');
+			$scope.alerter.addAlert('danger', 'Please select at least one shopping center.');
 			return;
 		}
 
@@ -161,11 +137,11 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 			.then(function(data) {
 				if (data.status === 200) {
 					//TODO: figure out why this doesn't always work
-					addAlert('success', 'Program was successfully saved.');
+					$scope.alerter.addAlert('success', 'Program was successfully saved.');
 				}
 			})
 			.catch(function(data) {
-				addAlert('danger', 'Unable to save Program data.');
+				$scope.alerter.addAlert('danger', 'Unable to save Program data.');
 			});
 	};
 });
