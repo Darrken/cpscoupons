@@ -180,7 +180,7 @@ app.controller('retailersByCenterCtrl', function ($scope, $routeParams, programs
 	//{ email: 'anothertest@test.com', hasSignedUp: true, storeName: 'kiosk?', contactName: 'jane smith', repName: 'jane rep', phone: '789-456-1230' }];
 
 	$scope.getMallList = function () {
-		programsApiService.getByCommand('getMallList')
+		programsApiService.getByCommand('getMallsWithSignups')
 			.then(function (data) {
 				$scope.malls = data;
 			})

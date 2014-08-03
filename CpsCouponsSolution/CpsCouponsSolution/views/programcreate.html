@@ -4,7 +4,7 @@
 	</div>
 	
 	<alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="alerter.closeAlert($index)">{{alert.msg}}</alert>
-
+	
 	<form name="programform" role="form" ng-submit="saveProgram()" ng-show="!previewMode">
 		<div class="form-group">
 			<label for="name">Program Name</label>
@@ -13,7 +13,7 @@
 		<div class="row form-group">
 			<div class="col-xs-4">
 				<label for="wordcount">Coupon Word Count</label>
-				<input type="number" min="1" max="1000" class="form-control" name="wordcount" id="wordcount" placeholder="10" ng-model="program.CouponWordCount" required>
+				<input type="number" min="1" max="1000" class="form-control" name="wordcount" id="wordcount" placeholder="EX: 10" ng-model="program.CouponWordCount" required>
 			</div>
 			<div class="col-xs-4">
 				<label for="name">Coupon Deadline</label>

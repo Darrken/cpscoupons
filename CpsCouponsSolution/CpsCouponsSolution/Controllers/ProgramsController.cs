@@ -174,6 +174,22 @@ namespace CpsCouponsSolution.Controllers
 			return Request.CreateResponse(HttpStatusCode.OK, mallNames);
 		}
 
+		public HttpResponseMessage GetMallsWithSignups()
+		{
+			List<MallDTO> mallList;
+			try
+			{
+				var programsService = new ProgramsService();
+				mallList = programsService.GetMallsWithSignups();
+			}
+			catch (Exception ex)
+			{
+				return Request.CreateResponse(HttpStatusCode.InternalServerError, new { message = "There was an error retrieving the mall list.  " + ex.Message });
+			}
+
+			return Request.CreateResponse(HttpStatusCode.OK, mallList);
+		}
+
 		public HttpResponseMessage SignUp(RetailerDTO retailerDto)
 		{
 			ResponseResult responseResult;

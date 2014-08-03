@@ -243,6 +243,10 @@ app.factory('adminService', function ($location) {
 			if (!isAdmin) {
 				$location.path('adminlogin');
 			}
+		},
+		
+		isAdmin: function() {
+			return isAdmin;
 		}
 	};
 });
