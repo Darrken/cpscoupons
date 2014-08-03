@@ -1,26 +1,28 @@
-﻿<div class="container-fluid">
+﻿<div id="top" class="container-fluid">
 	<div class="page-header" ng-show="!previewMode">
-		<h1 id="top">Create Program</h1>
+		<h1>Create Program</h1>
 	</div>
 	
-	<alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+	<alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="alerter.closeAlert($index)">{{alert.msg}} {{$index}}</alert>
 
 	<form name="programform" role="form" ng-submit="saveProgram()" ng-show="!previewMode">
 		<div class="form-group">
 			<label for="name">Program Name</label>
 			<input type="text" class="form-control" id="name" placeholder="Enter program name" ng-model="program.Name" required>
 		</div>
-		<div class="form-group">
-			<label for="name">Coupon Deadline</label>
-			<input type="date" class="form-control" id="coupondeadline" ng-model="program.DeadlineCoupon" required>
-		</div>
-		<div class="form-group">
-			<label for="name">In-Mall Deadline</label>
-			<input type="date" class="form-control" id="inmalldeadline" ng-model="program.DeadlineInMall" required>
-		</div>
-		<div class="form-group">
-			<label for="wordcount">Coupon Word Count</label>
-			<input type="number" min="1" max="1000" class="form-control" name="wordcount" id="wordcount" placeholder="10" ng-model="program.CouponWordCount" required>
+		<div class="row form-group">
+			<div class="col-xs-4">
+				<label for="wordcount">Coupon Word Count</label>
+				<input type="number" min="1" max="1000" class="form-control" name="wordcount" id="wordcount" placeholder="10" ng-model="program.CouponWordCount" required>
+			</div>
+			<div class="col-xs-4">
+				<label for="name">Coupon Deadline</label>
+				<input type="date" class="form-control" id="coupondeadline" ng-model="program.DeadlineCoupon" required>
+			</div>
+			<div class="col-xs-4">
+				<label for="name">In-Mall Deadline</label>
+				<input type="date" class="form-control" id="inmalldeadline" ng-model="program.DeadlineInMall" required>
+			</div>
 		</div>
 		<div class="form-group">
 			<label for="header">Header</label>
@@ -53,9 +55,9 @@
 			</div>
 			<div><button type="button" class="btn btn-info" ng-click="addField()">Add New Input Field</button></div>
 		</div>
-		<button type="button" class="btn btn-warning" ng-click="previewMode = !previewMode">Preview Form</button> <button type="submit" class="btn btn-primary" ng-disabled="!programform.$valid">Submit</button>
+		<button type="button" class="btn btn-warning" ng-click="togglePreviewMode()">Preview Form</button> <button type="submit" class="btn btn-primary" ng-disabled="!programform.$valid">Submit</button>
 	</form>
-	
+
 
 	<div ng-show="previewMode">
 		<h2 ng-bind-html="program.Header"></h2>
@@ -90,7 +92,7 @@
 
 		<h3>please check your participating GGP Shopping Center locations:</h3>
 		<div style="padding: 1em;" class="panel panel-default">
-			<label class="checkbox-inline" ng-repeat="mall in program.ParticipatingMalls" style="width: 20%; margin-left: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" tooltip="{{mall.Name + ' - ' + mall.StateName}}">
+			<label class="checkbox-inline" ng-repeat="mall in previewMalls" style="width: 20%; margin-left: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" tooltip="{{mall.Name + ' - ' + mall.StateName}}">
 				<input type="checkbox" name="centers" id="Checkbox1" ng-click="toggleCenter(mall.Id)" value="{{mall.Id}}" style="position: static;"> {{mall.Name + ' - ' + mall.StateName}}
 			</label>
 		</div>
@@ -155,7 +157,7 @@
 							<input type="checkbox" ng-model="agreed"> I agree to the terms for participation
 						</label>
 					</div>
-					<button type="button" class="btn btn-warning" ng-click="previewMode = !previewMode">Back to Editing</button>
+					<button type="button" class="btn btn-warning" ng-click="togglePreviewMode()">Back to Editing</button>
 				</form>
 				<br/>
 				<alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>

@@ -15,11 +15,12 @@
 });
 
 
-app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, programsApiService, alertService) {
+app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, $timeout, programsApiService, alertService) {
 	$scope.alerter = alertService;
 	$scope.Emails = [];
 	$scope.ParticipatingMalls = [];
 	$scope.previewMode = false;
+	$scope.previewMalls = [];
 
 	$scope.program = {
 		ParticipatingMalls: [],
@@ -54,6 +55,12 @@ app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, p
 		else {
 			$scope.ParticipatingMalls.push(id);
 		}
+
+		$scope.previewMalls = [];
+		_.forEach($scope.ParticipatingMalls, function(participatingMall) {
+			var mall = _.find($scope.malls, { 'Id': participatingMall });
+			$scope.previewMalls.push(mall);
+		});
 	};
 
 	$scope.addField = function() {
@@ -64,15 +71,26 @@ app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, p
 		if (!fieldName || fieldName.length === 0) {
 			$scope.program.Fields.splice(index, 1);
 		}
-	}
+	};
+
+	$scope.togglePreviewMode = function () {
+		$scope.previewMode = !$scope.previewMode;
+		$location.hash('top');
+		$anchorScroll();
+	};
+
+	$scope.$on('$locationChangeStart', function (ev) {
+		ev.preventDefault();
+	});
 
 	$scope.saveProgram = function() {
 		var emails = $scope.program.Emails.split('\n');
-
+		$scope.program.Retailers = [];
 		_.forEach(emails, function(email) {
 			$scope.program.Retailers.push({ Email: email });
 		});
 
+		$scope.program.ParticipatingMalls = [];
 		_.forEach($scope.ParticipatingMalls, function (id) {
 			$scope.program.ParticipatingMalls.push({ Id: id });
 		});
