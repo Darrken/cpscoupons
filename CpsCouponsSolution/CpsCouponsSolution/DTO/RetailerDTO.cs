@@ -16,6 +16,16 @@ namespace CpsCouponsSolution.DTO
 			ProgramId = retailer.ProgramId;
 			Email = retailer.Email;
 			UrlGuid = retailer.UrlGuid;
+			StoreName = retailer.StoreName;
+			Offer = retailer.Offer;
+			Restrictions = retailer.Restrictions;
+			ContactName = retailer.ContactName;
+			Address = retailer.Address;
+			City = retailer.City;
+			State = retailer.State;
+			Zip = retailer.Zip;
+			RepName = retailer.RepName;
+			Phone = retailer.Phone;
 			HasSignedUp = retailer.Program_Field_Values.Any() || retailer.Program_Retailer_Selected_Malls.Any();
 			FieldValues = retailer.Program_Field_Values.Select(v => new FieldValueDTO(v)).ToList();
 			SelectedMalls = retailer.Program_Retailer_Selected_Malls.Select(m => m.MallId).ToList();
