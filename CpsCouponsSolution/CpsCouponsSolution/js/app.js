@@ -5,6 +5,10 @@
 				templateUrl: '/views/admin.html',
 				controller: 'adminMenuCtrl'
 			}).
+			when('/adminlogin', {
+				templateUrl: '/views/adminlogin.html',
+				controller: 'adminLoginCtrl'
+			}).
 			when('/adminprogram/:programId', {
 				templateUrl: '/views/programedit.html',
 				controller: 'programCtrl'
@@ -16,6 +20,14 @@
 			when('/signup/:urlguid', {
 				templateUrl: '/views/programsignup.html',
 				controller: 'programSignupCtrl'
+			}).
+			when('/retailersbycenter', {
+				templateUrl: '/views/retailersbycenter.html',
+				controller: 'retailersByCenterCtrl'
+			}).
+			when('/retailersbyprogram', {
+				templateUrl: '/views/retailersbyprogram.html',
+				controller: 'retailersByProgramCtrl'
 			}).
 			otherwise({
 				redirectTo: '/'

@@ -3,12 +3,12 @@
 		<h1>Admin</h1>
 	</div>
 	
-	<alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+	<alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="alerter.closeAlert($index)">{{alert.msg}}</alert>
 
 	<div class="panel panel-default">
 		<ul class="list-group">
-			<li class="list-group-item"><a href="/reportbyretailer">View Signups by Retailer</a></li>
-			<li class="list-group-item"><a href="/reportbycenter">View Signups by Center</a></li>
+			<li class="list-group-item"><a href="/retailersbyprogram">View Signups by Retailer</a></li>
+			<li class="list-group-item"><a href="/retailersbycenter">View Signups by Center</a></li>
 			<li class="list-group-item"><a href="/adminprogram">Create a new Program</a></li>
 			<li class="list-group-item">Edit an existing Program
 				<ul>

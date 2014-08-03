@@ -158,18 +158,20 @@
     <Compile Include="Services\ProgramsService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\logonmast.png" />
+    <Content Include="Assets\mmmlogo.png" />
     <Content Include="js\app.js" />
-    <Content Include="Assets\ui-bootstrap-tpls-0.11.0.min.js" />
     <Content Include="index.html" />
     <Content Include="Global.asax" />
     <Content Include="js\controllers.js" />
     <Content Include="js\directives.js" />
     <Content Include="js\services.js" />
     <Content Include="views\admin.html" />
+    <Content Include="views\adminlogin.html" />
     <Content Include="views\programsignup.html" />
     <Content Include="views\programcreate.html" />
     <Content Include="views\programedit.html" />
+    <Content Include="views\retailersbycenter.html" />
+    <Content Include="views\retailersbyprogram.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
