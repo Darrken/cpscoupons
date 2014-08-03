@@ -11,7 +11,7 @@
 	<div class="row">
 		<div class="col-md-6">
 			<h3>coupon offer ({{program.CouponWordCount}} words or less):</h3>
-			<textarea class="form-control" id="offer" rows="3" placeholder="Enter offer text" required="true" ng-model="retailer.Offer"></textarea>
+			<textarea class="form-control" id="offer" rows="3" placeholder="Enter offer text" required ng-model="retailer.Offer"></textarea>
 			<p><small>MMM will provide a proof of your offer and will send via email for approval.</small></p>
 		</div>
 		<div class="col-md-6">
@@ -42,11 +42,11 @@
 			<form name="programform" role="form" ng-submit="submitForm()">
 				<div class="form-group">
 					<label for="name">Name <span class="text-danger">*</span></label>
-					<input type="text" class="form-control" id="name" placeholder="Name" required="true" ng-model="retailer.ContactName">
+					<input type="text" class="form-control" id="name" placeholder="Name" required ng-model="retailer.ContactName">
 				</div>
 				<div class="form-group">
 					<label for="retailer">Retailer <span class="text-danger">*</span></label>
-					<input type="txt" class="form-control" id="retailer" placeholder="Retailer name" required="true" ng-model="retailer.StoreName">
+					<input type="txt" class="form-control" id="retailer" placeholder="Retailer name" required ng-model="retailer.StoreName">
 				</div>
 				<div class="form-group">
 					<label for="restrictions">Coupon Restrictions</label>
@@ -54,7 +54,7 @@
 				</div>	
 				<div class="form-group">
 					<label for="phone">Phone <span class="text-danger">*</span></label>
-					<input type="tel" class="form-control" id="phone" placeholder="Phone number" required="true" ng-model="retailer.Phone">
+					<input type="tel" class="form-control" id="phone" placeholder="Phone number" required ng-model="retailer.Phone">
 				</div>
 				<div class="form-group">
 					<label for="address">Address</label>

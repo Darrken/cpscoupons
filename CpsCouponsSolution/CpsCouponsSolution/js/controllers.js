@@ -19,6 +19,7 @@ app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, p
 	$scope.alerter = alertService;
 	$scope.Emails = [];
 	$scope.ParticipatingMalls = [];
+	$scope.previewMode = false;
 
 	$scope.program = {
 		ParticipatingMalls: [],
