@@ -46,6 +46,7 @@ namespace CpsCouponsSolution.DTO
 		public string ProgramName { get; set; }
 		public string Email { get; set; }
 		public Guid UrlGuid { get; set; }
+		public bool IsAdmin { get; set; }
 		public bool IsRetailerEmailNeeded { get; set; }
 		public bool HasSignedUp { get; set; }
 		public string StoreName { get; set; }

@@ -118,13 +118,15 @@ app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, $
 app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiService, alertService, adminService) {
 	$scope.alerter = alertService;
 	$scope.agreed = false;
-	$scope.isAdmin = adminService.isAdmin;
+	$scope.isAdmin = adminService.isAdmin();
 
 	$scope.getProgramByGuid = function () {
 		programsApiService.getProgramByRetailer($routeParams.urlguid)
 			.then(function (data) {
 				$scope.program = data;
 				$scope.retailer = _.find(data.Retailers, { 'UrlGuid': $routeParams.urlguid.toLowerCase() });
+				$scope.retailer.IsAdmin = $scope.isAdmin;
+				$scope.retailer.IsRetailerEmailNeeded = false;
 				$scope.retailer.FieldValues = [];
 				$scope.retailer.SelectedMalls = [];
 				_.forEach($scope.program.Fields, function (field) {
@@ -139,13 +141,11 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 	$scope.getProgramByGuid();
 
 	$scope.toggleCenter = function (id) {
-		var idx = $scope.retailer.SelectedMalls.indexOf(id);
-
-		if (idx > -1) {
-			$scope.retailer.SelectedMalls.splice(idx, 1);
+		if (_.any($scope.retailer.SelectedMalls, { 'Id': id })) {
+			_.remove($scope.retailer.SelectedMalls, { 'Id': id });
 		}
 		else {
-			$scope.retailer.SelectedMalls.push(id);
+			$scope.retailer.SelectedMalls.push({ 'Id': id });
 		}
 	};
 
@@ -159,7 +159,14 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 			.then(function (data) {
 				if (data.status === 200) {
 					//TODO: figure out why this doesn't always work
-					$scope.alerter.addAlert('success', 'Program was successfully saved.');
+					
+					if (!data.WasSuccessful) {
+						$scope.alerter.addAlert('danger', 'Unable to save Program data.');
+						// could also alert data.FailureReason
+					}
+					else {
+						$scope.alerter.addAlert('success', 'Program was successfully saved.');
+					}
 				}
 			})
 			.catch(function (data) {
