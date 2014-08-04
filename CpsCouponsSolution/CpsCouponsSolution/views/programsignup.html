@@ -96,9 +96,9 @@
 						<input type="checkbox" ng-model="agreed"> I agree to the terms for participation
 					</label>
 				</div>
-				<div class="checkbox">
+				<div class="checkbox" ng-if="isAdmin">
 					<label>
-						<input type="checkbox" ng-if="isAdmin" ng-model="retailer.IsRetailerEmailNeeded"> Send retailer an email of the update.
+						<input type="checkbox"  ng-model="retailer.IsRetailerEmailNeeded"> Send retailer an email of the update.
 					</label>
 				</div>
 				<button type="submit" class="btn btn-default btn-primary" ng-disabled="!agreed">Submit</button>
