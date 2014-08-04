@@ -1,9 +1,12 @@
 ﻿<div id="top" class="container-fluid">
+	<ol class="breadcrumb">
+		<li><a href="/adminmenu">Admin Home</a></li>
+		<li class="active">Create Program</li>
+	</ol>
+
 	<div class="page-header" ng-show="!previewMode">
 		<h1>Create Program</h1>
 	</div>
-	
-	<alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="alerter.closeAlert($index)">{{alert.msg}}</alert>
 	
 	<form name="programform" role="form" ng-submit="saveProgram()" ng-show="!previewMode">
 		<div class="form-group">
@@ -13,7 +16,7 @@
 		<div class="row form-group">
 			<div class="col-xs-4">
 				<label for="wordcount">Coupon Word Count</label>
-				<input type="number" min="1" max="1000" class="form-control" name="wordcount" id="wordcount" placeholder="EX: 10" ng-model="program.CouponWordCount" required>
+				<input type="number" min="1" max="1000" class="form-control" name="wordcount" id="wordcount" placeholder="ex: 10" ng-model="program.CouponWordCount" required>
 			</div>
 			<div class="col-xs-4">
 				<label for="name">Coupon Deadline</label>
@@ -55,7 +58,10 @@
 			</div>
 			<div><button type="button" class="btn btn-info" ng-click="addField()">Add New Input Field</button></div>
 		</div>
-		<button type="button" class="btn btn-warning" ng-click="togglePreviewMode()">Preview Form</button> <button type="submit" class="btn btn-primary" ng-disabled="!programform.$valid">Submit</button>
+
+		<p><button type="button" class="btn btn-warning" ng-click="togglePreviewMode()">Preview Form</button> <button type="submit" class="btn btn-primary" ng-disabled="!programform.$valid">Submit</button></p>
+		
+		<p><alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="alerter.closeAlert($index)">{{alert.msg}}</alert></p>
 	</form>
 
 

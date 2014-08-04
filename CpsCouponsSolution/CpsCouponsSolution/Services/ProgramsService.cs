@@ -274,26 +274,44 @@ namespace CpsCouponsSolution.Services
 				dbContext.SaveChanges();
 			}
 
-			// after successful signup, send email of transaction
-			SendReservationConfirmedEmail(retailerData, selectedProgram);
+			// after successful signup, send email of successful reservation or possible update
+			if(!retailerData.IsAdmin)
+				SendReservationConfirmedEmail(retailerData, selectedProgram);
+
+			if(retailerData.IsRetailerEmailNeeded)
+				SendRetailerUpdateEmail(retailerData, selectedProgram);
 
 			return new ResponseResult() { WasSuccessful = true }; 
 		}
 
+		private void SendRetailerUpdateEmail(RetailerDTO retailerData, Program selectedProgram)
+		{
+			var subject = ConfigurationManager.AppSettings["SignedUpUpdateEmailSubject"];
+			var body = ConfigurationManager.AppSettings["SignedUpUpdateEmailBody"];
+
+			SendEmail(retailerData, selectedProgram, body, subject);
+		}
+
 		private void SendReservationConfirmedEmail(RetailerDTO retailerData, Program selectedProgram)
 		{
-			var emailService = new EmailService();
 			var subject = ConfigurationManager.AppSettings["SignedUpEmailSubject"];
 			var body = ConfigurationManager.AppSettings["SignedUpEmailBody"];
+
+			SendEmail(retailerData, selectedProgram, body, subject);
+		}
+
+		private void SendEmail(RetailerDTO retailerData, Program selectedProgram, string body, string subject)
+		{
+			var emailService = new EmailService();
 
 			body = body + "\n\n" + "Program name: \n\t" + selectedProgram.Name;
 			body = body + "\n" + "Program description: \n\t" + selectedProgram.Description;
 			body = body + "\n" + "Store name: \n\t" + retailerData.StoreName;
 			body = body + "\n" + "Offer: \n\t" + retailerData.Offer;
-			body = body + "\n" + "Restrictions: \n\t" +retailerData.Restrictions;
+			body = body + "\n" + "Restrictions: \n\t" + retailerData.Restrictions;
 			body = body + "\n" + "Selected Malls: \n\t" + string.Concat(GetMallNames(false)
-																		.Where(m => retailerData.SelectedMalls.Select(mall => mall.Id).Contains(m.Id))
-																		.Select(m => m.Name + "\n\t").ToList());
+				.Where(m => retailerData.SelectedMalls.Select(mall => mall.Id).Contains(m.Id))
+				.Select(m => m.Name + "\n\t").ToList());
 			body = body + "\n Thank you for your participation.";
 			body = body + "\n\n Mall Marketing Media.";
 			body = body + "\n a division of.";

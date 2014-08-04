@@ -16,7 +16,7 @@
 	$scope.getProgramList();
 });
 
-app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, $timeout, programsApiService, alertService, adminService) {
+app.controller('programCreateCtrl', function ($scope, $location, $anchorScroll, $route, $timeout, programsApiService, alertService, adminService) {
 	adminService.adminCheck('/adminprogram');
 	
 	$scope.alerter = alertService;
@@ -78,16 +78,28 @@ app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, $
 
 	$scope.togglePreviewMode = function () {
 		$scope.previewMode = !$scope.previewMode;
-		$location.hash('top');
-		$anchorScroll();
+		//$location.hash('top');
+		//$anchorScroll();
 	};
 
-	$scope.$on('$locationChangeStart', function (ev) {
-		ev.preventDefault();
-	});
-
+	//$scope.$on('$locationChangeStart', function (event) {
+	//	if ($route && $route.current && $route.current.templateUrl.indexOf('programcreate') > 0) {
+	//		event.preventDefault();
+	//	}
+	//});
+	
 	$scope.saveProgram = function () {
+		if ($scope.ParticipatingMalls.length < 1) {
+			$scope.alerter.addAlert('danger', 'Please select at least one center.');
+			return;
+		}
+
 		var emails = $scope.program.Emails.split('\n');
+		if (emails.length < 1) {
+			$scope.alerter.addAlert('danger', 'Please enter at least one email.');
+			return;
+		}
+
 		$scope.program.Retailers = [];
 		_.forEach(emails, function (email) {
 			$scope.program.Retailers.push({ Email: email });
@@ -99,31 +111,34 @@ app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, $
 		});
 
 		programsApiService.saveByCommand('createProgram', $scope.program)
-			.then(function (data) {
+			.then(function(data) {
 				if (data.status === 200) {
 					//TODO: figure out why this doesn't always work
 					$scope.alerter.addAlert('success', 'Program was successfully saved.');
 				}
 			})
-			.catch(function (data) {
+			.catch(function(data) {
 				$scope.alerter.addAlert('danger', 'Unable to save Program data.');
-			})
-			.finally(function () {
-				$location.hash('top');
-				$anchorScroll();
 			});
+		//.finally(function () {
+		//	$location.hash('top');
+		//	$anchorScroll();
+		//});
 	};
 });
 
 app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiService, alertService, adminService) {
 	$scope.alerter = alertService;
 	$scope.agreed = false;
+	$scope.isAdmin = adminService.isAdmin();
 
 	$scope.getProgramByGuid = function () {
 		programsApiService.getProgramByRetailer($routeParams.urlguid)
 			.then(function (data) {
 				$scope.program = data;
 				$scope.retailer = _.find(data.Retailers, { 'UrlGuid': $routeParams.urlguid.toLowerCase() });
+				$scope.retailer.IsAdmin = $scope.isAdmin;
+				$scope.retailer.IsRetailerEmailNeeded = false;
 				$scope.retailer.FieldValues = [];
 				$scope.retailer.SelectedMalls = [];
 				_.forEach($scope.program.Fields, function (field) {
@@ -138,13 +153,11 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 	$scope.getProgramByGuid();
 
 	$scope.toggleCenter = function (id) {
-		var idx = $scope.retailer.SelectedMalls.indexOf(id);
-
-		if (idx > -1) {
-			$scope.retailer.SelectedMalls.splice(idx, 1);
+		if (_.any($scope.retailer.SelectedMalls, { 'Id': id })) {
+			_.remove($scope.retailer.SelectedMalls, { 'Id': id });
 		}
 		else {
-			$scope.retailer.SelectedMalls.push(id);
+			$scope.retailer.SelectedMalls.push({ 'Id': id });
 		}
 	};
 
@@ -158,7 +171,14 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 			.then(function (data) {
 				if (data.status === 200) {
 					//TODO: figure out why this doesn't always work
-					$scope.alerter.addAlert('success', 'Program was successfully saved.');
+					
+					if (!data.WasSuccessful) {
+						$scope.alerter.addAlert('danger', 'Unable to save Program data.');
+						// could also alert data.FailureReason
+					}
+					else {
+						$scope.alerter.addAlert('success', 'Program was successfully saved.');
+					}
 				}
 			})
 			.catch(function (data) {

@@ -2,20 +2,20 @@
 	.config(function($routeProvider, $locationProvider) {
 		$routeProvider.
 			when('/adminmenu', {
-				templateUrl: '/views/admin.html',
+				templateUrl: '/views/adminmenu.html',
 				controller: 'adminMenuCtrl'
 			}).
 			when('/adminlogin', {
 				templateUrl: '/views/adminlogin.html',
 				controller: 'adminLoginCtrl'
 			}).
-			when('/adminprogram/:programId', {
+			when('/programedit/:programId', {
 				templateUrl: '/views/programedit.html',
 				controller: 'programAdminCtrl'
 			}).
-			when('/adminprogram', {
+			when('/programcreate', {
 				templateUrl: '/views/programcreate.html',
-				controller: 'programAdminCtrl'
+				controller: 'programCreateCtrl'
 			}).
 			when('/signup/:urlguid', {
 				templateUrl: '/views/programsignup.html',
