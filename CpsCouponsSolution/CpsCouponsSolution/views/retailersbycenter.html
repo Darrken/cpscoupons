@@ -22,7 +22,7 @@
 			</div>
 		</div>
 
-		<table class="table table-condensed">
+		<table class="table table-condensed table-hover">
 			<thead>
 				<tr>
 					<th>Mall Name</th>
@@ -32,7 +32,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="retailer in retailers">
+				<tr ng-repeat="retailer in retailers" ng-click="openSignup(retailer.UrlGuid)">
 					<td>{{retailer.MallNameLabel}}</td>
 					<td>{{retailer.StoreName}}</td>
 					<td>{{retailer.Email}}</td>

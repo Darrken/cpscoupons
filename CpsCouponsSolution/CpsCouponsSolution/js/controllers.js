@@ -187,15 +187,13 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 	};
 });
 
-app.controller('retailersByCenterCtrl', function ($scope, $routeParams, programsApiService, alertService, fileService, adminService) {
+app.controller('retailersByCenterCtrl', function ($scope, $location, $routeParams, programsApiService, alertService, fileService, adminService) {
 	adminService.adminCheck('/retailersbycenter');
 	
 	$scope.alerter = alertService;
 	$scope.malls = [];
 	$scope.selectedMall = {};
 	$scope.retailers = [];
-	//[{ email: 'test@test.com', hasSignedUp: false, storeName: 'test store', contactName: 'john smith', repName: 'john rep', phone: '123-456-7890' },
-	//{ email: 'anothertest@test.com', hasSignedUp: true, storeName: 'kiosk?', contactName: 'jane smith', repName: 'jane rep', phone: '789-456-1230' }];
 
 	$scope.getMallList = function () {
 		programsApiService.getByCommand('getMallsWithSignups')
@@ -226,18 +224,20 @@ app.controller('retailersByCenterCtrl', function ($scope, $routeParams, programs
 		fileService.createCsvFile(exportColumns, $scope.retailers, 'retailers_by_center');
 	};
 
+	$scope.openSignup = function(guid) {
+		$location.path('/signup/' + guid);
+	};
+
 	$scope.malls = $scope.getMallList();
 });
 
-app.controller('retailersByProgramCtrl', function ($scope, $routeParams, programsApiService, alertService, fileService, adminService) {
+app.controller('retailersByProgramCtrl', function ($scope, $location, $routeParams, programsApiService, alertService, fileService, adminService) {
 	adminService.adminCheck('/retailersbyprogram');
 
 	$scope.alerter = alertService;
 	$scope.programs = [];
 	$scope.selectedProgram = {};
 	$scope.retailers = [];
-	//[{ email: 'test@test.com', hasSignedUp: false, storeName: 'test store', contactName: 'john smith', repName: 'john rep', phone: '123-456-7890' },
-	//{ email: 'anothertest@test.com', hasSignedUp: true, storeName: 'kiosk?', contactName: 'jane smith', repName: 'jane rep', phone: '789-456-1230' }];
 
 	$scope.getProgramList = function () {
 		programsApiService.getByCommand('getProgramList')
@@ -262,6 +262,10 @@ app.controller('retailersByProgramCtrl', function ($scope, $routeParams, program
 	$scope.exportReport = function () {
 		var exportColumns = ['Email', 'StoreName', 'ProgramName', 'HasSignedUp'];
 		fileService.createCsvFile(exportColumns, $scope.retailers, 'retailers_by_center');
+	};
+	
+	$scope.openSignup = function (guid) {
+		$location.path('/signup/' + guid);
 	};
 
 	$scope.getProgramList();

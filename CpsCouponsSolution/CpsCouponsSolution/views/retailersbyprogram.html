@@ -22,7 +22,7 @@
 			</div>
 		</div>
 
-		<table class="table table-condensed">
+		<table class="table table-condensed table-hover">
 			<thead>
 				<tr>
 					<th>Email</th>
@@ -32,11 +32,11 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="retailer in retailers">
+				<tr ng-repeat="retailer in retailers" ng-click="openSignup(retailer.UrlGuid)">
 					<td>{{retailer.Email}}</td>
 					<td>{{retailer.StoreName}}</td>
 					<td>{{retailer.ProgramName}}</td>
-					<td><span class="label" ng-class="{'label-success': retailer.HasSignedUp, 'label-danger': !retailer.HasSignedUp}">{{retailer.HasSignedUp}}</span></td>
+					<td><span class="label" ng-class="{'label-success': retailer.HasSignedUp, 'label-danger': !retailer.HasSignedUp}">{{retailer.HasSignedUp ? 'Yes' : 'No'}}</span></td>
 				</tr>
 			</tbody>
 		</table>
