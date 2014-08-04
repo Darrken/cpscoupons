@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Net;
 using System.Net.Mail;
+using System.Text.RegularExpressions;
 
 namespace CpsCouponsSolution.Services
 {
@@ -39,15 +40,12 @@ namespace CpsCouponsSolution.Services
 
 		public bool ValidateEmailAddress(string emailAddress)
 		{
-			try
-			{
-				var testAddress = new MailAddress(emailAddress);
-				return true;
-			}
-			catch (Exception)
-			{
-				return false;
-			}
+			// Pattern from: http://www.w3.org/TR/html5/forms.html#valid-e-mail-address
+			var pattern = @"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
+
+			var regex = new Regex(pattern, RegexOptions.IgnoreCase);
+
+			return regex.IsMatch(emailAddress);
 		}
 	}
 }
