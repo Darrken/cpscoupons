@@ -1,6 +1,10 @@
 ﻿<div class="container-fluid">
+	<ol class="breadcrumb">
+		<li class="active">Admin Home</li>
+	</ol>
+
 	<div class="page-header">
-		<h1>Admin</h1>
+		<h1>Admin Home</h1>
 	</div>
 	
 	<alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="alerter.closeAlert($index)">{{alert.msg}}</alert>

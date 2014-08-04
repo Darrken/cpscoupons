@@ -1,9 +1,12 @@
 ﻿<div id="top" class="container-fluid">
+	<ol class="breadcrumb">
+		<li><a href="/adminmenu">Admin Home</a></li>
+		<li class="active">Create Program</li>
+	</ol>
+
 	<div class="page-header" ng-show="!previewMode">
 		<h1>Create Program</h1>
 	</div>
-	
-	<alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="alerter.closeAlert($index)">{{alert.msg}}</alert>
 	
 	<form name="programform" role="form" ng-submit="saveProgram()" ng-show="!previewMode">
 		<div class="form-group">
@@ -56,6 +59,8 @@
 			<div><button type="button" class="btn btn-info" ng-click="addField()">Add New Input Field</button></div>
 		</div>
 		<button type="button" class="btn btn-warning" ng-click="togglePreviewMode()">Preview Form</button> <button type="submit" class="btn btn-primary" ng-disabled="!programform.$valid">Submit</button>
+		
+		<p><alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="alerter.closeAlert($index)">{{alert.msg}}</alert></p>
 	</form>
 
 

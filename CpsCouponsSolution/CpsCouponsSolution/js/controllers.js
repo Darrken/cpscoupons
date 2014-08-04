@@ -16,7 +16,7 @@
 	$scope.getProgramList();
 });
 
-app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, $timeout, programsApiService, alertService, adminService) {
+app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, $route, $timeout, programsApiService, alertService, adminService) {
 	adminService.adminCheck('/adminprogram');
 	
 	$scope.alerter = alertService;
@@ -78,14 +78,16 @@ app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, $
 
 	$scope.togglePreviewMode = function () {
 		$scope.previewMode = !$scope.previewMode;
-		$location.hash('top');
-		$anchorScroll();
+		//$location.hash('top');
+		//$anchorScroll();
 	};
 
-	$scope.$on('$locationChangeStart', function (ev) {
-		ev.preventDefault();
-	});
-
+	//$scope.$on('$locationChangeStart', function (event) {
+	//	if ($route && $route.current && $route.current.templateUrl.indexOf('programcreate') > 0) {
+	//		event.preventDefault();
+	//	}
+	//});
+	
 	$scope.saveProgram = function () {
 		var emails = $scope.program.Emails.split('\n');
 		$scope.program.Retailers = [];
@@ -99,19 +101,19 @@ app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, $
 		});
 
 		programsApiService.saveByCommand('createProgram', $scope.program)
-			.then(function (data) {
+			.then(function(data) {
 				if (data.status === 200) {
 					//TODO: figure out why this doesn't always work
 					$scope.alerter.addAlert('success', 'Program was successfully saved.');
 				}
 			})
-			.catch(function (data) {
+			.catch(function(data) {
 				$scope.alerter.addAlert('danger', 'Unable to save Program data.');
-			})
-			.finally(function () {
-				$location.hash('top');
-				$anchorScroll();
 			});
+		//.finally(function () {
+		//	$location.hash('top');
+		//	$anchorScroll();
+		//});
 	};
 });
 
