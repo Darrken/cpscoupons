@@ -292,7 +292,7 @@ namespace CpsCouponsSolution.Services
 			body = body + "\n" + "Offer: \n\t" + retailerData.Offer;
 			body = body + "\n" + "Restrictions: \n\t" +retailerData.Restrictions;
 			body = body + "\n" + "Selected Malls: \n\t" + string.Concat(GetMallNames(false)
-																		.Where(m => retailerData.SelectedMalls.Contains(m.Id))
+																		.Where(m => retailerData.SelectedMalls.Select(mall => mall.Id).Contains(m.Id))
 																		.Select(m => m.Name + "\n\t").ToList());
 			body = body + "\n Thank you for your participation.";
 			body = body + "\n\n Mall Marketing Media.";
@@ -367,19 +367,19 @@ namespace CpsCouponsSolution.Services
 			}
 			
 			var alreadySelectedMalls = dbContext.Program_Retailer_Selected_Malls.Where(rsm => rsm.ProgramRetailerId == retailerData.Id).ToList();
-			foreach (var mallId in retailerData.SelectedMalls)
+			foreach (var mallDto in retailerData.SelectedMalls)
 			{
-				if (alreadySelectedMalls.All(m => m.MallId != mallId))
+				if (alreadySelectedMalls.All(m => m.MallId != mallDto.Id))
 				{
 					retailer.Program_Retailer_Selected_Malls.Add(new Program_Retailer_Selected_Malls()
 					{
 						ProgramRetailerId = retailerData.Id,
-						MallId = mallId
+						MallId = mallDto.Id
 					});	
 				}
 			}
 
-			var mallsToDelete = alreadySelectedMalls.Where(m => !retailerData.SelectedMalls.Contains(m.MallId)).ToList();
+			var mallsToDelete = alreadySelectedMalls.Where(m => !retailerData.SelectedMalls.Select(mall => mall.Id).Contains(m.MallId)).ToList();
 			foreach (var mallToDelete in mallsToDelete)
 			{
 				dbContext.Entry(mallToDelete).State = EntityState.Deleted;
