@@ -21,19 +21,17 @@
 			<thead>
 				<tr>
 					<th>Email</th>
+					<th>Store Name</th>
+					<th>Program Name</th>
 					<th>Has Signed Up</th>
-					<th>Contact Name</th>
-					<th>Rep Name</th>
-					<th>Phone</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr ng-repeat="retailer in retailers">
 					<td>{{retailer.Email}}</td>
+					<td>{{retailer.StoreName}}</td>
+					<td>{{retailer.ProgramName}}</td>
 					<td><span class="label" ng-class="{'label-success': retailer.HasSignedUp, 'label-danger': !retailer.HasSignedUp}">{{retailer.HasSignedUp}}</span></td>
-					<td>{{retailer.ContactName}}</td>
-					<td>{{retailer.RepName}}</td>
-					<td>{{retailer.Phone}}</td>
 				</tr>
 			</tbody>
 		</table>
