@@ -202,7 +202,7 @@ app.controller('retailersByCenterCtrl', function ($scope, $routeParams, programs
 	};
 
 	$scope.exportReport = function () {
-		var exportColumns = ['MallName', 'StoreName', 'Email', 'ProgramName'];
+		var exportColumns = ['MallNameLabel', 'StoreName', 'Email', 'ProgramName'];
 		fileService.createCsvFile(exportColumns, $scope.retailers, 'retailers_by_center');
 	};
 
