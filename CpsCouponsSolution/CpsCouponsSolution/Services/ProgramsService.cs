@@ -24,7 +24,7 @@ namespace CpsCouponsSolution.Services
 					Name = p.Mall.Name,
 					StateId = p.Mall.State.ID,
 					StateName = p.Mall.State.Abbreviation
-				});
+				}).Distinct();
 
 				mallList = malls.OrderBy(m => m.Name).ToList();
 			}
