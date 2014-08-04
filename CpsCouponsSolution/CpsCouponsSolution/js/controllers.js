@@ -16,7 +16,7 @@
 	$scope.getProgramList();
 });
 
-app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, $route, $timeout, programsApiService, alertService, adminService) {
+app.controller('programCreateCtrl', function ($scope, $location, $anchorScroll, $route, $timeout, programsApiService, alertService, adminService) {
 	adminService.adminCheck('/adminprogram');
 	
 	$scope.alerter = alertService;
