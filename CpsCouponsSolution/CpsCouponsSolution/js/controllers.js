@@ -120,6 +120,7 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 
 	$scope.alerter = alertService;
 	$scope.agreed = false;
+	$scope.isAdmin = adminService.isAdmin;
 
 	$scope.getProgramByGuid = function () {
 		programsApiService.getProgramByRetailer($routeParams.urlguid)
