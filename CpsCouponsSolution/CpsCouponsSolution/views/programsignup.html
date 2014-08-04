@@ -1,4 +1,9 @@
 ﻿<div class="container-fluid">
+	<ol class="breadcrumb" ng-if="isAdmin">
+		<li><a href="/adminmenu">Admin Home</a></li>
+		<li class="active">Program SignUp</li>
+	</ol>
+	
 	<h2 ng-bind-html="program.Header"></h2>
 
 	<div class="row">
@@ -102,6 +107,7 @@
 					</label>
 				</div>
 				<button type="submit" class="btn btn-default btn-primary" ng-disabled="!agreed">Submit</button>
+				<a ng-if="isAdmin" class="btn btn-warning" href="/adminmenu">Return to Admin Home</a>
 			</form>
 			<br/>
 			<alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="alerter.closeAlert($index)">{{alert.msg}}</alert>
@@ -135,4 +141,5 @@
 	</div>
 	
 	<h3><img src="/Assets/mmmlogo.png" class="img-responsive center-block" alt="Responsive image"></h3>
+	
 </div>
