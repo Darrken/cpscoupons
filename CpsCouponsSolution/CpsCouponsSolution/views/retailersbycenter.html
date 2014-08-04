@@ -20,20 +20,18 @@
 		<table class="table table-condensed">
 			<thead>
 				<tr>
+					<th>Mall Name</th>
+					<th>Retailer Name</th>
 					<th>Email</th>
-					<th>Has Signed Up</th>
-					<th>Contact Name</th>
-					<th>Rep Name</th>
-					<th>Phone</th>
+					<th>Program Name</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr ng-repeat="retailer in retailers">
+					<td>{{retailer.MallNameLabel}}</td>
+					<td>{{retailer.StoreName}}</td>
 					<td>{{retailer.Email}}</td>
-					<td><span class="label" ng-class="{'label-success': retailer.HasSignedUp, 'label-danger': !retailer.HasSignedUp}">{{retailer.HasSignedUp}}</span></td>
-					<td>{{retailer.ContactName}}</td>
-					<td>{{retailer.RepName}}</td>
-					<td>{{retailer.Phone}}</td>
+					<td>{{retailer.ProgramName}}</td>
 				</tr>
 			</tbody>
 		</table>

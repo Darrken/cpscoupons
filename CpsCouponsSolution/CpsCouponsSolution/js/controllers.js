@@ -116,10 +116,9 @@ app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, $
 });
 
 app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiService, alertService, adminService) {
-	adminService.adminCheck('/signup/' + $routeParams.urlguid);
-
 	$scope.alerter = alertService;
 	$scope.agreed = false;
+	$scope.isAdmin = adminService.isAdmin;
 
 	$scope.getProgramByGuid = function () {
 		programsApiService.getProgramByRetailer($routeParams.urlguid)
@@ -193,6 +192,10 @@ app.controller('retailersByCenterCtrl', function ($scope, $routeParams, programs
 		programsApiService.getRetailersByMall($scope.selectedMall.Id)
 			.then(function (data) {
 				$scope.retailers = data;
+
+				for (var i = 0; i < $scope.retailers.length; i++) {
+					$scope.retailers[i].MallNameLabel = _.pluck($scope.retailers[i].SelectedMalls, 'Name').join();
+				}
 			})
 			.catch(function () {
 				$scope.alerter.addAlert('danger', 'Unable to get report data.');
@@ -200,7 +203,7 @@ app.controller('retailersByCenterCtrl', function ($scope, $routeParams, programs
 	};
 
 	$scope.exportReport = function () {
-		var exportColumns = ['email', 'hasSignedUp', 'storeName', 'contactName', 'repName', 'phone'];
+		var exportColumns = ['MallName', 'StoreName', 'Email', 'ProgramName'];
 		fileService.createCsvFile(exportColumns, $scope.retailers, 'retailers_by_center');
 	};
 
@@ -238,7 +241,7 @@ app.controller('retailersByProgramCtrl', function ($scope, $routeParams, program
 	};
 
 	$scope.exportReport = function () {
-		var exportColumns = ['email', 'hasSignedUp', 'storeName', 'contactName', 'repName', 'phone'];
+		var exportColumns = ['Email', 'StoreName', 'ProgramName', 'HasSignedUp'];
 		fileService.createCsvFile(exportColumns, $scope.retailers, 'retailers_by_center');
 	};
 
