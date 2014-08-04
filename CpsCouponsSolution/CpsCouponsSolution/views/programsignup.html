@@ -5,141 +5,228 @@
 	</ol>
 	
 	<h2 ng-bind-html="program.Header"></h2>
-
-	<div class="row">
-		<div class="col-md-6" ng-bind-html="program.Description"></div>
-		<div class="col-md-6" ng-bind-html="program.Disclaimer"></div>
-	</div>
-
-	<h4 class="text-primary text-center">Act quickly, as space is very limited and offered on a first-come, first-served basis. Send in your reservation TODAY to ensure your participation.</h4>
-	
-	<div class="row">
-		<div class="col-md-6">
-			<h3>coupon offer ({{program.CouponWordCount}} words or less):</h3>
-			<textarea class="form-control" id="offer" rows="3" placeholder="Enter offer text" required ng-model="retailer.Offer"></textarea>
-			<p><small>MMM will provide a proof of your offer and will send via email for approval.</small></p>
+	<div ng-show="!confirm">
+		<div class="row">
+			<div class="col-md-6" ng-bind-html="program.Description"></div>
+			<div class="col-md-6" ng-bind-html="program.Disclaimer"></div>
 		</div>
-		<div class="col-md-6">
-			<h3>deadlines</h3>
-			<ul class="list-group">
-				<li class="list-group-item">
-					Space Reservations and Coupon Offer
-					<span class="label label-primary pull-right" style="font-size: inherit">{{program.DeadlineCoupon | date:'MM-dd-yyyy'}}</span>
-				</li>
-				<li class="list-group-item">
-					In-Mall Date
-					<span class="label label-success pull-right" style="font-size: inherit">{{program.DeadlineInMall | date:'MM-dd-yyyy'}}</span>
-				</li>
-			</ul>
+
+		<h4 class="text-primary text-center">Act quickly, as space is very limited and offered on a first-come, first-served basis. Send in your reservation TODAY to ensure your participation.</h4>
+
+		<div class="row">
+			<div class="col-md-6">
+				<h3>coupon offer ({{program.CouponWordCount}} words or less):</h3>
+				<textarea class="form-control" id="offer" rows="3" placeholder="Enter offer text" required ng-model="retailer.Offer"></textarea>
+				<p><small>MMM will provide a proof of your offer and will send via email for approval.</small></p>
+			</div>
+			<div class="col-md-6">
+				<h3>deadlines</h3>
+				<ul class="list-group">
+					<li class="list-group-item">Space Reservations and Coupon Offer
+						<span class="label label-primary pull-right" style="font-size: inherit">{{program.DeadlineCoupon | date:'MM-dd-yyyy'}}</span>
+					</li>
+					<li class="list-group-item">In-Mall Date
+						<span class="label label-success pull-right" style="font-size: inherit">{{program.DeadlineInMall | date:'MM-dd-yyyy'}}</span>
+					</li>
+				</ul>
+			</div>
 		</div>
-	</div>
 
-	<h3>please check your participating GGP Shopping Center locations:</h3>
-	<div style="padding: 1em;" class="panel panel-default">
-		<label class="checkbox-inline" ng-repeat="mall in program.ParticipatingMalls" style="width: 20%; margin-left: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" tooltip="{{mall.Name + ' - ' + mall.StateName}}">
-			<input type="checkbox" name="centers" id="centers" ng-click="toggleCenter(mall.Id)" value="{{mall.Id}}" style="position: static;"> {{mall.Name + ' - ' + mall.StateName}}
-		</label>
-	</div>
+		<h3>please check your participating GGP Shopping Center locations:</h3>
+		<div style="padding: 1em;" class="panel panel-default">
+			<label class="checkbox-inline" ng-repeat="mall in program.ParticipatingMalls" style="width: 20%; margin-left: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" tooltip="{{mall.Name + ' - ' + mall.StateName}}">
+				<input type="checkbox" name="centers" id="centers" ng-click="toggleCenter(mall.Id)" value="{{mall.Id}}" style="position: static;">
+				{{mall.Name + ' - ' + mall.StateName}}
+			</label>
+		</div>
 
-	<div class="row">
-		<div class="col-md-6">
-			<h3>participation agreement</h3>
-			<form name="programform" role="form" ng-submit="submitForm()">
-				<div class="form-group">
-					<label for="name">Name <span class="text-danger">*</span></label>
-					<input type="text" class="form-control" id="name" placeholder="Name" required ng-model="retailer.ContactName">
-				</div>
-				<div class="form-group">
-					<label for="retailer">Retailer <span class="text-danger">*</span></label>
-					<input type="txt" class="form-control" id="retailer" placeholder="Retailer name" required ng-model="retailer.StoreName">
-				</div>
-				<div class="form-group">
-					<label for="restrictions">Coupon Restrictions</label>
-					<input type="txt" class="form-control" id="restrictions" placeholder="Enter any coupon restrictions" ng-model="retailer.Restrictions">
-				</div>	
-				<div class="form-group">
-					<label for="phone">Phone <span class="text-danger">*</span></label>
-					<input type="tel" class="form-control" id="phone" placeholder="Phone number" required ng-model="retailer.Phone">
-				</div>
-				<div class="form-group">
-					<label for="address">Address</label>
-					<input type="text" class="form-control" id="address" placeholder="Address" ng-model="retailer.Address">
-				</div>
-				<div class="row form-group">
-					<div class="col-xs-4">
-						<label for="city">City</label>
-						<input type="text" id="city" class="form-control" placeholder="City" ng-model="retailer.City">
+		<div class="row">
+			<div class="col-md-6">
+				<h3>participation agreement</h3>
+				<form name="programform" role="form" ng-submit="submitForm()">
+					<div class="form-group">
+						<label for="name">Name <span class="text-danger">*</span></label>
+						<input type="text" class="form-control" id="name" placeholder="Name" required ng-model="retailer.ContactName">
 					</div>
-					<div class="col-xs-2">
-						<label for="state">State</label>
-						<input type="text" id="state" class="form-control" placeholder="State" ng-model="retailer.State">
+					<div class="form-group">
+						<label for="retailer">Retailer <span class="text-danger">*</span></label>
+						<input type="txt" class="form-control" id="retailer" placeholder="Retailer name" required ng-model="retailer.StoreName">
 					</div>
-					<div class="col-xs-3">
-						<label for="zip">Zip</label>
-						<input type="text" id="zip" class="form-control" placeholder="Zip" ng-model="retailer.Zip">
+					<div class="form-group">
+						<label for="restrictions">Coupon Restrictions</label>
+						<input type="txt" class="form-control" id="restrictions" placeholder="Enter any coupon restrictions" ng-model="retailer.Restrictions">
 					</div>
-				</div>
-				<div class="form-group">
-					<label for="rep">MMM Representative</label>
-					<input type="text" class="form-control" id="rep" placeholder="MMM Representative" ng-model="retailer.RepName">
-				</div>
-				<div class="form-group" ng-repeat="field in retailer.FieldValues">
-					<label for="{{field.Name}}">{{field.Name}}</label>
-					<input type="text" class="form-control" id="{{field.Name}}" placeholder="{{field.Name}}" ng-model="retailer.FieldValues[$index].Value" />
-				</div>
-				<div class="form-group">
-					<label for="email">Email</label>
-					<input type="email" class="form-control" id="email" placeholder="Email" disabled="disabled" value="{{retailer.Email}}">
-				</div>
-				<div class="form-group">
-					<strong>Terms and Conditions</strong><br/>
-					<small>Space is not confirmed until we receive your signed participation agreement.</small><br/>
-					<small>Cancellations must be received by publisher in writing before the space reservation deadline date.</small>
-				</div>
-				<div class="checkbox">
-					<label>
-						<input type="checkbox" ng-model="agreed"> I agree to the terms for participation
-					</label>
-				</div>
-				<div class="checkbox" ng-if="isAdmin">
-					<label>
-						<input type="checkbox"  ng-model="retailer.IsRetailerEmailNeeded"> Send retailer an email of the update.
-					</label>
-				</div>
-				<button type="submit" class="btn btn-default btn-primary" ng-disabled="!agreed">Submit</button>
+					<div class="form-group">
+						<label for="phone">Phone <span class="text-danger">*</span></label>
+						<input type="tel" class="form-control" id="phone" placeholder="Phone number" required ng-model="retailer.Phone">
+					</div>
+					<div class="form-group">
+						<label for="address">Address</label>
+						<input type="text" class="form-control" id="address" placeholder="Address" ng-model="retailer.Address">
+					</div>
+					<div class="row form-group">
+						<div class="col-xs-4">
+							<label for="city">City</label>
+							<input type="text" id="city" class="form-control" placeholder="City" ng-model="retailer.City">
+						</div>
+						<div class="col-xs-2">
+							<label for="state">State</label>
+							<input type="text" id="state" class="form-control" placeholder="State" ng-model="retailer.State">
+						</div>
+						<div class="col-xs-3">
+							<label for="zip">Zip</label>
+							<input type="text" id="zip" class="form-control" placeholder="Zip" ng-model="retailer.Zip">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="rep">MMM Representative</label>
+						<input type="text" class="form-control" id="rep" placeholder="MMM Representative" ng-model="retailer.RepName">
+					</div>
+					<div class="form-group" ng-repeat="field in retailer.FieldValues">
+						<label for="{{field.Name}}">{{field.Name}}</label>
+						<input type="text" class="form-control" id="{{field.Name}}" placeholder="{{field.Name}}" ng-model="retailer.FieldValues[$index].Value" />
+					</div>
+					<div class="form-group">
+						<label for="email">Email</label>
+						<input type="email" class="form-control" id="email" placeholder="Email" disabled="disabled" value="{{retailer.Email}}">
+					</div>
+					<div class="form-group">
+						<strong>Terms and Conditions</strong><br />
+						<small>Space is not confirmed until we receive your signed participation agreement.</small><br />
+						<small>Cancellations must be received by publisher in writing before the space reservation deadline date.</small>
+					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" ng-model="agreed">
+							I agree to the terms for participation
+						</label>
+					</div>
+					<div class="checkbox" ng-if="isAdmin">
+						<label>
+							<input type="checkbox" ng-model="retailer.IsRetailerEmailNeeded">
+							Send retailer an email of the update.
+						</label>
+					</div>
+					<button type="submit" class="btn btn-default btn-primary" ng-disabled="!agreed">Submit</button>
 				<a ng-if="isAdmin" class="btn btn-warning" href="/adminmenu">Return to Admin Home</a>
-			</form>
-			<br/>
-			<alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="alerter.closeAlert($index)">{{alert.msg}}</alert>
-		</div>
-		<div class="col-md-6">
-			<h3>material guidelines</h3>
-			<div class="list-group">
-				<a class="list-group-item">
-					<h4 class="list-group-item-heading">Material</h4>
-					<p class="list-group-item-text">The retailer must provide publisher with coupon copy by the material deadline. If material is not received by the material deadline, it will not be included.</p>
-				</a>
-				<a class="list-group-item">
-					<h4 class="list-group-item-heading">Copy</h4>
-					<p class="list-group-item-text">Mall Marketing Media reserves the right to edit supplied copy if the retailer supplies more words than can possibly fit the coupon size. Copywriting assistance is available upon request.</p>
-				</a>
-				<a class="list-group-item">
-					<h4 class="list-group-item-heading">Proofs</h4>
-					<p class="list-group-item-text">Proofs will be provided when all materials have been received by publisher by the material deadline date. It is the responsibility of the retailer to make sure all copy is correct. Proofs will be in English. Proofing is to make necessary corrections, not for rewrites. The retailer must be available to approve the proof by date specified or make sure someone is authorized to sign off on the proof in their absence. Proofs must be returned to the publisher by date indicated on proof.<br/><br/>
-					All proofs will be sent via fax or email. You must provide either of these options for proofing.</p>
-				</a>
-				<a class="list-group-item">
-					<h4 class="list-group-item-heading">Special Position</h4>
-					<p class="list-group-item-text">Unless otherwise agreed in writing, MMM will select the placement of each offer by alphabetical order.</p>
-				</a>
-				<a class="list-group-item">
-					<h4 class="list-group-item-heading">Cancellations</h4>
-					<p class="list-group-item-text">Cancellations must be received in writing by publisher before the space reservations deadline date.</p>
-				</a>
+				</form>
+				<br />
+				<alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="alerter.closeAlert($index)">{{alert.msg}}</alert>
+			</div>
+			<div class="col-md-6">
+				<h3>material guidelines</h3>
+				<div class="list-group">
+					<a class="list-group-item">
+						<h4 class="list-group-item-heading">Material</h4>
+						<p class="list-group-item-text">The retailer must provide publisher with coupon copy by the material deadline. If material is not received by the material deadline, it will not be included.</p>
+					</a>
+					<a class="list-group-item">
+						<h4 class="list-group-item-heading">Copy</h4>
+						<p class="list-group-item-text">Mall Marketing Media reserves the right to edit supplied copy if the retailer supplies more words than can possibly fit the coupon size. Copywriting assistance is available upon request.</p>
+					</a>
+					<a class="list-group-item">
+						<h4 class="list-group-item-heading">Proofs</h4>
+						<p class="list-group-item-text">
+							Proofs will be provided when all materials have been received by publisher by the material deadline date. It is the responsibility of the retailer to make sure all copy is correct. Proofs will be in English. Proofing is to make necessary corrections, not for rewrites. The retailer must be available to approve the proof by date specified or make sure someone is authorized to sign off on the proof in their absence. Proofs must be returned to the publisher by date indicated on proof.<br />
+							<br />
+							All proofs will be sent via fax or email. You must provide either of these options for proofing.
+						</p>
+					</a>
+					<a class="list-group-item">
+						<h4 class="list-group-item-heading">Special Position</h4>
+						<p class="list-group-item-text">Unless otherwise agreed in writing, MMM will select the placement of each offer by alphabetical order.</p>
+					</a>
+					<a class="list-group-item">
+						<h4 class="list-group-item-heading">Cancellations</h4>
+						<p class="list-group-item-text">Cancellations must be received in writing by publisher before the space reservations deadline date.</p>
+					</a>
+				</div>
 			</div>
 		</div>
 	</div>
-	
-	<h3><img src="/Assets/mmmlogo.png" class="img-responsive center-block" alt="Responsive image"></h3>
+
+	<div ng-if="confirm">
+		<h4>Confirmation</h4>
+
+		<div class="row">
+			<div class="col-md-6">
+				<strong>Coupon offer:</strong>
+				{{retailer.Offer}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<strong>Name:</strong>
+				{{retailer.ContactName}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<strong>Retailer:</strong>
+				{{retailer.StoreName}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<strong>Coupon Restrictions:</strong>
+				{{retailer.Restrictions}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<strong>Phone:</strong>
+				{{retailer.Phone}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<strong>Address:</strong>
+				{{retailer.Address}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<strong>City:</strong>
+				{{retailer.City}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<strong>State:</strong>
+				{{retailer.State}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<strong>Zip:</strong>
+				{{retailer.Zip}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<strong>MMM Representative:</strong>
+				{{retailer.RepName}}
+			</div>
+		</div>
+		<div class="row" ng-repeat="field in retailer.FieldValues">
+			<div class="col-md-6">
+				<strong>{{field.Name}}:</strong>
+				{{retailer.FieldValues[$index].Value}}
+			</div>
+		</div>
+		<div class="row" ng-repeat="field in retailer.FieldValues">
+			<div class="col-md-6">
+				<strong>Email:</strong>
+				{{retailer.Email}}
+			</div>
+		</div>
+
+		<br/>
+		<button ng-click="confirmForm()" class="btn btn-default btn-primary">Confirm</button>
+		<br />
+		<alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="alerter.closeAlert($index)">{{alert.msg}}</alert>
+	</div>
+	<h3>
+		<img src="/Assets/mmmlogo.png" class="img-responsive center-block" alt="Responsive image"></h3>
 	
 </div>

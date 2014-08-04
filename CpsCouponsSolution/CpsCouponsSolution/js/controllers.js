@@ -130,6 +130,7 @@ app.controller('programCreateCtrl', function ($scope, $location, $anchorScroll, 
 app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiService, alertService, adminService) {
 	$scope.alerter = alertService;
 	$scope.agreed = false;
+	$scope.confirm = false;
 	$scope.isAdmin = adminService.isAdmin();
 
 	$scope.getProgramByGuid = function () {
@@ -167,11 +168,15 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 			return;
 		}
 
+		$scope.confirm = true;
+	};
+
+	$scope.confirmForm = function () {
 		programsApiService.saveByCommand('signUp', $scope.retailer)
 			.then(function (data) {
 				if (data.status === 200) {
 					//TODO: figure out why this doesn't always work
-					
+
 					if (!data.WasSuccessful) {
 						$scope.alerter.addAlert('danger', 'Unable to save Program data.');
 						// could also alert data.FailureReason
@@ -183,6 +188,9 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 			})
 			.catch(function (data) {
 				$scope.alerter.addAlert('danger', 'Unable to save Program data.');
+			})
+			.finally(function () {
+				$scope.confirm = false;
 			});
 	};
 });
