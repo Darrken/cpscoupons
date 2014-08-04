@@ -165,8 +165,8 @@
     <Content Include="js\controllers.js" />
     <Content Include="js\directives.js" />
     <Content Include="js\services.js" />
-    <Content Include="views\admin.html" />
     <Content Include="views\adminlogin.html" />
+    <Content Include="views\adminmenu.html" />
     <Content Include="views\programsignup.html" />
     <Content Include="views\programcreate.html" />
     <Content Include="views\programedit.html" />

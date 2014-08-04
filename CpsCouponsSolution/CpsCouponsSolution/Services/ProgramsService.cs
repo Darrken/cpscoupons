@@ -87,6 +87,9 @@ namespace CpsCouponsSolution.Services
 			Program newProgram;
 			using (var dbContext = new ToolkitEntities())
 			{
+				if(dbContext.Programs.Any(p => p.Name == programData.Name))
+					throw new DuplicateNameException();
+				
 				newProgram = new Program()
 				             {
 					             CouponWordCount = programData.CouponWordCount,

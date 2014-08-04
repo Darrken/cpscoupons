@@ -117,7 +117,12 @@ app.controller('programCreateCtrl', function ($scope, $location, $anchorScroll, 
 					$scope.alerter.addAlert('success', 'Program was successfully saved.');
 				}
 			})
-			.catch(function(data) {
+			.catch(function (data) {
+				if (data.message.indexOf("name already exists") >= 0) {
+					$scope.alerter.addAlert('danger', 'Program name already exists.  Please enter a new Program name.');
+					return;
+				}
+
 				$scope.alerter.addAlert('danger', 'Unable to save Program data.');
 			});
 		//.finally(function () {
