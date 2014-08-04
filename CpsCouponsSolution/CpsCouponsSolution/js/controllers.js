@@ -89,7 +89,17 @@ app.controller('programAdminCtrl', function ($scope, $location, $anchorScroll, $
 	//});
 	
 	$scope.saveProgram = function () {
+		if ($scope.ParticipatingMalls.length < 1) {
+			$scope.alerter.addAlert('danger', 'Please select at least one center.');
+			return;
+		}
+
 		var emails = $scope.program.Emails.split('\n');
+		if (emails.length < 1) {
+			$scope.alerter.addAlert('danger', 'Please enter at least one email.');
+			return;
+		}
+
 		$scope.program.Retailers = [];
 		_.forEach(emails, function (email) {
 			$scope.program.Retailers.push({ Email: email });
