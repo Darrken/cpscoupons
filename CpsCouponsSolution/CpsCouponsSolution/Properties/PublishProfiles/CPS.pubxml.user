@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit http://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>C:\dev\CPS\CPSCouponDeploy</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="Assets/mmmlogo.png">
+      <publishTime>07/29/2014 22:53:36</publishTime>
+    </File>
+    <File Include="bin/CpsCouponsSolution.dll">
+      <publishTime>08/03/2014 21:48:02</publishTime>
+    </File>
+    <File Include="bin/de/Microsoft.Data.Edm.resources.dll">
+      <publishTime>07/25/2014 21:22:24</publishTime>
+    </File>
+    <File Include="bin/de/Microsoft.Data.OData.resources.dll">
+      <publishTime>07/25/2014 21:22:25</publishTime>
+    </File>
+    <File Include="bin/de/System.Spatial.resources.dll">
+      <publishTime>07/25/2014 21:22:25</publishTime>
+    </File>
+    <File Include="bin/EntityFramework.dll">
+      <publishTime>07/25/2014 21:22:24</publishTime>
+    </File>
+    <File Include="bin/es/Microsoft.Data.Edm.resources.dll">
+      <publishTime>07/25/2014 21:22:24</publishTime>
+    </File>
+    <File Include="bin/es/Microsoft.Data.OData.resources.dll">
+      <publishTime>07/25/2014 21:22:25</publishTime>
+    </File>
+    <File Include="bin/es/System.Spatial.resources.dll">
+      <publishTime>07/25/2014 21:22:25</publishTime>
+    </File>
+    <File Include="bin/fr/Microsoft.Data.Edm.resources.dll">
+      <publishTime>07/25/2014 21:22:24</publishTime>
+    </File>
+    <File Include="bin/fr/Microsoft.Data.OData.resources.dll">
+      <publishTime>07/25/2014 21:22:25</publishTime>
+    </File>
+    <File Include="bin/fr/System.Spatial.resources.dll">
+      <publishTime>07/25/2014 21:22:25</publishTime>
+    </File>
+    <File Include="bin/it/Microsoft.Data.Edm.resources.dll">
+      <publishTime>07/25/2014 21:22:24</publishTime>
+    </File>
+    <File Include="bin/it/Microsoft.Data.OData.resources.dll">
+      <publishTime>07/25/2014 21:22:25</publishTime>
+    </File>
+    <File Include="bin/it/System.Spatial.resources.dll">
+      <publishTime>07/25/2014 21:22:25</publishTime>
+    </File>
+    <File Include="bin/ja/Microsoft.Data.Edm.resources.dll">
+      <publishTime>07/25/2014 21:22:24</publishTime>
+    </File>
+    <File Include="bin/ja/Microsoft.Data.OData.resources.dll">
+      <publishTime>07/25/2014 21:22:25</publishTime>
+    </File>
+    <File Include="bin/ja/System.Spatial.resources.dll">
+      <publishTime>07/25/2014 21:22:25</publishTime>
+    </File>
+    <File Include="bin/ko/Microsoft.Data.Edm.resources.dll">
+      <publishTime>07/25/2014 21:22:24</publishTime>
+    </File>
+    <File Include="bin/ko/Microsoft.Data.OData.resources.dll">
+      <publishTime>07/25/2014 21:22:25</publishTime>
+    </File>
+    <File Include="bin/ko/System.Spatial.resources.dll">
+      <publishTime>07/25/2014 21:22:25</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Data.Edm.dll">
+      <publishTime>07/25/2014 21:22:24</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Data.OData.dll">
+      <publishTime>07/25/2014 21:22:25</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Web.Infrastructure.dll">
+      <publishTime>07/25/2014 21:22:25</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.dll">
+      <publishTime>07/25/2014 21:22:25</publishTime>
+    </File>
+    <File Include="bin/ru/Microsoft.Data.Edm.resources.dll">
+      <publishTime>07/25/2014 21:22:24</publishTime>
+    </File>
+    <File Include="bin/ru/Microsoft.Data.OData.resources.dll">
+      <publishTime>07/25/2014 21:22:25</publishTime>
+    </File>
+    <File Include="bin/ru/System.Spatial.resources.dll">
+      <publishTime>07/25/2014 21:22:25</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.Formatting.dll">
+      <publishTime>07/25/2014 21:22:24</publishTime>
+    </File>
+    <File Include="bin/System.Spatial.dll">
+      <publishTime>07/25/2014 21:22:25</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.dll">
+      <publishTime>07/25/2014 21:22:24</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.OData.dll">
+      <publishTime>07/25/2014 21:22:24</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.SelfHost.dll">
+      <publishTime>07/25/2014 21:22:24</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.Tracing.dll">
+      <publishTime>07/25/2014 21:22:24</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.WebHost.dll">
+      <publishTime>07/25/2014 21:22:24</publishTime>
+    </File>
+    <File Include="bin/System.Web.Providers.dll">
+      <publishTime>07/25/2014 21:22:24</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/Microsoft.Data.Edm.resources.dll">
+      <publishTime>07/25/2014 21:22:24</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/Microsoft.Data.OData.resources.dll">
+      <publishTime>07/25/2014 21:22:25</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Spatial.resources.dll">
+      <publishTime>07/25/2014 21:22:25</publishTime>
+    </File>
+    <File Include="bin/zh-Hant/Microsoft.Data.Edm.resources.dll">
+      <publishTime>07/25/2014 21:22:24</publishTime>
+    </File>
+    <File Include="bin/zh-Hant/Microsoft.Data.OData.resources.dll">
+      <publishTime>07/25/2014 21:22:25</publishTime>
+    </File>
+    <File Include="bin/zh-Hant/System.Spatial.resources.dll">
+      <publishTime>07/25/2014 21:22:25</publishTime>
+    </File>
+    <File Include="Global.asax">
+      <publishTime>07/25/2014 21:22:23</publishTime>
+    </File>
+    <File Include="index.html">
+      <publishTime>08/03/2014 21:45:43</publishTime>
+    </File>
+    <File Include="js/app.js">
+      <publishTime>08/03/2014 21:07:21</publishTime>
+    </File>
+    <File Include="js/controllers.js">
+      <publishTime>08/03/2014 21:07:16</publishTime>
+    </File>
+    <File Include="js/directives.js">
+      <publishTime>07/27/2014 00:44:02</publishTime>
+    </File>
+    <File Include="js/services.js">
+      <publishTime>08/03/2014 20:38:02</publishTime>
+    </File>
+    <File Include="Models/ToolkitEntities.edmx.diagram">
+      <publishTime>08/02/2014 14:42:06</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>07/25/2014 21:22:24</publishTime>
+    </File>
+    <File Include="views/adminlogin.html">
+      <publishTime>08/03/2014 18:14:21</publishTime>
+    </File>
+    <File Include="views/adminmenu.html">
+      <publishTime>08/03/2014 21:08:07</publishTime>
+    </File>
+    <File Include="views/programcreate.html">
+      <publishTime>08/03/2014 20:54:09</publishTime>
+    </File>
+    <File Include="views/programedit.html">
+      <publishTime>08/03/2014 20:46:24</publishTime>
+    </File>
+    <File Include="views/programsignup.html">
+      <publishTime>08/03/2014 20:09:37</publishTime>
+    </File>
+    <File Include="views/retailersbycenter.html">
+      <publishTime>08/03/2014 20:46:40</publishTime>
+    </File>
+    <File Include="views/retailersbyprogram.html">
+      <publishTime>08/03/2014 20:46:46</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>08/03/2014 21:48:02</publishTime>
+    </File>
+  </ItemGroup>
+</Project>
