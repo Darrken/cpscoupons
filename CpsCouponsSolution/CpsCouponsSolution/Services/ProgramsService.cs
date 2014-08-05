@@ -339,8 +339,8 @@ namespace CpsCouponsSolution.Services
 											<![endif]-->
 											<![if !mso]>
 											<table cellspacing=""0"" cellpadding=""0""> <tr> 
-											<td align=""center"" width=""300"" height=""40"" bgcolor=""#3071a9"" style=""-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; color: #ffffff; display: block;"">
-												<a href='" + inviteUrl +@"' style=""margin-top:2em;font-size:16px; font-weight: bold; font-family:sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block"">
+											<td align=""center"" width=""300"" height=""40"" bgcolor=""#3071a9"" style=""padding:2em;-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; color: #ffffff; display: block;"">
+												<a href='" + inviteUrl +@"' style=""font-size:16px; font-weight: bold; font-family:sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block"">
 												<span style=""color: #ffffff;"">
 												Click to start Reservation
 												</span>
