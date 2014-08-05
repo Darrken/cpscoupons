@@ -22,7 +22,6 @@ app.controller('programCtrl', function ($scope, $routeParams, $location, $anchor
 	$scope.isEdit = false;
 	$scope.alerter = alertService;
 	$scope.Emails = [];
-	$scope.ParticipatingMalls = [];
 	$scope.previewMode = false;
 	$scope.previewMalls = [];
 	$scope.malls = [];
@@ -115,12 +114,12 @@ app.controller('programCtrl', function ($scope, $routeParams, $location, $anchor
 			return mall.selected;
 		});
 
-		$scope.ParticipatingMalls = _.map(selectedMalls,
+		$scope.program.ParticipatingMalls = _.map(selectedMalls,
 								function (mall) {
 									return { Id: mall.Id };
 								});
 
-		if ($scope.ParticipatingMalls.length < 1) {
+		if ($scope.program.ParticipatingMalls.length < 1) {
 			$scope.alerter.addAlert('danger', 'Please select at least one center.');
 			return;
 		}
