@@ -26,6 +26,7 @@ app.controller('programCreateCtrl', function ($scope, $location, $anchorScroll, 
 	$scope.previewMalls = [];
 
 	$scope.program = {
+		Header: null,
 		ParticipatingMalls: [],
 		CouponWordCount: null,
 		Description: null,
@@ -113,7 +114,6 @@ app.controller('programCreateCtrl', function ($scope, $location, $anchorScroll, 
 		programsApiService.saveByCommand('createProgram', $scope.program)
 			.then(function(data) {
 				if (data.status === 200) {
-					//TODO: figure out why this doesn't always work
 					$scope.alerter.addAlert('success', 'Program was successfully saved.');
 				}
 			})
