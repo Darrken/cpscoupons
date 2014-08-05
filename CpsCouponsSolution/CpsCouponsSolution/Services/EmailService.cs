@@ -13,7 +13,7 @@ namespace CpsCouponsSolution.Services
 			var from = ConfigurationManager.AppSettings["EmailFromAddress"];
 			var msg = new MailMessage(from, to, subject, body);
 			msg.IsBodyHtml = true;
-			
+
 			if (!string.IsNullOrEmpty(cc) && cc.Trim().Length > 0)
 				msg.CC.Add(cc);
 
