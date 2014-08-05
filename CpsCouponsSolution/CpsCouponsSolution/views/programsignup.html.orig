@@ -108,7 +108,6 @@
 						</label>
 					</div>
 					<button type="submit" class="btn btn-default btn-primary" ng-disabled="!agreed">Submit</button>
-				<a ng-if="isAdmin" class="btn btn-warning" href="/adminmenu">Return to Admin Home</a>
 				</form>
 				<br />
 				<alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="alerter.closeAlert($index)">{{alert.msg}}</alert>
@@ -141,6 +140,72 @@
 						<p class="list-group-item-text">Cancellations must be received in writing by publisher before the space reservations deadline date.</p>
 					</a>
 				</div>
+<<<<<<< HEAD
+				<div class="form-group">
+					<label for="rep">MMM Representative</label>
+					<input type="text" class="form-control" id="rep" placeholder="MMM Representative" ng-model="retailer.RepName">
+				</div>
+				<div class="form-group" ng-repeat="field in retailer.FieldValues">
+					<label for="{{field.Name}}">{{field.Name}}</label>
+					<input type="text" class="form-control" id="{{field.Name}}" placeholder="{{field.Name}}" ng-model="retailer.FieldValues[$index].Value" />
+				</div>
+				<div class="form-group">
+					<label for="email">Email</label>
+					<input type="email" class="form-control" id="email" placeholder="Email" disabled="disabled" value="{{retailer.Email}}">
+				</div>
+				<div class="form-group">
+					<strong>Terms and Conditions</strong><br/>
+					<small>Space is not confirmed until we receive your signed participation agreement.</small><br/>
+					<small>Cancellations must be received by publisher in writing before the space reservation deadline date.</small>
+				</div>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" ng-model="agreed"> I agree to the terms for participation
+					</label>
+				</div>
+				<div class="checkbox" ng-if="isAdmin">
+					<label>
+						<input type="checkbox"  ng-model="retailer.IsRetailerEmailNeeded"> Send retailer an email of the update.
+					</label>
+				</div>
+				<button type="submit" class="btn btn-default btn-primary" ng-disabled="!agreed">Submit</button>
+				<a ng-if="isAdmin" class="btn btn-warning" href="/adminmenu">Return to Admin Home</a>
+			</form>
+			<br/>
+			<alert ng-repeat="alert in alerter.alerts" type="{{alert.type}}" close="alerter.closeAlert($index)">{{alert.msg}}</alert>
+		</div>
+		<div class="col-md-6">
+			<h3>material guidelines</h3>
+			<div class="list-group">
+				<a class="list-group-item">
+					<h4 class="list-group-item-heading">Material</h4>
+					<p class="list-group-item-text">The retailer must provide publisher with coupon copy by the material deadline. If material is not received by the material deadline, it will not be included.</p>
+				</a>
+				<a class="list-group-item">
+					<h4 class="list-group-item-heading">Copy</h4>
+					<p class="list-group-item-text">Mall Marketing Media reserves the right to edit supplied copy if the retailer supplies more words than can possibly fit the coupon size. Copywriting assistance is available upon request.</p>
+				</a>
+				<a class="list-group-item">
+					<h4 class="list-group-item-heading">Proofs</h4>
+					<p class="list-group-item-text">Proofs will be provided when all materials have been received by publisher by the material deadline date. It is the responsibility of the retailer to make sure all copy is correct. Proofs will be in English. Proofing is to make necessary corrections, not for rewrites. The retailer must be available to approve the proof by date specified or make sure someone is authorized to sign off on the proof in their absence. Proofs must be returned to the publisher by date indicated on proof.<br/><br/>
+					All proofs will be sent via fax or email. You must provide either of these options for proofing.</p>
+				</a>
+				<a class="list-group-item">
+					<h4 class="list-group-item-heading">Special Position</h4>
+					<p class="list-group-item-text">Unless otherwise agreed in writing, MMM will select the placement of each offer by alphabetical order.</p>
+				</a>
+				<a class="list-group-item">
+					<h4 class="list-group-item-heading">Cancellations</h4>
+					<p class="list-group-item-text">Cancellations must be received in writing by publisher before the space reservations deadline date.</p>
+				</a>
+			</div>
+		</div>
+	</div>
+	
+	<h3><img src="/Assets/mmmlogo.png" class="img-responsive center-block" alt="Responsive image"></h3>
+	
+</div>
+=======
 			</div>
 		</div>
 	</div>
@@ -228,5 +293,5 @@
 	</div>
 	<h3>
 		<img src="/Assets/mmmlogo.png" class="img-responsive center-block" alt="Responsive image"></h3>
-	
 </div>
+>>>>>>> 123898d89d91cb9cc4f5a8609f16eb52e62f77d1

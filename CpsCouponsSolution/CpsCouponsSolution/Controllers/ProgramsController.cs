@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -35,6 +36,10 @@ namespace CpsCouponsSolution.Controllers
 			catch (ArgumentNullException ex)
 			{
 				return Request.CreateResponse(HttpStatusCode.BadRequest, new { message = "Argument errors when trying to create the program.  " + ex.Message });
+			}
+			catch (DuplicateNameException ex)
+			{
+				return Request.CreateResponse(HttpStatusCode.BadRequest, new { message = "Program name already exists."});
 			}
 			catch (Exception ex)
 			{

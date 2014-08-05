@@ -24,7 +24,7 @@ namespace CpsCouponsSolution.Services
 					Name = p.Mall.Name,
 					StateId = p.Mall.State.ID,
 					StateName = p.Mall.State.Abbreviation
-				});
+				}).Distinct();
 
 				mallList = malls.OrderBy(m => m.Name).ToList();
 			}
@@ -87,6 +87,9 @@ namespace CpsCouponsSolution.Services
 			Program newProgram;
 			using (var dbContext = new ToolkitEntities())
 			{
+				if(dbContext.Programs.Any(p => p.Name == programData.Name))
+					throw new DuplicateNameException();
+				
 				newProgram = new Program()
 				             {
 					             CouponWordCount = programData.CouponWordCount,
@@ -312,10 +315,10 @@ namespace CpsCouponsSolution.Services
 			body = body + "\n" + "Selected Malls: \n\t" + string.Concat(GetMallNames(false)
 				.Where(m => retailerData.SelectedMalls.Select(mall => mall.Id).Contains(m.Id))
 				.Select(m => m.Name + "\n\t").ToList());
-			body = body + "\n Thank you for your participation.";
-			body = body + "\n\n Mall Marketing Media.";
-			body = body + "\n a division of.";
-			body = body + "\n creative publishing solutions.";
+			body = body + "\n Thank you for your participation";
+			body = body + "\n\n Mall Marketing Media";
+			body = body + "\n a division of";
+			body = body + "\n creative publishing solutions";
 
 
 			var emailMsg = emailService.CreateMessage(retailerData.Email, subject, body);

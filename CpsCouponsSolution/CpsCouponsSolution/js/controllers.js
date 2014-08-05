@@ -117,7 +117,12 @@ app.controller('programCreateCtrl', function ($scope, $location, $anchorScroll, 
 					$scope.alerter.addAlert('success', 'Program was successfully saved.');
 				}
 			})
-			.catch(function(data) {
+			.catch(function (data) {
+				if (data.message.indexOf("name already exists") >= 0) {
+					$scope.alerter.addAlert('danger', 'Program name already exists.  Please enter a new Program name.');
+					return;
+				}
+
 				$scope.alerter.addAlert('danger', 'Unable to save Program data.');
 			});
 		//.finally(function () {
@@ -130,6 +135,7 @@ app.controller('programCreateCtrl', function ($scope, $location, $anchorScroll, 
 app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiService, alertService, adminService) {
 	$scope.alerter = alertService;
 	$scope.agreed = false;
+	$scope.confirm = false;
 	$scope.isAdmin = adminService.isAdmin();
 
 	$scope.getProgramByGuid = function () {
@@ -167,11 +173,15 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 			return;
 		}
 
+		$scope.confirm = true;
+	};
+
+	$scope.confirmForm = function () {
 		programsApiService.saveByCommand('signUp', $scope.retailer)
 			.then(function (data) {
 				if (data.status === 200) {
 					//TODO: figure out why this doesn't always work
-					
+
 					if (!data.WasSuccessful) {
 						$scope.alerter.addAlert('danger', 'Unable to save Program data.');
 						// could also alert data.FailureReason
@@ -183,19 +193,20 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 			})
 			.catch(function (data) {
 				$scope.alerter.addAlert('danger', 'Unable to save Program data.');
+			})
+			.finally(function () {
+				$scope.confirm = false;
 			});
 	};
 });
 
-app.controller('retailersByCenterCtrl', function ($scope, $routeParams, programsApiService, alertService, fileService, adminService) {
+app.controller('retailersByCenterCtrl', function ($scope, $location, $routeParams, programsApiService, alertService, fileService, adminService) {
 	adminService.adminCheck('/retailersbycenter');
 	
 	$scope.alerter = alertService;
 	$scope.malls = [];
 	$scope.selectedMall = {};
 	$scope.retailers = [];
-	//[{ email: 'test@test.com', hasSignedUp: false, storeName: 'test store', contactName: 'john smith', repName: 'john rep', phone: '123-456-7890' },
-	//{ email: 'anothertest@test.com', hasSignedUp: true, storeName: 'kiosk?', contactName: 'jane smith', repName: 'jane rep', phone: '789-456-1230' }];
 
 	$scope.getMallList = function () {
 		programsApiService.getByCommand('getMallsWithSignups')
@@ -222,22 +233,24 @@ app.controller('retailersByCenterCtrl', function ($scope, $routeParams, programs
 	};
 
 	$scope.exportReport = function () {
-		var exportColumns = ['MallName', 'StoreName', 'Email', 'ProgramName'];
+		var exportColumns = ['MallNameLabel', 'StoreName', 'Email', 'ProgramName'];
 		fileService.createCsvFile(exportColumns, $scope.retailers, 'retailers_by_center');
+	};
+
+	$scope.openSignup = function(guid) {
+		$location.path('/signup/' + guid);
 	};
 
 	$scope.malls = $scope.getMallList();
 });
 
-app.controller('retailersByProgramCtrl', function ($scope, $routeParams, programsApiService, alertService, fileService, adminService) {
+app.controller('retailersByProgramCtrl', function ($scope, $location, $routeParams, programsApiService, alertService, fileService, adminService) {
 	adminService.adminCheck('/retailersbyprogram');
 
 	$scope.alerter = alertService;
 	$scope.programs = [];
 	$scope.selectedProgram = {};
 	$scope.retailers = [];
-	//[{ email: 'test@test.com', hasSignedUp: false, storeName: 'test store', contactName: 'john smith', repName: 'john rep', phone: '123-456-7890' },
-	//{ email: 'anothertest@test.com', hasSignedUp: true, storeName: 'kiosk?', contactName: 'jane smith', repName: 'jane rep', phone: '789-456-1230' }];
 
 	$scope.getProgramList = function () {
 		programsApiService.getByCommand('getProgramList')
@@ -262,6 +275,10 @@ app.controller('retailersByProgramCtrl', function ($scope, $routeParams, program
 	$scope.exportReport = function () {
 		var exportColumns = ['Email', 'StoreName', 'ProgramName', 'HasSignedUp'];
 		fileService.createCsvFile(exportColumns, $scope.retailers, 'retailers_by_center');
+	};
+	
+	$scope.openSignup = function (guid) {
+		$location.path('/signup/' + guid);
 	};
 
 	$scope.getProgramList();
