@@ -24,6 +24,7 @@ app.controller('programCtrl', function ($scope, $routeParams, $location, $anchor
 	$scope.Emails = [];
 	$scope.previewMode = false;
 	$scope.previewMalls = [];
+	$scope.malls = [];
 
 	$scope.program = {
 		Header: null,
@@ -40,26 +41,39 @@ app.controller('programCtrl', function ($scope, $routeParams, $location, $anchor
 
 	if ($routeParams.programId) {
 		$scope.isEdit = true;
-		
-		programsApiService.getProgramById($routeParams.programId)
+
+		programsApiService.getByCommand('getMallList')
 			.then(function (data) {
-				$scope.program = data;
+				$scope.malls = data;
 
-				var emails = _.pluck(data.Retailers, 'Email');
-				$scope.program.Emails = emails.join("\r\n");
+				programsApiService.getProgramById($routeParams.programId)
+					.then(function (data) {
+						$scope.program = data;
+						var deadlineCoupon = new Date($scope.program.DeadlineCoupon);
+						$scope.program.DeadlineCoupon = new Date(deadlineCoupon.getUTCFullYear(), deadlineCoupon.getUTCMonth(), deadlineCoupon.getUTCDate());
 
-				_.forEach($scope.program.ParticipatingMalls, function (selectedMall) {
-					var mallToSelect = _.find($scope.malls, function (mall) {
-						return mall.Id === selectedMall.Id;
+						var deadlineInMall = new Date($scope.program.DeadlineInMall);
+						$scope.program.DeadlineInMall = new Date(deadlineInMall.getUTCFullYear(), deadlineInMall.getUTCMonth(), deadlineInMall.getUTCDate());
+
+						var emails = _.pluck(data.Retailers, 'Email');
+						$scope.program.Emails = emails.join("\r\n");
+
+						_.forEach($scope.program.ParticipatingMalls, function (selectedMall) {
+							var mallToSelect = _.find($scope.malls, function (mall) {
+								return mall.Id === selectedMall.Id;
+							});
+
+							mallToSelect.selected = true;
+						});
+
+					})
+					.catch(function () {
+						$scope.alerter.addAlert('danger', 'Unable to get Program data.');
+						$location.path("/");
 					});
-
-					mallToSelect.selected = true;
-				});
-
 			})
 			.catch(function () {
-				$scope.alerter.addAlert('danger', 'Unable to get Program data.');
-				$location.path("/");
+				$scope.alerter.addAlert('danger', 'Unable to get Center data.');
 			});
 	}
 
@@ -73,24 +87,9 @@ app.controller('programCtrl', function ($scope, $routeParams, $location, $anchor
 			});
 	};
 
-	$scope.getMallList();
-
-	//$scope.toggleCenter = function (id) {
-	//	var idx = $scope.ParticipatingMalls.indexOf(id);
-
-	//	if (idx > -1) {
-	//		$scope.ParticipatingMalls.splice(idx, 1);
-	//	}
-	//	else {
-	//		$scope.ParticipatingMalls.push(id);
-	//	}
-
-	//	$scope.previewMalls = [];
-	//	_.forEach($scope.ParticipatingMalls, function (participatingMall) {
-	//		var mall = _.find($scope.malls, { 'Id': participatingMall });
-	//		$scope.previewMalls.push(mall);
-	//	});
-	//};
+	if ($scope.malls.length < 1) {
+		$scope.getMallList();
+	}
 
 	$scope.addField = function () {
 		$scope.program.Fields.push({ Name: null });
