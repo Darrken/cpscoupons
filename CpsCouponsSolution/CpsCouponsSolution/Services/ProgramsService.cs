@@ -135,12 +135,10 @@ namespace CpsCouponsSolution.Services
 
 					var subject = ConfigurationManager.AppSettings["InviteSubject"];
 					var inviteBaseUrl = ConfigurationManager.AppSettings["InviteBaseUrl"];
-
 					var inviteUrl = inviteBaseUrl + urlGuid;
-					var body = GetReservationInviteBody(inviteUrl);
+					var replacementDictionary = new Dictionary<string, string> {{"<%inviteUrl%>", inviteUrl}};
 
-
-					retailerInviteEmailsToSend.Add(emailService.CreateMessage(retailerDto.Email, subject, body));
+					retailerInviteEmailsToSend.Add(emailService.CreateMessage(retailerDto.Email, subject, EmailType.Invite, replacementDictionary));
 				}
 
 				dbContext.Programs.Add(newProgram);
@@ -290,53 +288,45 @@ namespace CpsCouponsSolution.Services
 			return new ResponseResult() { WasSuccessful = true }; 
 		}
 
-		private string GetReservationInviteBody(string inviteUrl)
-		{
-			var body = string.Empty;
-			using (var reader = new StreamReader(HttpContext.Current.Server.MapPath("~/Templates/ReservationInvite.html")))
-			{
-				body = reader.ReadToEnd();
-			}
-			body = body.Replace("<%inviteUrl%>", inviteUrl);
-
-			return body;
-		}
-
 		private void SendRetailerUpdateEmail(RetailerDTO retailerData, Program selectedProgram)
 		{
 			var subject = ConfigurationManager.AppSettings["SignedUpUpdateEmailSubject"];
-			var body = ConfigurationManager.AppSettings["SignedUpUpdateEmailBody"];
+			var replacementDictionary = GetReplacementDictionary(retailerData, selectedProgram);
 
-			SendEmail(retailerData, selectedProgram, body, subject);
+			SendEmail(retailerData, subject, EmailType.Update, replacementDictionary);
 		}
 
 		private void SendReservationConfirmedEmail(RetailerDTO retailerData, Program selectedProgram)
 		{
 			var subject = ConfigurationManager.AppSettings["SignedUpEmailSubject"];
-			var body = ConfigurationManager.AppSettings["SignedUpEmailBody"];
+			var replacementDictionary = GetReplacementDictionary(retailerData, selectedProgram);
 
-			SendEmail(retailerData, selectedProgram, body, subject);
+			SendEmail(retailerData, subject, EmailType.Confirm, replacementDictionary);
 		}
 
-		private void SendEmail(RetailerDTO retailerData, Program selectedProgram, string body, string subject)
+		private Dictionary<string, string> GetReplacementDictionary(RetailerDTO retailerData, Program selectedProgram)
+		{
+			var replacementDictionary = new Dictionary<string, string>
+			                            {
+				                            {"<%programName%>", selectedProgram.Name},
+				                            {"<%programDescription%>", selectedProgram.Description},
+				                            {"<%StoreName%>", retailerData.StoreName},
+				                            {"<%Offer%>", retailerData.Offer},
+				                            {"<%Restrictions%>", retailerData.Restrictions},
+				                            {
+					                            "<%MallNames%>", "<table>" + string.Concat(GetMallNames(false)
+					                            .Where(m => retailerData.SelectedMalls.Select(mall => mall.Id).Contains(m.Id))
+					                            .Select(m => "<tr><td>" + m.Name + "</td></tr>").ToList()) + "</table>"
+				                            }
+			                            };
+			return replacementDictionary;
+		}
+
+		private void SendEmail(RetailerDTO retailerData, string subject, EmailType emailType, Dictionary<string, string> replacementDictionary)
 		{
 			var emailService = new EmailService();
 
-			body = body + "\n\n" + "Program name: \n\t" + selectedProgram.Name;
-			body = body + "\n" + "Program description: \n\t" + selectedProgram.Description;
-			body = body + "\n" + "Store name: \n\t" + retailerData.StoreName;
-			body = body + "\n" + "Offer: \n\t" + retailerData.Offer;
-			body = body + "\n" + "Restrictions: \n\t" + retailerData.Restrictions;
-			body = body + "\n" + "Selected Malls: \n\t" + string.Concat(GetMallNames(false)
-				.Where(m => retailerData.SelectedMalls.Select(mall => mall.Id).Contains(m.Id))
-				.Select(m => m.Name + "\n\t").ToList());
-			body = body + "\n Thank you for your participation";
-			body = body + "\n\n Mall Marketing Media";
-			body = body + "\n a division of";
-			body = body + "\n creative publishing solutions";
-
-
-			var emailMsg = emailService.CreateMessage(retailerData.Email, subject, body);
+			var emailMsg = emailService.CreateMessage(retailerData.Email, subject, emailType, replacementDictionary);
 			emailService.Send(emailMsg);
 		}
 
