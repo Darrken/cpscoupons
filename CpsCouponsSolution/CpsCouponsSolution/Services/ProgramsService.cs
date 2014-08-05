@@ -92,6 +92,7 @@ namespace CpsCouponsSolution.Services
 				
 				newProgram = new Program()
 				             {
+									 Header = programData.Header,
 					             CouponWordCount = programData.CouponWordCount,
 					             Description = programData.Description,
 					             Disclaimer = programData.Disclaimer,
