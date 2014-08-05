@@ -133,7 +133,7 @@ app.controller('programCtrl', function ($scope, $routeParams, $location, $anchor
 			$scope.program.Retailers.push({ Email: email });
 		});
 
-		programsApiService.saveByCommand('createProgram', $scope.program)
+		programsApiService.saveByCommand('saveProgram', $scope.program)
 			.then(function (data) {
 				if (data.status === 200) {
 					$scope.isEdit = true;

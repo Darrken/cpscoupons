@@ -171,8 +171,7 @@
     <Content Include="views\adminlogin.html" />
     <Content Include="views\adminmenu.html" />
     <Content Include="views\programsignup.html" />
-    <Content Include="views\programcreate.html" />
-    <Content Include="views\programedit.html" />
+    <Content Include="views\adminprogram.html" />
     <Content Include="views\retailersbycenter.html" />
     <Content Include="views\retailersbyprogram.html" />
     <Content Include="Web.config">

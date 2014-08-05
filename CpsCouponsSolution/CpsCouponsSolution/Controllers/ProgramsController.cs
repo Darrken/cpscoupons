@@ -16,7 +16,7 @@ namespace CpsCouponsSolution.Controllers
 
 		// TODO: Add DI and construct controller with ProgramsService
 
-		public HttpResponseMessage CreateProgram(ProgramDTO programData)
+		public HttpResponseMessage SaveProgram(ProgramDTO programData)
 		{
 			int programId;
 			try
@@ -31,7 +31,7 @@ namespace CpsCouponsSolution.Controllers
 																new { message = "Invalid retailer email addresses: " + string.Concat(invalidEmailAddresses.Select(e => e + " ")) });
 
 				var programsService = new ProgramsService();
-				programId = programsService.CreateProgram(programData);
+				programId = programsService.SaveProgram(programData);
 			}
 			catch (ArgumentNullException ex)
 			{

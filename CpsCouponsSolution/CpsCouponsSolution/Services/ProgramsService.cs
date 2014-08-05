@@ -72,7 +72,7 @@ namespace CpsCouponsSolution.Services
 			};
 		}
 
-		public int CreateProgram(ProgramDTO programData)
+		public int SaveProgram(ProgramDTO programData)
 		{
 			if (programData == null)
 				throw new ArgumentNullException("programData");
