@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net.Mail;
+using System.Web;
 using System.Web.Management;
 using CpsCouponsSolution.DTO;
 using CpsCouponsSolution.Models;
@@ -131,12 +133,12 @@ namespace CpsCouponsSolution.Services
 						SubmittedTs = DateTime.UtcNow
 					});
 
-					var body = ConfigurationManager.AppSettings["InviteBody"];
 					var subject = ConfigurationManager.AppSettings["InviteSubject"];
 					var inviteBaseUrl = ConfigurationManager.AppSettings["InviteBaseUrl"];
 
 					var inviteUrl = inviteBaseUrl + urlGuid;
-					body = body + "\n " + GetButtonHtml(inviteUrl);
+					var body = GetReservationInviteBody(inviteUrl);
+
 
 					retailerInviteEmailsToSend.Add(emailService.CreateMessage(retailerDto.Email, subject, body));
 				}
@@ -288,6 +290,18 @@ namespace CpsCouponsSolution.Services
 			return new ResponseResult() { WasSuccessful = true }; 
 		}
 
+		private string GetReservationInviteBody(string inviteUrl)
+		{
+			var body = string.Empty;
+			using (var reader = new StreamReader(HttpContext.Current.Server.MapPath("~/Templates/ReservationInvite.html")))
+			{
+				body = reader.ReadToEnd();
+			}
+			body = body.Replace("<%inviteUrl%>", inviteUrl);
+
+			return body;
+		}
+
 		private void SendRetailerUpdateEmail(RetailerDTO retailerData, Program selectedProgram)
 		{
 			var subject = ConfigurationManager.AppSettings["SignedUpUpdateEmailSubject"];
@@ -324,32 +338,6 @@ namespace CpsCouponsSolution.Services
 
 			var emailMsg = emailService.CreateMessage(retailerData.Email, subject, body);
 			emailService.Send(emailMsg);
-		}
-
-		private string GetButtonHtml(string inviteUrl)
-		{
-			return @"<div>
-										<!--[if mso]>
-											<v:roundrect xmlns:v=""urn:schemas-microsoft-com:vml"" xmlns:w=""urn:schemas-microsoft-com:office:word"" href='" + inviteUrl + @"' style=""height:40px;v-text-anchor:middle;width:300px;"" arcsize=""10%"" stroke=""f"" fillcolor=""#3071a9"">
-												<w:anchorlock/>
-												<center style=""color:#ffffff;font-family:sans-serif;font-size:16px;font-weight:bold;"">
-												Click to start Reservation
-												</center>
-											</v:roundrect>
-											<![endif]-->
-											<![if !mso]>
-											<table cellspacing=""0"" cellpadding=""0""> <tr> 
-											<td align=""center"" width=""300"" height=""40"" bgcolor=""#3071a9"" style=""padding:2em;-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; color: #ffffff; display: block;"">
-												<a href='" + inviteUrl +@"' style=""font-size:16px; font-weight: bold; font-family:sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block"">
-												<span style=""color: #ffffff;"">
-												Click to start Reservation
-												</span>
-												</a>
-											</td> 
-											</tr> </table> 
-											<![endif]>
-										</div>
-										";
 		}
 
 		private void UpdateRetailerData(Program_Retailers retailer, RetailerDTO retailerData, ToolkitEntities dbContext)

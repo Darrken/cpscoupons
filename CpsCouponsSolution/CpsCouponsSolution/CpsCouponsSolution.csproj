@@ -165,6 +165,9 @@
     <Content Include="js\controllers.js" />
     <Content Include="js\directives.js" />
     <Content Include="js\services.js" />
+    <Content Include="Templates\ReservationUpdate.html" />
+    <Content Include="Templates\ReservationConfirmation.html" />
+    <Content Include="Templates\ReservationInvite.html" />
     <Content Include="views\adminlogin.html" />
     <Content Include="views\adminmenu.html" />
     <Content Include="views\programsignup.html" />
