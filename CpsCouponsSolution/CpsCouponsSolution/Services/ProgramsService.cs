@@ -332,7 +332,7 @@ namespace CpsCouponsSolution.Services
 											<v:roundrect xmlns:v=""urn:schemas-microsoft-com:vml"" xmlns:w=""urn:schemas-microsoft-com:office:word"" href='" + inviteUrl + @"' style=""height:40px;v-text-anchor:middle;width:300px;"" arcsize=""10%"" stroke=""f"" fillcolor=""#3071a9"">
 												<w:anchorlock/>
 												<center style=""color:#ffffff;font-family:sans-serif;font-size:16px;font-weight:bold;"">
-												Button Text Here!
+												Click to start Reservation
 												</center>
 											</v:roundrect>
 											<![endif]-->
