@@ -132,7 +132,7 @@ app.controller('programCreateCtrl', function ($scope, $location, $anchorScroll, 
 	};
 });
 
-app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiService, alertService, adminService) {
+app.controller('programSignupCtrl', function ($scope, $routeParams, $location, programsApiService, alertService, adminService) {
 	$scope.alerter = alertService;
 	$scope.agreed = false;
 	$scope.confirm = false;
@@ -154,7 +154,8 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 			})
 			.catch(function () {
 				$scope.alerter.addAlert('danger', 'Unable to get Program data. Please contact your MMM rep.');
-			});
+				$location.path("/");
+		});
 	};
 	$scope.getProgramByGuid();
 

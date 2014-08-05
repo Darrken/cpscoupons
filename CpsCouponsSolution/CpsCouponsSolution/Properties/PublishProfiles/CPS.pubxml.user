@@ -13,7 +13,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/29/2014 22:53:36</publishTime>
     </File>
     <File Include="bin/CpsCouponsSolution.dll">
-      <publishTime>08/03/2014 21:48:02</publishTime>
+      <publishTime>08/04/2014 22:30:22</publishTime>
     </File>
     <File Include="bin/de/Microsoft.Data.Edm.resources.dll">
       <publishTime>07/25/2014 21:22:24</publishTime>
@@ -145,7 +145,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/03/2014 21:07:21</publishTime>
     </File>
     <File Include="js/controllers.js">
-      <publishTime>08/03/2014 21:07:16</publishTime>
+      <publishTime>08/04/2014 22:13:59</publishTime>
     </File>
     <File Include="js/directives.js">
       <publishTime>07/27/2014 00:44:02</publishTime>
@@ -160,10 +160,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/25/2014 21:22:24</publishTime>
     </File>
     <File Include="views/adminlogin.html">
-      <publishTime>08/03/2014 18:14:21</publishTime>
+      <publishTime>08/04/2014 22:22:25</publishTime>
     </File>
     <File Include="views/adminmenu.html">
-      <publishTime>08/03/2014 21:08:07</publishTime>
+      <publishTime>08/04/2014 22:08:04</publishTime>
     </File>
     <File Include="views/programcreate.html">
       <publishTime>08/03/2014 20:54:09</publishTime>
@@ -172,13 +172,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/03/2014 20:46:24</publishTime>
     </File>
     <File Include="views/programsignup.html">
-      <publishTime>08/03/2014 20:09:37</publishTime>
+      <publishTime>08/04/2014 22:08:04</publishTime>
     </File>
     <File Include="views/retailersbycenter.html">
-      <publishTime>08/03/2014 20:46:40</publishTime>
+      <publishTime>08/04/2014 22:08:04</publishTime>
     </File>
     <File Include="views/retailersbyprogram.html">
-      <publishTime>08/03/2014 20:46:46</publishTime>
+      <publishTime>08/04/2014 22:08:04</publishTime>
     </File>
     <File Include="Web.config">
       <publishTime>08/03/2014 21:48:02</publishTime>
