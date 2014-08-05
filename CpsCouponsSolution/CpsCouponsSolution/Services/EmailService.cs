@@ -1,16 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Net;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
+using System.Web;
 
 namespace CpsCouponsSolution.Services
 {
 	public class EmailService
 	{
-		public MailMessage CreateMessage(string to, string subject, string body, string cc = null, string bcc = null)
+		public MailMessage CreateMessage(string to, string subject, EmailType emailType, Dictionary<string, string> replacementDictionary, string cc = null, string bcc = null)
 		{
 			var from = ConfigurationManager.AppSettings["EmailFromAddress"];
+
+			var body = GetEmailBody(emailType, replacementDictionary);
+			
 			var msg = new MailMessage(from, to, subject, body);
 			msg.IsBodyHtml = true;
 
@@ -21,6 +27,37 @@ namespace CpsCouponsSolution.Services
 				msg.Bcc.Add(bcc);
 
 			return msg;
+		}
+
+		private string GetEmailBody(EmailType emailType, Dictionary<string, string> replacments)
+		{
+			var body = string.Empty;
+			var templateName = string.Empty;
+
+			switch (emailType)
+			{
+				case EmailType.Confirm:
+					templateName = "ReservationConfirmation.html";
+					break;
+				case EmailType.Invite:
+					templateName = "ReservationInvite.html";
+					break;
+				case EmailType.Update:
+					templateName = "ReservationUpdate.html";
+					break;
+			}
+
+			using (var reader = new StreamReader(HttpContext.Current.Server.MapPath("~/Templates/" + templateName)))
+			{
+				body = reader.ReadToEnd();
+			}
+
+			foreach (var replacment in replacments)
+			{
+				body = body.Replace(replacment.Key, replacment.Value);
+			}
+
+			return body;
 		}
 
 		public void Send(MailMessage mailMessage)
@@ -48,5 +85,12 @@ namespace CpsCouponsSolution.Services
 
 			return regex.IsMatch(emailAddress);
 		}
+	}
+
+	public enum EmailType
+	{
+		Invite,
+		Confirm,
+		Update
 	}
 }

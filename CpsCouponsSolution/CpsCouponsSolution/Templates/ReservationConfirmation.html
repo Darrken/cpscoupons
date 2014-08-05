@@ -1,9 +1,60 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
+	<title></title>
+	<style>
+		body, table.body, h1, h2, h3, h4, h5, h6, p, td 
+		{ 
+			color: #222222;
+			font-family: "Helvetica", "Arial", sans-serif; 
+			font-weight: normal; 
+			padding:0; 
+			margin: 0;
+			text-align: left; 
+			line-height: 1.3;
+		}
+
+		h1 {font-size: 40px;}
+		h2 {font-size: 36px;}
+		h3 {font-size: 32px;}
+		h4 {font-size: 28px;}
+		h5 {font-size: 24px;}
+		h6 {font-size: 20px;}
+		body, table.body, p, td {font-size: 14px;line-height:19px;}
+	</style>
 </head>
 <body>
-
+	<div>
+		<table>
+			<tr>
+				<td>
+					<span>
+						You sucessfully created a Premier Passport Incentive Program reservation with the following details:
+					</span>
+				</td>
+			</tr>
+			<tr> 
+				<td>Program Name</td> <td><%programName%></td>
+			</tr>
+			<tr>
+				<td>Program Description</td> <td><%programDescription%></td>
+			</tr>
+			<tr>
+				<td>Store Name</td> <td><%StoreName%></td>
+			</tr>
+			<tr>
+				<td>Coupon Offer</td> <td><%Offer%></td>
+			</tr>
+			<tr>
+				<td>Restrictions</td> <td><%Restrictions%></td>
+			</tr>
+			<tr>
+				<td>Selected Centers</td> <td><%MallNames%></td>
+			</tr> 
+			<tr>
+				<img src="http://mmmtoolkit.com:8080/Assets/mmmlogo.png">
+			</tr>
+		</table> 
+	</div>
 </body>
 </html>
