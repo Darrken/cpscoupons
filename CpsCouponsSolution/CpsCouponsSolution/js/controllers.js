@@ -162,6 +162,7 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, $location, p
 			.then(function (data) {
 				$scope.program = data;
 				$scope.retailer = _.find(data.Retailers, { 'UrlGuid': $routeParams.urlguid.toLowerCase() });
+				$scope.confirm = $scope.retailer.HasSignedUp;
 				$scope.retailer.IsAdmin = $scope.isAdmin;
 				$scope.retailer.IsRetailerEmailNeeded = false;
 				$scope.retailer.FieldValues = $scope.retailer.FieldValues || [];
