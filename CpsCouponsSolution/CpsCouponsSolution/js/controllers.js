@@ -1,6 +1,6 @@
 ﻿app.controller('adminMenuCtrl', function ($scope, programsApiService, alertService, adminService) {
 	adminService.adminCheck('/adminmenu');
-	
+
 	$scope.alerter = alertService;
 
 	$scope.getProgramList = function () {
@@ -16,9 +16,10 @@
 	$scope.getProgramList();
 });
 
-app.controller('programCreateCtrl', function ($scope, $location, $anchorScroll, $route, $timeout, programsApiService, alertService, adminService) {
+app.controller('programCtrl', function ($scope, $routeParams, $location, $anchorScroll, $route, $timeout, programsApiService, alertService, adminService) {
 	adminService.adminCheck('/adminprogram');
-	
+
+	$scope.isEdit = false;
 	$scope.alerter = alertService;
 	$scope.Emails = [];
 	$scope.ParticipatingMalls = [];
@@ -38,6 +39,31 @@ app.controller('programCreateCtrl', function ($scope, $location, $anchorScroll, 
 		Name: null,
 	};
 
+	if ($routeParams.programId) {
+		$scope.isEdit = true;
+		
+		programsApiService.getProgramById($routeParams.programId)
+			.then(function (data) {
+				$scope.program = data;
+
+				var emails = _.pluck(data.Retailers, 'Email');
+				$scope.program.Emails = emails.join("\r\n");
+
+				_.forEach($scope.program.ParticipatingMalls, function (selectedMall) {
+					var mallToSelect = _.find($scope.malls, function (mall) {
+						return mall.Id === selectedMall.Id;
+					});
+
+					mallToSelect.selected = true;
+				});
+
+			})
+			.catch(function () {
+				$scope.alerter.addAlert('danger', 'Unable to get Program data.');
+				$location.path("/");
+			});
+	}
+
 	$scope.getMallList = function () {
 		programsApiService.getByCommand('getMallList')
 			.then(function (data) {
@@ -50,22 +76,22 @@ app.controller('programCreateCtrl', function ($scope, $location, $anchorScroll, 
 
 	$scope.getMallList();
 
-	$scope.toggleCenter = function (id) {
-		var idx = $scope.ParticipatingMalls.indexOf(id);
+	//$scope.toggleCenter = function (id) {
+	//	var idx = $scope.ParticipatingMalls.indexOf(id);
 
-		if (idx > -1) {
-			$scope.ParticipatingMalls.splice(idx, 1);
-		}
-		else {
-			$scope.ParticipatingMalls.push(id);
-		}
+	//	if (idx > -1) {
+	//		$scope.ParticipatingMalls.splice(idx, 1);
+	//	}
+	//	else {
+	//		$scope.ParticipatingMalls.push(id);
+	//	}
 
-		$scope.previewMalls = [];
-		_.forEach($scope.ParticipatingMalls, function (participatingMall) {
-			var mall = _.find($scope.malls, { 'Id': participatingMall });
-			$scope.previewMalls.push(mall);
-		});
-	};
+	//	$scope.previewMalls = [];
+	//	_.forEach($scope.ParticipatingMalls, function (participatingMall) {
+	//		var mall = _.find($scope.malls, { 'Id': participatingMall });
+	//		$scope.previewMalls.push(mall);
+	//	});
+	//};
 
 	$scope.addField = function () {
 		$scope.program.Fields.push({ Name: null });
@@ -78,18 +104,23 @@ app.controller('programCreateCtrl', function ($scope, $location, $anchorScroll, 
 	};
 
 	$scope.togglePreviewMode = function () {
+		$scope.previewMalls = _.where($scope.malls, function (mall) {
+			return mall.selected;
+		});
+
 		$scope.previewMode = !$scope.previewMode;
-		//$location.hash('top');
-		//$anchorScroll();
 	};
 
-	//$scope.$on('$locationChangeStart', function (event) {
-	//	if ($route && $route.current && $route.current.templateUrl.indexOf('programcreate') > 0) {
-	//		event.preventDefault();
-	//	}
-	//});
-	
 	$scope.saveProgram = function () {
+		var selectedMalls = _.where($scope.malls, function (mall) {
+			return mall.selected;
+		});
+
+		$scope.ParticipatingMalls = _.map(selectedMalls,
+								function (mall) {
+									return { Id: mall.Id };
+								});
+
 		if ($scope.ParticipatingMalls.length < 1) {
 			$scope.alerter.addAlert('danger', 'Please select at least one center.');
 			return;
@@ -106,13 +137,8 @@ app.controller('programCreateCtrl', function ($scope, $location, $anchorScroll, 
 			$scope.program.Retailers.push({ Email: email });
 		});
 
-		$scope.program.ParticipatingMalls = [];
-		_.forEach($scope.ParticipatingMalls, function (id) {
-			$scope.program.ParticipatingMalls.push({ Id: id });
-		});
-
 		programsApiService.saveByCommand('createProgram', $scope.program)
-			.then(function(data) {
+			.then(function (data) {
 				if (data.status === 200) {
 					$scope.alerter.addAlert('success', 'Program was successfully saved.');
 				}
@@ -125,10 +151,6 @@ app.controller('programCreateCtrl', function ($scope, $location, $anchorScroll, 
 
 				$scope.alerter.addAlert('danger', 'Unable to save Program data.');
 			});
-		//.finally(function () {
-		//	$location.hash('top');
-		//	$anchorScroll();
-		//});
 	};
 });
 
@@ -145,30 +167,43 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, $location, p
 				$scope.retailer = _.find(data.Retailers, { 'UrlGuid': $routeParams.urlguid.toLowerCase() });
 				$scope.retailer.IsAdmin = $scope.isAdmin;
 				$scope.retailer.IsRetailerEmailNeeded = false;
-				$scope.retailer.FieldValues = [];
-				$scope.retailer.SelectedMalls = [];
-				_.forEach($scope.program.Fields, function (field) {
-					var fieldValue = { Id: field.Id, Name: field.Name, Value: null, RetailerId: $scope.retailer.Id };
-					$scope.retailer.FieldValues.push(fieldValue);
-				});
+				$scope.retailer.FieldValues = $scope.retailer.FieldValues || [];
+				$scope.retailer.SelectedMalls = $scope.retailer.SelectedMalls || [];
+
+				if ($scope.retailer.SelectedMalls.length > 0) {
+					_.forEach($scope.retailer.SelectedMalls, function (selectedMall) {
+						var mallToSelect = _.find($scope.program.ParticipatingMalls, function (mall) {
+							return mall.Id === selectedMall.Id;
+						});
+
+						mallToSelect.selected = true;
+					});
+				}
+
+				if ($scope.retailer.FieldValues.length < 1) {
+					_.forEach($scope.program.Fields, function (field) {
+						var fieldValue = { Id: field.Id, Name: field.Name, Value: null, RetailerId: $scope.retailer.Id };
+						$scope.retailer.FieldValues.push(fieldValue);
+					});
+				}
 			})
 			.catch(function () {
 				$scope.alerter.addAlert('danger', 'Unable to get Program data. Please contact your MMM rep.');
 				$location.path("/");
-		});
+			});
 	};
 	$scope.getProgramByGuid();
 
-	$scope.toggleCenter = function (id) {
-		if (_.any($scope.retailer.SelectedMalls, { 'Id': id })) {
-			_.remove($scope.retailer.SelectedMalls, { 'Id': id });
-		}
-		else {
-			$scope.retailer.SelectedMalls.push({ 'Id': id });
-		}
-	};
-
 	$scope.submitForm = function () {
+		var selectedMalls = _.where($scope.program.ParticipatingMalls, function (mall) {
+			return mall.selected;
+		});
+
+		$scope.retailer.SelectedMalls = _.map(selectedMalls,
+								function (mall) {
+									return { Id: mall.Id };
+								});
+
 		if ($scope.retailer.SelectedMalls.length < 1) {
 			$scope.alerter.addAlert('danger', 'Please select at least one shopping center.');
 			return;
@@ -203,7 +238,7 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, $location, p
 
 app.controller('retailersByCenterCtrl', function ($scope, $location, $routeParams, programsApiService, alertService, fileService, adminService) {
 	adminService.adminCheck('/retailersbycenter');
-	
+
 	$scope.alerter = alertService;
 	$scope.malls = [];
 	$scope.selectedMall = {};
@@ -238,7 +273,7 @@ app.controller('retailersByCenterCtrl', function ($scope, $location, $routeParam
 		fileService.createCsvFile(exportColumns, $scope.retailers, 'retailers_by_center');
 	};
 
-	$scope.openSignup = function(guid) {
+	$scope.openSignup = function (guid) {
 		$location.path('/signup/' + guid);
 	};
 
@@ -277,7 +312,7 @@ app.controller('retailersByProgramCtrl', function ($scope, $location, $routePara
 		var exportColumns = ['Email', 'StoreName', 'ProgramName', 'HasSignedUp'];
 		fileService.createCsvFile(exportColumns, $scope.retailers, 'retailers_by_center');
 	};
-	
+
 	$scope.openSignup = function (guid) {
 		$location.path('/signup/' + guid);
 	};

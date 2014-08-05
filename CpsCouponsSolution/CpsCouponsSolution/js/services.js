@@ -62,6 +62,26 @@
 
 			return deferred.promise;
 		},
+		
+		getProgramById: function (programId) {
+			var deferred = $q.defer();
+
+			var apiUrl = this.baseQueriesApiUrl + 'getProgramById?programId=' + encodeURIComponent(programId);
+
+			$http({ method: 'GET', url: apiUrl }).
+				success(function (data) {
+					deferred.resolve(data);
+				}).
+				error(function (data, status) {
+					data = data || {};
+
+					data.status = status;
+
+					deferred.reject(data);
+				});
+
+			return deferred.promise;
+		},
 
 		getProgramByRetailer: function (id) {
 			var deferred = $q.defer();
