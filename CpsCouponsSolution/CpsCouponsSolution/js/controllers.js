@@ -136,6 +136,7 @@ app.controller('programCtrl', function ($scope, $routeParams, $location, $anchor
 		programsApiService.saveByCommand('createProgram', $scope.program)
 			.then(function (data) {
 				if (data.status === 200) {
+					$scope.isEdit = true;
 					$scope.alerter.addAlert('success', 'Program was successfully saved.');
 				}
 			})

@@ -39,12 +39,13 @@ namespace CpsCouponsSolution.Services
 			List<MallDTO> mallList;
 			using (var dbContext = new ToolkitEntities())
 			{
-				var malls = dbContext.Malls.Select(m => new MallDTO {
-																							Id = m.ID, 
-																							Name = m.Name, 
-																							StateId = m.State.ID, 
-																							StateName = m.State.Name
-																						});
+				var malls = dbContext.Malls.Select(m => new MallDTO
+				{
+					Id = m.ID,
+					Name = m.Name,
+					StateId = m.State.ID,
+					StateName = m.State.Name
+				});
 
 				if (!isAll)
 					malls = malls.Where(m => !m.Name.Contains("?")
@@ -62,8 +63,8 @@ namespace CpsCouponsSolution.Services
 			using (var dbContext = new ToolkitEntities())
 			{
 				var programToRemove = dbContext.Programs.SingleOrDefault(p => p.Id == programId);
-				
-				if(programToRemove == null)
+
+				if (programToRemove == null)
 					throw new Exception("Program to delete not found.");
 
 				dbContext.Entry(programToRemove).State = EntityState.Deleted;
@@ -73,7 +74,7 @@ namespace CpsCouponsSolution.Services
 
 		public int CreateProgram(ProgramDTO programData)
 		{
-			if(programData == null)
+			if (programData == null)
 				throw new ArgumentNullException("programData");
 			if (string.IsNullOrEmpty(programData.Disclaimer))
 				throw new ArgumentNullException("Disclaimer");
@@ -86,37 +87,51 @@ namespace CpsCouponsSolution.Services
 			if (programData.ParticipatingMalls == null || !programData.ParticipatingMalls.Any())
 				throw new ArgumentNullException("ParticipatingMalls");
 
-			Program newProgram;
+			Program newProgram = new Program();
 			using (var dbContext = new ToolkitEntities())
 			{
-				if(dbContext.Programs.Any(p => p.Name == programData.Name))
+				if (dbContext.Programs.Any(p => p.Name == programData.Name && programData.Id == 0))
+				{
 					throw new DuplicateNameException();
-				
-				newProgram = new Program()
-				             {
-									 Header = programData.Header,
-					             CouponWordCount = programData.CouponWordCount,
-					             Description = programData.Description,
-					             Disclaimer = programData.Disclaimer,
-					             Name = programData.Name,
-									 DeadlineCoupon = programData.DeadlineCoupon,
-									 DeadlineInMall = programData.DeadlineInMall
-				             };
+				}
+
+				if (programData.Id != 0)
+				{
+					newProgram = dbContext.Programs.Find(programData.Id);
+				}
+
+				newProgram.Header = programData.Header;
+				newProgram.CouponWordCount = programData.CouponWordCount;
+				newProgram.Description = programData.Description;
+				newProgram.Disclaimer = programData.Disclaimer;
+				newProgram.Name = programData.Name;
+				newProgram.DeadlineCoupon = programData.DeadlineCoupon;
+				newProgram.DeadlineInMall = programData.DeadlineInMall;
 
 				if (programData.Fields != null && programData.Fields.Any())
 				{
 					foreach (var fieldDto in programData.Fields)
 					{
+						if (newProgram.Program_Fields.Any(f => f.Name == fieldDto.Name))
+						{
+							continue;
+						}
+
 						newProgram.Program_Fields.Add(new Program_Fields()
-						                              {
-							                              Name = fieldDto.Name,
-							                              ProgramId = newProgram.Id
-						                              });
+																					{
+																						Name = fieldDto.Name,
+																						ProgramId = newProgram.Id
+																					});
 					}
 				}
 
 				foreach (var mall in programData.ParticipatingMalls)
 				{
+					if (newProgram.Malls.Any(m => m.ID == mall.Id))
+					{
+						continue;
+					}
+
 					newProgram.Malls.Add(dbContext.Malls.First(m => m.ID == mall.Id));
 				}
 
@@ -124,6 +139,11 @@ namespace CpsCouponsSolution.Services
 				var retailerInviteEmailsToSend = new List<MailMessage>();
 				foreach (var retailerDto in programData.Retailers)
 				{
+					if (newProgram.Program_Retailers.Any(r => r.Email == retailerDto.Email))
+					{
+						continue;
+					}
+
 					var urlGuid = Guid.NewGuid();
 					newProgram.Program_Retailers.Add(new Program_Retailers()
 					{
@@ -136,12 +156,20 @@ namespace CpsCouponsSolution.Services
 					var subject = ConfigurationManager.AppSettings["InviteSubject"];
 					var inviteBaseUrl = ConfigurationManager.AppSettings["InviteBaseUrl"];
 					var inviteUrl = inviteBaseUrl + urlGuid;
-					var replacementDictionary = new Dictionary<string, string> {{"<%inviteUrl%>", inviteUrl}};
+					var replacementDictionary = new Dictionary<string, string> { { "<%inviteUrl%>", inviteUrl } };
 
 					retailerInviteEmailsToSend.Add(emailService.CreateMessage(retailerDto.Email, subject, EmailType.Invite, replacementDictionary));
 				}
 
-				dbContext.Programs.Add(newProgram);
+				if (newProgram.Id == 0)
+				{
+					dbContext.Programs.Add(newProgram);
+				}
+				else
+				{
+					dbContext.Entry(newProgram).State = EntityState.Modified;
+				}
+
 				dbContext.SaveChanges();
 
 				// send emails if program creation was successful
@@ -160,7 +188,7 @@ namespace CpsCouponsSolution.Services
 
 			using (var dbContext = new ToolkitEntities())
 			{
-				var selectedProgram =dbContext.Programs.SingleOrDefault(p => p.Id == programId);
+				var selectedProgram = dbContext.Programs.SingleOrDefault(p => p.Id == programId);
 
 				if (selectedProgram == null)
 					throw new Exception("Program not found.");
@@ -175,8 +203,8 @@ namespace CpsCouponsSolution.Services
 		{
 			ProgramDTO programDto;
 			Guid retailerGuid;
-			
-			if(!Guid.TryParse(urlGuid, out retailerGuid))
+
+			if (!Guid.TryParse(urlGuid, out retailerGuid))
 				throw new ArgumentException("Guid invalid.");
 
 			using (var dbContext = new ToolkitEntities())
@@ -195,7 +223,7 @@ namespace CpsCouponsSolution.Services
 		public List<RetailerDTO> GetRetailersByProgramId(int programId)
 		{
 			List<RetailerDTO> retailers;
-			
+
 			using (var dbContext = new ToolkitEntities())
 			{
 				var retailerList = dbContext.Program_Retailers
@@ -220,7 +248,7 @@ namespace CpsCouponsSolution.Services
 				var programList = dbContext.Programs
 					.ToList();
 
-				if(!programList.Any())
+				if (!programList.Any())
 					return new List<ProgramDTO>();
 
 				programs = programList.Select(program => new ProgramDTO(program)).ToList();
@@ -250,27 +278,27 @@ namespace CpsCouponsSolution.Services
 
 		public ResponseResult RetailerSignUp(RetailerDTO retailerData)
 		{
-			if(retailerData == null)
+			if (retailerData == null)
 				return new ResponseResult() { WasSuccessful = false, FailureReason = "No Retailer submitted to update." };
 
-			if(string.IsNullOrEmpty(retailerData.Offer))
+			if (string.IsNullOrEmpty(retailerData.Offer))
 				return new ResponseResult() { WasSuccessful = false, FailureReason = "No Offer details submitted." };
 
-			if(string.IsNullOrEmpty(retailerData.StoreName))
+			if (string.IsNullOrEmpty(retailerData.StoreName))
 				return new ResponseResult() { WasSuccessful = false, FailureReason = "No StoreName submitted." };
 
-			if(retailerData.SelectedMalls == null || !retailerData.SelectedMalls.Any())
+			if (retailerData.SelectedMalls == null || !retailerData.SelectedMalls.Any())
 				return new ResponseResult() { WasSuccessful = false, FailureReason = "No Malls were selected." };
 
 			Program selectedProgram;
 			using (var dbContext = new ToolkitEntities())
 			{
 				selectedProgram = dbContext.Programs.SingleOrDefault(p => p.Id == retailerData.ProgramId);
-				
+
 				var retailer = dbContext.Program_Retailers.SingleOrDefault(pr => pr.Id == retailerData.Id && pr.ProgramId == retailerData.ProgramId);
 
-				if(retailer == null)
-					return new ResponseResult(){WasSuccessful = false, FailureReason = "Retailer not found."};
+				if (retailer == null)
+					return new ResponseResult() { WasSuccessful = false, FailureReason = "Retailer not found." };
 
 				UpdateRetailerData(retailer, retailerData, dbContext);
 
@@ -279,13 +307,13 @@ namespace CpsCouponsSolution.Services
 			}
 
 			// after successful signup, send email of successful reservation or possible update
-			if(!retailerData.IsAdmin)
+			if (!retailerData.IsAdmin)
 				SendReservationConfirmedEmail(retailerData, selectedProgram);
 
-			if(retailerData.IsRetailerEmailNeeded)
+			if (retailerData.IsRetailerEmailNeeded)
 				SendRetailerUpdateEmail(retailerData, selectedProgram);
 
-			return new ResponseResult() { WasSuccessful = true }; 
+			return new ResponseResult() { WasSuccessful = true };
 		}
 
 		private void SendRetailerUpdateEmail(RetailerDTO retailerData, Program selectedProgram)
@@ -342,7 +370,7 @@ namespace CpsCouponsSolution.Services
 			retailer.RepName = retailerData.RepName;
 			retailer.State = retailerData.State;
 			retailer.Zip = retailerData.Zip;
-			
+
 			if (retailerData.FieldValues != null && retailerData.FieldValues.Any())
 			{
 				foreach (var fieldValueDto in retailerData.FieldValues)
@@ -361,11 +389,11 @@ namespace CpsCouponsSolution.Services
 							ProgramFieldId = fieldValueDto.Id,
 							ProgramRetailerId = retailer.Id,
 							Value = fieldValueDto.Value
-						});	
+						});
 					}
 				}
 			}
-			
+
 			var alreadySelectedMalls = dbContext.Program_Retailer_Selected_Malls.Where(rsm => rsm.ProgramRetailerId == retailerData.Id).ToList();
 			foreach (var mallDto in retailerData.SelectedMalls)
 			{
@@ -375,7 +403,7 @@ namespace CpsCouponsSolution.Services
 					{
 						ProgramRetailerId = retailerData.Id,
 						MallId = mallDto.Id
-					});	
+					});
 				}
 			}
 
