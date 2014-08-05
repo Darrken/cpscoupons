@@ -16,9 +16,10 @@
 	$scope.getProgramList();
 });
 
-app.controller('programCtrl', function ($scope, $location, $anchorScroll, $route, $timeout, programsApiService, alertService, adminService) {
+app.controller('programCtrl', function ($scope, $routeParams, $location, $anchorScroll, $route, $timeout, programsApiService, alertService, adminService) {
 	adminService.adminCheck('/adminprogram');
 
+	$scope.isEdit = false;
 	$scope.alerter = alertService;
 	$scope.Emails = [];
 	$scope.ParticipatingMalls = [];
@@ -26,6 +27,7 @@ app.controller('programCtrl', function ($scope, $location, $anchorScroll, $route
 	$scope.previewMalls = [];
 
 	$scope.program = {
+		Header: null,
 		ParticipatingMalls: [],
 		CouponWordCount: null,
 		Description: null,
@@ -36,6 +38,31 @@ app.controller('programCtrl', function ($scope, $location, $anchorScroll, $route
 		Fields: [],
 		Name: null,
 	};
+
+	if ($routeParams.programId) {
+		$scope.isEdit = true;
+		
+		programsApiService.getProgramById($routeParams.programId)
+			.then(function (data) {
+				$scope.program = data;
+
+				var emails = _.pluck(data.Retailers, 'Email');
+				$scope.program.Emails = emails.join("\r\n");
+
+				_.forEach($scope.program.ParticipatingMalls, function (selectedMall) {
+					var mallToSelect = _.find($scope.malls, function (mall) {
+						return mall.Id === selectedMall.Id;
+					});
+
+					mallToSelect.selected = true;
+				});
+
+			})
+			.catch(function () {
+				$scope.alerter.addAlert('danger', 'Unable to get Program data.');
+				$location.path("/");
+			});
+	}
 
 	$scope.getMallList = function () {
 		programsApiService.getByCommand('getMallList')
@@ -49,22 +76,22 @@ app.controller('programCtrl', function ($scope, $location, $anchorScroll, $route
 
 	$scope.getMallList();
 
-	$scope.toggleCenter = function (id) {
-		var idx = $scope.ParticipatingMalls.indexOf(id);
+	//$scope.toggleCenter = function (id) {
+	//	var idx = $scope.ParticipatingMalls.indexOf(id);
 
-		if (idx > -1) {
-			$scope.ParticipatingMalls.splice(idx, 1);
-		}
-		else {
-			$scope.ParticipatingMalls.push(id);
-		}
+	//	if (idx > -1) {
+	//		$scope.ParticipatingMalls.splice(idx, 1);
+	//	}
+	//	else {
+	//		$scope.ParticipatingMalls.push(id);
+	//	}
 
-		$scope.previewMalls = [];
-		_.forEach($scope.ParticipatingMalls, function (participatingMall) {
-			var mall = _.find($scope.malls, { 'Id': participatingMall });
-			$scope.previewMalls.push(mall);
-		});
-	};
+	//	$scope.previewMalls = [];
+	//	_.forEach($scope.ParticipatingMalls, function (participatingMall) {
+	//		var mall = _.find($scope.malls, { 'Id': participatingMall });
+	//		$scope.previewMalls.push(mall);
+	//	});
+	//};
 
 	$scope.addField = function () {
 		$scope.program.Fields.push({ Name: null });
@@ -77,18 +104,23 @@ app.controller('programCtrl', function ($scope, $location, $anchorScroll, $route
 	};
 
 	$scope.togglePreviewMode = function () {
+		$scope.previewMalls = _.where($scope.malls, function (mall) {
+			return mall.selected;
+		});
+
 		$scope.previewMode = !$scope.previewMode;
-		//$location.hash('top');
-		//$anchorScroll();
 	};
 
-	//$scope.$on('$locationChangeStart', function (event) {
-	//	if ($route && $route.current && $route.current.templateUrl.indexOf('programcreate') > 0) {
-	//		event.preventDefault();
-	//	}
-	//});
-
 	$scope.saveProgram = function () {
+		var selectedMalls = _.where($scope.malls, function (mall) {
+			return mall.selected;
+		});
+
+		$scope.ParticipatingMalls = _.map(selectedMalls,
+								function (mall) {
+									return { Id: mall.Id };
+								});
+
 		if ($scope.ParticipatingMalls.length < 1) {
 			$scope.alerter.addAlert('danger', 'Please select at least one center.');
 			return;
@@ -105,29 +137,24 @@ app.controller('programCtrl', function ($scope, $location, $anchorScroll, $route
 			$scope.program.Retailers.push({ Email: email });
 		});
 
-		$scope.program.ParticipatingMalls = [];
-		_.forEach($scope.ParticipatingMalls, function (id) {
-			$scope.program.ParticipatingMalls.push({ Id: id });
-		});
-
 		programsApiService.saveByCommand('createProgram', $scope.program)
 			.then(function (data) {
 				if (data.status === 200) {
-					//TODO: figure out why this doesn't always work
 					$scope.alerter.addAlert('success', 'Program was successfully saved.');
 				}
 			})
 			.catch(function (data) {
+				if (data.message.indexOf("name already exists") >= 0) {
+					$scope.alerter.addAlert('danger', 'Program name already exists.  Please enter a new Program name.');
+					return;
+				}
+
 				$scope.alerter.addAlert('danger', 'Unable to save Program data.');
 			});
-		//.finally(function () {
-		//	$location.hash('top');
-		//	$anchorScroll();
-		//});
 	};
 });
 
-app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiService, alertService, adminService) {
+app.controller('programSignupCtrl', function ($scope, $routeParams, $location, programsApiService, alertService, adminService) {
 	$scope.alerter = alertService;
 	$scope.agreed = false;
 	$scope.confirm = false;
@@ -162,6 +189,7 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 			})
 			.catch(function () {
 				$scope.alerter.addAlert('danger', 'Unable to get Program data. Please contact your MMM rep.');
+				$location.path("/");
 			});
 	};
 	$scope.getProgramByGuid();
@@ -170,7 +198,7 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 		var selectedMalls = _.where($scope.program.ParticipatingMalls, function (mall) {
 			return mall.selected;
 		});
-		
+
 		$scope.retailer.SelectedMalls = _.map(selectedMalls,
 								function (mall) {
 									return { Id: mall.Id };

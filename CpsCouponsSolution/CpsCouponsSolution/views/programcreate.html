@@ -1,11 +1,11 @@
 ﻿<div id="top" class="container-fluid">
 	<ol class="breadcrumb">
 		<li><a href="/adminmenu">Admin Home</a></li>
-		<li class="active">Create Program</li>
+		<li class="active">{{isEdit ? 'Edit Program' : 'Create Program'}}</li>
 	</ol>
 
 	<div class="page-header" ng-show="!previewMode">
-		<h1>Create Program</h1>
+		<h1>{{isEdit ? 'Edit Program' : 'Create Program'}}</h1>
 	</div>
 	
 	<form name="programform" role="form" ng-submit="saveProgram()" ng-show="!previewMode">
@@ -47,7 +47,8 @@
 			<label for="centers">Select Participating Centers</label>
 			<div style="height: 20em; overflow-y: scroll; padding: 1em;" class="panel panel-default">
 				<label class="checkbox-inline" ng-repeat="mall in malls" style="width: 20%; margin-left: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" tooltip="{{mall.Name + ' - ' + mall.StateName}}">
-					<input type="checkbox" name="centers" id="centers" ng-click="toggleCenter(mall.Id)" value="{{mall.Id}}" style="position: static;"> {{mall.Name + ' - ' + mall.StateName}}
+					<input type="checkbox" name="centers" id="centers" ng-model="mall.selected" ng-true-value='true' ng-false-value='false' style="position: static;"> 
+					{{mall.Name + ' - ' + mall.StateName}}
 				</label>
 			</div>
 		</div>

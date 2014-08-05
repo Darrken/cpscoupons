@@ -2,3 +2,4 @@ bin
 obj
 /CpsCouponsSolution/CpsCouponsSolution/*.user
 /CpsCouponsSolution/*.suo
+/CpsCouponsSolution/CpsCouponsSolution/Properties/PublishProfiles

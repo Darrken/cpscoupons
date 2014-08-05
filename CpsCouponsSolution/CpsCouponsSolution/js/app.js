@@ -10,7 +10,7 @@
 				controller: 'adminLoginCtrl'
 			}).
 			when('/programedit/:programId', {
-				templateUrl: '/views/programedit.html',
+				templateUrl: '/views/programcreate.html',
 				controller: 'programCtrl'
 			}).
 			when('/programcreate', {
