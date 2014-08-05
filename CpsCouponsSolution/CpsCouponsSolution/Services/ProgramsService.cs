@@ -23,7 +23,7 @@ namespace CpsCouponsSolution.Services
 					Id = p.Mall.ID,
 					Name = p.Mall.Name,
 					StateId = p.Mall.State.ID,
-					StateName = p.Mall.State.Abbreviation
+					StateName = p.Mall.State.Name
 				}).Distinct();
 
 				mallList = malls.OrderBy(m => m.Name).ToList();
@@ -41,7 +41,7 @@ namespace CpsCouponsSolution.Services
 																							Id = m.ID, 
 																							Name = m.Name, 
 																							StateId = m.State.ID, 
-																							StateName = m.State.Abbreviation
+																							StateName = m.State.Name
 																						});
 
 				if (!isAll)

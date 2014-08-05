@@ -1,6 +1,6 @@
 ﻿app.controller('adminMenuCtrl', function ($scope, programsApiService, alertService, adminService) {
 	adminService.adminCheck('/adminmenu');
-	
+
 	$scope.alerter = alertService;
 
 	$scope.getProgramList = function () {
@@ -16,9 +16,9 @@
 	$scope.getProgramList();
 });
 
-app.controller('programCreateCtrl', function ($scope, $location, $anchorScroll, $route, $timeout, programsApiService, alertService, adminService) {
+app.controller('programCtrl', function ($scope, $location, $anchorScroll, $route, $timeout, programsApiService, alertService, adminService) {
 	adminService.adminCheck('/adminprogram');
-	
+
 	$scope.alerter = alertService;
 	$scope.Emails = [];
 	$scope.ParticipatingMalls = [];
@@ -87,7 +87,7 @@ app.controller('programCreateCtrl', function ($scope, $location, $anchorScroll, 
 	//		event.preventDefault();
 	//	}
 	//});
-	
+
 	$scope.saveProgram = function () {
 		if ($scope.ParticipatingMalls.length < 1) {
 			$scope.alerter.addAlert('danger', 'Please select at least one center.');
@@ -111,13 +111,13 @@ app.controller('programCreateCtrl', function ($scope, $location, $anchorScroll, 
 		});
 
 		programsApiService.saveByCommand('createProgram', $scope.program)
-			.then(function(data) {
+			.then(function (data) {
 				if (data.status === 200) {
 					//TODO: figure out why this doesn't always work
 					$scope.alerter.addAlert('success', 'Program was successfully saved.');
 				}
 			})
-			.catch(function(data) {
+			.catch(function (data) {
 				$scope.alerter.addAlert('danger', 'Unable to save Program data.');
 			});
 		//.finally(function () {
@@ -140,12 +140,25 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 				$scope.retailer = _.find(data.Retailers, { 'UrlGuid': $routeParams.urlguid.toLowerCase() });
 				$scope.retailer.IsAdmin = $scope.isAdmin;
 				$scope.retailer.IsRetailerEmailNeeded = false;
-				$scope.retailer.FieldValues = [];
-				$scope.retailer.SelectedMalls = [];
-				_.forEach($scope.program.Fields, function (field) {
-					var fieldValue = { Id: field.Id, Name: field.Name, Value: null, RetailerId: $scope.retailer.Id };
-					$scope.retailer.FieldValues.push(fieldValue);
-				});
+				$scope.retailer.FieldValues = $scope.retailer.FieldValues || [];
+				$scope.retailer.SelectedMalls = $scope.retailer.SelectedMalls || [];
+
+				if ($scope.retailer.SelectedMalls.length > 0) {
+					_.forEach($scope.retailer.SelectedMalls, function (selectedMall) {
+						var mallToSelect = _.find($scope.program.ParticipatingMalls, function (mall) {
+							return mall.Id === selectedMall.Id;
+						});
+
+						mallToSelect.selected = true;
+					});
+				}
+
+				if ($scope.retailer.FieldValues.length < 1) {
+					_.forEach($scope.program.Fields, function (field) {
+						var fieldValue = { Id: field.Id, Name: field.Name, Value: null, RetailerId: $scope.retailer.Id };
+						$scope.retailer.FieldValues.push(fieldValue);
+					});
+				}
 			})
 			.catch(function () {
 				$scope.alerter.addAlert('danger', 'Unable to get Program data. Please contact your MMM rep.');
@@ -153,16 +166,16 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 	};
 	$scope.getProgramByGuid();
 
-	$scope.toggleCenter = function (id) {
-		if (_.any($scope.retailer.SelectedMalls, { 'Id': id })) {
-			_.remove($scope.retailer.SelectedMalls, { 'Id': id });
-		}
-		else {
-			$scope.retailer.SelectedMalls.push({ 'Id': id });
-		}
-	};
-
 	$scope.submitForm = function () {
+		var selectedMalls = _.where($scope.program.ParticipatingMalls, function (mall) {
+			return mall.selected;
+		});
+		
+		$scope.retailer.SelectedMalls = _.map(selectedMalls,
+								function (mall) {
+									return { Id: mall.Id };
+								});
+
 		if ($scope.retailer.SelectedMalls.length < 1) {
 			$scope.alerter.addAlert('danger', 'Please select at least one shopping center.');
 			return;
@@ -197,7 +210,7 @@ app.controller('programSignupCtrl', function ($scope, $routeParams, programsApiS
 
 app.controller('retailersByCenterCtrl', function ($scope, $location, $routeParams, programsApiService, alertService, fileService, adminService) {
 	adminService.adminCheck('/retailersbycenter');
-	
+
 	$scope.alerter = alertService;
 	$scope.malls = [];
 	$scope.selectedMall = {};
@@ -232,7 +245,7 @@ app.controller('retailersByCenterCtrl', function ($scope, $location, $routeParam
 		fileService.createCsvFile(exportColumns, $scope.retailers, 'retailers_by_center');
 	};
 
-	$scope.openSignup = function(guid) {
+	$scope.openSignup = function (guid) {
 		$location.path('/signup/' + guid);
 	};
 
@@ -271,7 +284,7 @@ app.controller('retailersByProgramCtrl', function ($scope, $location, $routePara
 		var exportColumns = ['Email', 'StoreName', 'ProgramName', 'HasSignedUp'];
 		fileService.createCsvFile(exportColumns, $scope.retailers, 'retailers_by_center');
 	};
-	
+
 	$scope.openSignup = function (guid) {
 		$location.path('/signup/' + guid);
 	};

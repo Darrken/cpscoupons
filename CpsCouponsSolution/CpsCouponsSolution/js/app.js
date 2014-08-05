@@ -11,11 +11,11 @@
 			}).
 			when('/programedit/:programId', {
 				templateUrl: '/views/programedit.html',
-				controller: 'programAdminCtrl'
+				controller: 'programCtrl'
 			}).
 			when('/programcreate', {
 				templateUrl: '/views/programcreate.html',
-				controller: 'programCreateCtrl'
+				controller: 'programCtrl'
 			}).
 			when('/signup/:urlguid', {
 				templateUrl: '/views/programsignup.html',
