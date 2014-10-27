@@ -30,7 +30,7 @@
 				controller: 'retailersByProgramCtrl'
 			}).
 			otherwise({
-				redirectTo: '/'
+			    redirectTo: '/'
 			});
 		$locationProvider.html5Mode(true);
 	});

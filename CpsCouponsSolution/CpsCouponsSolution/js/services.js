@@ -133,22 +133,22 @@
 });
 
 app.factory('alertService', function() {
-	var root = {};
-	root.alerts = [];
+	var service = {};
+	service.alerts = [];
 
-	root.clearAlerts = function () {
-		root.alerts = [];
+	service.clearAlerts = function () {
+		service.alerts = [];
 	};
 	
-	root.addAlert = function (errorType, message) {
-		root.alerts.push({ type: errorType, msg: message });
+	service.addAlert = function (errorType, message) {
+		service.alerts.push({ type: errorType, msg: message });
 	};
 
-	root.closeAlert = function (index) {
-		root.alerts.splice(index, 1);
+	service.closeAlert = function (index) {
+		service.alerts.splice(index, 1);
 	};
 
-	return root;
+	return service;
 });
 
 app.factory('fileService', function ($filter) {
